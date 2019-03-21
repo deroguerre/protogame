@@ -20,18 +20,24 @@
 ********************************************************************************************/
 
 #include <raylib.h>
+#include "SceneManager/sceneManager.h"
+#include "SceneManager/scIntro.h"
+
+SceneManager& mSceneManager = SceneManager::getInstance();
 
 int main()
 {
 	// Initialization
 	//--------------------------------------------------------------------------------------
 	int screenWidth = 800;
-	int screenHeight = 450;
+	int screenHeight = 600;
 
 	InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
 
 	SetTargetFPS(60);
 	//--------------------------------------------------------------------------------------
+	
+	mSceneManager.changeScene(new ScIntro());
 
 	// Main game loop
 	while (!WindowShouldClose())    // Detect window close button or ESC key
@@ -41,17 +47,21 @@ int main()
 		// TODO: Update your variables here
 		//----------------------------------------------------------------------------------
 
+		mSceneManager.update();
+
 		// Draw
 		//----------------------------------------------------------------------------------
 		BeginDrawing();
 
 		ClearBackground(RAYWHITE);
 
-		DrawText("Congrats! You created your first window!", 190, 200, 20, MAROON);
+		mSceneManager.draw();
 
 		EndDrawing();
 		//----------------------------------------------------------------------------------
 	}
+
+	mSceneManager.getCurrentScene()->unload();
 
 	// De-Initialization
 	//--------------------------------------------------------------------------------------   
