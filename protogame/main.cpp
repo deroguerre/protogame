@@ -22,6 +22,7 @@
 #include <raylib.h>
 #include "SceneManager/sceneManager.h"
 #include "SceneManager/scIntro.h"
+#include "SceneManager/scGame.h"
 
 SceneManager& mSceneManager = SceneManager::getInstance();
 
@@ -37,7 +38,7 @@ int main()
 	SetTargetFPS(60);
 	//--------------------------------------------------------------------------------------
 	
-	mSceneManager.changeScene(new ScIntro());
+	mSceneManager.changeScene(new ScGame());
 
 	// Main game loop
 	while (!WindowShouldClose())    // Detect window close button or ESC key

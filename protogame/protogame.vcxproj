@@ -121,6 +121,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Room.cpp" />
     <ClCompile Include="SceneManager\sceneManager.cpp" />
     <ClCompile Include="SceneManager\scGame.cpp" />
     <ClCompile Include="SceneManager\scGameOver.cpp" />
@@ -128,6 +130,8 @@
     <ClCompile Include="SceneManager\scMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Room.h" />
     <ClInclude Include="SceneManager\scene.h" />
     <ClInclude Include="SceneManager\sceneManager.h" />
     <ClInclude Include="SceneManager\scGame.h" />
