@@ -7,7 +7,7 @@
 #include "../Player.h"
 #include <charconv>
 
-Texture2D dungeonTileset;
+Texture2D dungeonTileset, medivalTileset;
 Room* oRoom;
 Player* oPlayer;
 Rectangle frameRec;
@@ -21,7 +21,9 @@ ScGame::ScGame() : Scene()
 	std::cout << "load Game" << std::endl;
 
 	dungeonTileset = LoadTexture("assets/dungeon_tileset1.png");
-	oRoom = new Room(dungeonTileset);
+	medivalTileset = LoadTexture("assets/medieval-fantasy/background-elements/0-tileset-x32.png");
+
+	oRoom = new Room(medivalTileset);
 
 	oPlayer = new Player();
 	oPlayer->texture = LoadTexture("assets/sprite0.png");

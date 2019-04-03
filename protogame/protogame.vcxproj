@@ -131,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="SceneManager\scene.h" />
     <ClInclude Include="SceneManager\sceneManager.h" />
@@ -138,6 +139,9 @@
     <ClInclude Include="SceneManager\scGameOver.h" />
     <ClInclude Include="SceneManager\scIntro.h" />
     <ClInclude Include="SceneManager\scMenu.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="protogame.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
