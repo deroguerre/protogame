@@ -1,9 +1,10 @@
 #ifndef SCMENU_H
 #define SCMENU_H
-#include "scene.h"
-#include "scIntro.h"
 
-class ScMenu : public Scene {
+#include "scene.h"
+
+class ScMenu : public Scene 
+{
 public:
 	ScMenu();
 	void load() override;

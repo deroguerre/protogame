@@ -21,7 +21,8 @@
 
 #include <raylib.h>
 #include "SceneManager/sceneManager.h"
-#include "SceneManager/scIntro.h"
+#include "SceneManager/scGame.h"
+#include "globals.h"
 
 SceneManager& mSceneManager = SceneManager::getInstance();
 
@@ -29,15 +30,13 @@ int main()
 {
 	// Initialization
 	//--------------------------------------------------------------------------------------
-	int screenWidth = 800;
-	int screenHeight = 600;
 
-	InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
+	InitWindow(GLOBALS::SCREEN_WIDTH, GLOBALS::SCREEN_HEIGHT, "raylib [core] example - basic window");
 
 	SetTargetFPS(60);
 	//--------------------------------------------------------------------------------------
 	
-	mSceneManager.changeScene(new ScIntro());
+	mSceneManager.changeScene(new ScGame());
 
 	// Main game loop
 	while (!WindowShouldClose())    // Detect window close button or ESC key

@@ -14,23 +14,24 @@ void SceneManager::update()
 }
 
 void SceneManager::draw() { 
-	mCurrentScene->draw(); 
+	mCurrentScene->draw();
 }
 
 void SceneManager::changeScene(Scene* aNewScene)
 {
-	if (mInstance.mCurrentScene != 0)
+	if (mCurrentScene != 0)
 	{
-		mInstance.mCurrentScene->unload();
+		mCurrentScene->unload();
+		delete mCurrentScene;
 	}
-	delete mInstance.mCurrentScene;
-	mInstance.mCurrentScene = aNewScene;
-	mInstance.mCurrentScene->load();
+	
+	mCurrentScene = aNewScene;
+	mCurrentScene->load();
 }
 
 Scene * SceneManager::getCurrentScene()
 {
-	return mInstance.mCurrentScene;
+	return mCurrentScene;
 }
 
 // Constructor

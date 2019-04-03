@@ -1,36 +1,32 @@
-#include <iostream>
 #include <raylib.h>
-#include "scGameOver.h"
 #include "scGame.h"
-#include "sceneManager.h"
-#include <charconv>
 
 ScGame::ScGame() : Scene()
 {
+	mPlayer = Player(Vector2{ 20, 20 });
 }
 
-void ScGame::load() {
-	std::cout << "load Game" << std::endl;
+void ScGame::load() {}
+
+void ScGame::update() 
+{
+	if (IsKeyDown(KEY_LEFT))
+		mPlayer.moveLeft();
+	else if (IsKeyDown(KEY_RIGHT))
+		mPlayer.moveRight();
+	else if (IsKeyDown(KEY_UP)) 
+		mPlayer.moveUp();
+	else if (IsKeyDown(KEY_DOWN))
+		mPlayer.moveDown();
+	else
+		mPlayer.stopMoving();
+
+	mPlayer.update(GetFrameTime());
 }
 
-void ScGame::update() {
-	std::cout << "Update Game" << std::endl;
-
-	mCounter--;
-	if (mCounter == 0) {
-		SceneManager::getInstance().changeScene(new ScGameOver());
-	}
+void ScGame::draw() 
+{
+	mPlayer.draw();
 }
 
-void ScGame::draw() {
-	std::cout << "draw Game" << std::endl;
-	int i = 5;
-	if (mCounter % 60 == 0) {
-		i = mCounter / 60;
-	}
-	DrawText(FormatText("%i", mCounter / 60), 300, 100, 500, BLACK);
-}
-
-void ScGame::unload() {
-	std::cout << "unload Game" << std::endl;
-}
+void ScGame::unload() {}

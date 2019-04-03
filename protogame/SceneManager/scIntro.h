@@ -1,10 +1,10 @@
-#pragma once
-
 #ifndef SCINTRO_H
 #define SCINTRO_H
+
 #include "scene.h"
 
-class ScIntro : public Scene {
+class ScIntro : public Scene 
+{
 public:
 	ScIntro();
 	void load() override;
