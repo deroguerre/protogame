@@ -346,3 +346,6 @@ healthchecksdb
 MigrationBackup/
 
 assets/
+protogame/maps/1-map.tmx
+protogame/maps/1-map_Calque1.csv
+protogame/maps/1-map_Calque2.csv

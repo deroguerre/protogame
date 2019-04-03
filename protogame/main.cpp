@@ -47,18 +47,16 @@ int main()
 	{
 		// Update
 		//----------------------------------------------------------------------------------
-		// TODO: Update your variables here
+		mSceneManager.update();
 		//----------------------------------------------------------------------------------
 
-		mSceneManager.update();
 
 		// Draw
 		//----------------------------------------------------------------------------------
 		BeginDrawing();
 
-		ClearBackground(RAYWHITE);
-
-		mSceneManager.draw();
+			ClearBackground(RAYWHITE);
+			mSceneManager.draw();
 
 		EndDrawing();
 		//----------------------------------------------------------------------------------

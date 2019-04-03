@@ -9,7 +9,7 @@
 #include <vector>
 
 Texture2D mDungeonTile;
-Rectangle	t0, t21;
+Rectangle	t0, t21, t51;
 
 std::vector<int> mLayer1, mLayer2;
 
@@ -38,13 +38,15 @@ Room::Room(Texture2D aDungeonTileset)
 	mDungeonTile = aDungeonTileset;
 	t0 = { 0.0f, 0.0f, (float)mDungeonTile.width / 20, (float)mDungeonTile.height / 12 };
 	t21 = { 32.0f, 32.0f, (float)mDungeonTile.width / 20, (float)mDungeonTile.height / 12 };
+	t51 = { 352.0f, 64.0f, (float)mDungeonTile.width / 20, (float)mDungeonTile.height / 12 };
 
 	mLayer1 = this->CSVParser("maps/1-map_Calque1.csv");
-	//mLayer2 = this->CSVParser("maps/1-map_Calque2.csv");
+	mLayer2 = this->CSVParser("maps/1-map_Calque2.csv");
+
 }
 
 Vector2 origin = { 0, 0 };
-Rectangle tempRec;
+Rectangle tempRec, tempRec2;
 
 void Room::Draw() {
 
@@ -54,19 +56,15 @@ void Room::Draw() {
 	{
 		for (int j = 0; j < 40; j++)
 		{
-			switch (mLayer1[lDataId])
-			{
-			case 0: tempRec = t0;
-				break;
-			case 21: tempRec = t21;
-				break;
-			default:
-				break;
-			}
-			lDataId++;
+
+			tempRec = this->getTextureRectangle(mLayer1, lDataId);
+			tempRec2 = this->getTextureRectangle(mLayer2, lDataId);
 
 			DrawTextureRec(mDungeonTile, tempRec, origin, WHITE);
+			DrawTextureRec(mDungeonTile, tempRec2, origin, WHITE);
+
 			origin.x += 32;
+			lDataId++;
 		}
 		origin.x = 0;
 		origin.y += 32;
@@ -74,6 +72,25 @@ void Room::Draw() {
 	lDataId = 0;
 	origin.x = 0;
 	origin.y = 0;
+}
+
+Rectangle Room::getTextureRectangle(std::vector<int> aLayer, int aId) {
+
+	Rectangle lTempRec = { 0,0,0,0 };
+
+	switch (aLayer[aId])
+	{
+	case 0: lTempRec = t0;
+		break;
+	case 21: lTempRec = t21;
+		break;
+	case 51: lTempRec = t51;
+		break;
+	default:
+		break;
+	}
+
+	return lTempRec;
 }
 
 Room::~Room()
