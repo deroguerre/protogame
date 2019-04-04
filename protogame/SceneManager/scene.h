@@ -1,8 +1,10 @@
 #ifndef SCENE_H
 #define SCENE_H
+
 #include <raylib.h>
 
-class Scene {
+class Scene 
+{
 public:
 	virtual void load() {}
 	virtual void update() {}

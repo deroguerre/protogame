@@ -1,9 +1,11 @@
-#pragma once
 #ifndef SCGAME_H
 #define SCGAME_H
-#include "scene.h"
 
-class ScGame : public Scene {
+#include "scene.h"
+#include "../player.h"
+
+class ScGame : public Scene 
+{
 public:
 	ScGame();
 	void load() override;
@@ -11,6 +13,6 @@ public:
 	void draw() override;
 	void unload() override;
 private:
-	int mCounter = 6 * 60;
+	Player mPlayer;
 };
-#endif#pragma once
+#endif

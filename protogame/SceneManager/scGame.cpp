@@ -1,6 +1,4 @@
-#include <iostream>
 #include <raylib.h>
-#include "scGameOver.h"
 #include "scGame.h"
 #include "sceneManager.h"
 #include "../Room.h"
@@ -16,7 +14,6 @@ int framesSpeed = 8;
 
 ScGame::ScGame() : Scene()
 {
-	std::cout << "load Game" << std::endl;
 
 	medievalTileset = LoadTexture("assets/medieval-fantasy/background-elements/0-tileset-x32.png");
 
@@ -28,41 +25,28 @@ ScGame::ScGame() : Scene()
 	oRoom = new Room(medievalTileset, medievalLayers, 40, 20);
 }
 
+void ScGame::load() {}
 
-void ScGame::load() {
+void ScGame::update() 
+{
+	//if (IsKeyDown(KEY_LEFT))
+	//	mPlayer.moveLeft();
+	//else if (IsKeyDown(KEY_RIGHT))
+	//	mPlayer.moveRight();
+	//else if (IsKeyDown(KEY_UP)) 
+	//	mPlayer.moveUp();
+	//else if (IsKeyDown(KEY_DOWN))
+	//	mPlayer.moveDown();
+	//else
+	//	mPlayer.stopMoving();
+
+	//mPlayer.update(GetFrameTime());
 }
 
-void ScGame::update() {
-	//std::cout << "Update Game" << std::endl;
-
-	mCounter--;
-	//if (mCounter == 0) {
-	//	SceneManager::getInstance().changeScene(new ScGameOver());
-	//}
-
-	framesCounter++;
-
-	if (framesCounter >= (60 / framesSpeed))
-	{
-		framesCounter = 0;
-		currentFrame++;
-
-		if (currentFrame > 3) currentFrame = 0;
-	}
-}
-
-void ScGame::draw() {
-	//std::cout << "draw Game" << std::endl;
-	int i = 5;
-	if (mCounter % 60 == 0) {
-		i = mCounter / 60;
-	}
-	//DrawText(FormatText("%i", mCounter / 60), 300, 100, 500, BLACK);
-
+void ScGame::draw() 
+{
 	oRoom->Draw();
-
+	mPlayer.draw();
 }
 
-void ScGame::unload() {
-	//std::cout << "unload Game" << std::endl;
-}
+void ScGame::unload() {}

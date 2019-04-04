@@ -23,6 +23,7 @@
 #include "SceneManager/sceneManager.h"
 #include "SceneManager/scIntro.h"
 #include "SceneManager/scGame.h"
+#include "globals.h"
 
 SceneManager& mSceneManager = SceneManager::getInstance();
 
@@ -30,12 +31,8 @@ int main()
 {
 	// Initialization
 	//--------------------------------------------------------------------------------------
-	int screenWidth = 1280;
-	int screenHeight = 720;
 
-	InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
-	//ToggleFullscreen();
-
+	InitWindow(GLOBALS::SCREEN_WIDTH, GLOBALS::SCREEN_HEIGHT, "raylib [core] example - basic window");
 
 	SetTargetFPS(60);
 	//--------------------------------------------------------------------------------------

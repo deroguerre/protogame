@@ -1,9 +1,10 @@
-#pragma once
 #ifndef SCGAMEOVER_H
 #define SCGAMEOVER_H
+
 #include "scene.h"
 
-class ScGameOver : public Scene {
+class ScGameOver : public Scene 
+{
 public:
 	ScGameOver();
 	void load() override;
