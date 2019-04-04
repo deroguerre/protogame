@@ -2,14 +2,20 @@
 #include <raylib.h>
 #include <string>
 #include <vector>
+#include <list>
 
 class Room
 {
 public:
-	std::vector<int> CSVParser(std::string layerPath);
-	Room(Texture2D texture);
-	void Draw();
-	Rectangle getTextureRectangle(std::vector<int> aLayer, int aId);
+	std::list<std::vector<int>>  mLayerList;
+
+	Room(Texture2D texture, std::vector<std::string> aLayerList, int aNbRow, int aNbCol);
 	~Room();
+
+	void Draw();
+private:
+	std::vector<Rectangle> RectangleListCreator(Texture2D aDungeonTile);
+	std::vector<int> CSVParser(std::string layerPath);
+	std::vector<Rectangle> layerRectangles;
 };
 
