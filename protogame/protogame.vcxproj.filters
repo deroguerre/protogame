@@ -36,9 +36,6 @@
     <ClCompile Include="SceneManager\scMenu.cpp">
       <Filter>Source Files\SceneManager</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Room.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -61,9 +58,6 @@
     </ClInclude>
     <ClInclude Include="SceneManager\sceneManager.h">
       <Filter>Source Files\SceneManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Room.h">
       <Filter>Header Files</Filter>

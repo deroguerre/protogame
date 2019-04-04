@@ -7,8 +7,8 @@
 #include <vector>
 #include <list>
 
-int nbRowTiles = 0;
 int nbColTiles = 0;
+int nbRowTiles = 0;
 
 Texture2D mTileset;
 std::vector<int> mLayer1, mLayer2;
@@ -16,14 +16,14 @@ std::vector<int> mLayer1, mLayer2;
 Vector2 origin = { 0, 0 };
 Rectangle mCurrRectangle;
 
-Room::Room(Texture2D aDungeonTileset, std::vector<std::string> aLayerList, int aNbRow, int aNbCol)
+Room::Room(Texture2D aDungeonTileset, std::vector<std::string> aLayerList,  int aNbCol, int aNbRow)
 {
 	mTileset = aDungeonTileset;
-	nbRowTiles = aNbRow;
 	nbColTiles = aNbCol;
+	nbRowTiles = aNbRow;
 
-	//créée la liste des rectangles depuis la texture fournis (only 32x32)
-	layerRectangles = this->RectangleListCreator(mTileset);
+	//crée la liste des rectangles depuis la texture fournis (only 32x32)
+	_layerRectangles = this->RectangleListCreator(mTileset);
 
 	//recupère les calques et les ajoutes à une liste 
 	for (size_t i = 0; i < aLayerList.size(); i++)
@@ -46,7 +46,7 @@ void Room::Draw() {
 
 				// on ignore -1 qui représente une tuile vide
 				if (item[lIterator] != -1) {
-					mCurrRectangle = layerRectangles[item[lIterator]];
+					mCurrRectangle = _layerRectangles[item[lIterator]];
 					DrawTextureRec(mTileset, mCurrRectangle, origin, WHITE);
 				}
 			}

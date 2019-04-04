@@ -4,12 +4,10 @@
 #include "scGame.h"
 #include "sceneManager.h"
 #include "../Room.h"
-#include "../Player.h"
 #include <charconv>
 
-Texture2D dungeonTileset, medievalTileset;
+Texture2D medievalTileset;
 Room* oRoom;
-Player* oPlayer;
 Rectangle frameRec;
 
 int currentFrame = 0;
@@ -20,19 +18,14 @@ ScGame::ScGame() : Scene()
 {
 	std::cout << "load Game" << std::endl;
 
-	dungeonTileset = LoadTexture("assets/dungeon_tileset1.png");
 	medievalTileset = LoadTexture("assets/medieval-fantasy/background-elements/0-tileset-x32.png");
 
 	std::vector<std::string> medievalLayers = {
 		"maps/1-map_Calque1.csv",
-		"maps/1-map_Calque2.csv"
+		"maps/1-map_Calque2.csv",
+		"maps/1-map_Calque3.csv"
 	};
-	oRoom = new Room(medievalTileset, medievalLayers, 20, 40);
-
-	oPlayer = new Player();
-	oPlayer->texture = LoadTexture("assets/sprite0.png");
-
-	frameRec = { 0.0f, 0.0f, (float)oPlayer->texture.width / 4, (float)oPlayer->texture.height };
+	oRoom = new Room(medievalTileset, medievalLayers, 40, 20);
 }
 
 
@@ -55,8 +48,6 @@ void ScGame::update() {
 		currentFrame++;
 
 		if (currentFrame > 3) currentFrame = 0;
-
-		frameRec.x = (float)currentFrame*(float)oPlayer->texture.width / 4;
 	}
 }
 
@@ -68,10 +59,8 @@ void ScGame::draw() {
 	}
 	//DrawText(FormatText("%i", mCounter / 60), 300, 100, 500, BLACK);
 
-	//DrawTexture(dungeonTileset, 0, 0, WHITE);
 	oRoom->Draw();
 
-	DrawTextureRec(oPlayer->texture, frameRec, oPlayer->position, WHITE);
 }
 
 void ScGame::unload() {
