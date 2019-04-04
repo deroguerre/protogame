@@ -15,7 +15,7 @@ int framesSpeed = 8;
 ScGame::ScGame() : Scene()
 {
 
-	medievalTileset = LoadTexture("assets/medieval-fantasy/background-elements/0-tileset-x32.png");
+	medievalTileset = LoadTexture("assets/0-tileset-x32.png");
 
 	std::vector<std::string> medievalLayers = {
 		"maps/1-map_Calque1.csv",

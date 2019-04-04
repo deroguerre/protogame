@@ -347,4 +347,4 @@ MigrationBackup/
 
 CppProperties.json
 
-assets/
+**/assets/medieval-fantasy
