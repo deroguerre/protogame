@@ -23,24 +23,25 @@ ScGame::ScGame() : Scene()
 		"maps/1-map_Calque3.csv"
 	};
 	oRoom = new Room(medievalTileset, medievalLayers, 40, 20);
+	mPlayer = Player({ 20, 20 });
 }
 
 void ScGame::load() {}
 
 void ScGame::update() 
 {
-	//if (IsKeyDown(KEY_LEFT))
-	//	mPlayer.moveLeft();
-	//else if (IsKeyDown(KEY_RIGHT))
-	//	mPlayer.moveRight();
-	//else if (IsKeyDown(KEY_UP)) 
-	//	mPlayer.moveUp();
-	//else if (IsKeyDown(KEY_DOWN))
-	//	mPlayer.moveDown();
-	//else
-	//	mPlayer.stopMoving();
+	if (IsKeyDown(KEY_LEFT))
+		mPlayer.moveLeft();
+	else if (IsKeyDown(KEY_RIGHT))
+		mPlayer.moveRight();
+	else if (IsKeyDown(KEY_UP)) 
+		mPlayer.moveUp();
+	else if (IsKeyDown(KEY_DOWN))
+		mPlayer.moveDown();
+	else
+		mPlayer.stopMoving();
 
-	//mPlayer.update(GetFrameTime());
+	mPlayer.update(GetFrameTime());
 }
 
 void ScGame::draw() 

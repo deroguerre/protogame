@@ -345,7 +345,6 @@ healthchecksdb
 # Backup folder for Package Reference Convert tool in Visual Studio 2017
 MigrationBackup/
 
+CppProperties.json
+
 assets/
-protogame/maps/1-map.tmx
-protogame/maps/1-map_Calque1.csv
-protogame/maps/1-map_Calque2.csv
