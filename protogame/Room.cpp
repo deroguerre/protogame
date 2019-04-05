@@ -33,6 +33,40 @@ Room::Room(Texture2D aDungeonTileset, std::vector<std::string> aLayerList,  int 
 		mLayerList.push_back(lCurrentLayer);
 	}
 
+	blockList = this->CreateBlockList();
+
+}
+
+std::vector<int> blockIds = {0,1,2,3,4,5,10,15,20,25,30,35,40,41,42,43,44,45};
+
+std::vector<Rectangle> Room::CreateBlockList() {
+	std::vector<Rectangle> blockList;
+	int lIterator = 0;
+
+	for (size_t itRow = 0; itRow < nbRowTiles; itRow++)
+	{
+		for (size_t itCol = 0; itCol < nbColTiles; itCol++)
+		{
+			for (auto item : mLayerList) {
+
+				for (auto tile : blockIds) {
+
+					if (item[lIterator] == tile) {
+						blockList.push_back(_layerRectangles[item[lIterator]]);
+					}
+				}			
+			}
+			origin.x += 32;
+			lIterator++;
+		}
+		origin.x = 0;
+		origin.y += 32;
+	}
+	lIterator = 0;
+	origin.x = 0;
+	origin.y = 0;
+
+	return blockList;
 }
 
 void Room::Draw() {

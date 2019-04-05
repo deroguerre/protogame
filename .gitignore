@@ -349,3 +349,5 @@ CppProperties.json
 
 **/assets/medieval-fantasy
 **/assets/2D Pixel Dungeon Asset Pack
+protogame/protogame.vcxproj
+protogame/protogame.vcxproj.filters

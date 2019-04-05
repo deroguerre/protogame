@@ -12,6 +12,9 @@ int currentFrame = 0;
 int framesCounter = 0;
 int framesSpeed = 8;
 
+const float CAMERA_SPEED = 1.5f;
+Camera2D mCamera;
+
 ScGame::ScGame() : Scene()
 {
 
@@ -30,21 +33,43 @@ ScGame::ScGame() : Scene()
 		"maps/2-map_Calque3.csv"
 	};
 	oRoom = new Room(medievalTileset, medievalLayers, 25, 19);
+	//oRoom->blockList;
+
 	mPlayer = Player({ 100, 100 });
 }
 
-void ScGame::load() {}
+void ScGame::load() {
+
+	mCamera.target = { mPlayer.getPosition().x, mPlayer.getPosition().y };
+	mCamera.offset = { 0, 0 };
+	mCamera.rotation = 0.0f;
+	mCamera.zoom = 1.0f;
+
+}
 
 void ScGame::update() 
 {
 	if (IsKeyDown(KEY_LEFT))
+	{
 		mPlayer.moveLeft();
+		mCamera.offset.x += CAMERA_SPEED;
+	}
 	else if (IsKeyDown(KEY_RIGHT))
+	{
 		mPlayer.moveRight();
-	else if (IsKeyDown(KEY_UP)) 
+		mCamera.offset.x -= CAMERA_SPEED;
+	}
+
+	else if (IsKeyDown(KEY_UP))
+	{
 		mPlayer.moveUp();
+		mCamera.offset.y += CAMERA_SPEED;
+	}
 	else if (IsKeyDown(KEY_DOWN))
+	{
 		mPlayer.moveDown();
+		mCamera.offset.y -= CAMERA_SPEED;
+	}
 	else
 		mPlayer.stopMoving();
 
@@ -55,6 +80,8 @@ void ScGame::draw()
 {
 	oRoom->Draw();
 	mPlayer.draw();
+	//BeginMode2D(mCamera);
+	//EndMode2D();
 }
 
 void ScGame::unload() {}
