@@ -11,10 +11,11 @@ int nbColTiles = 0;
 int nbRowTiles = 0;
 
 Texture2D mTileset;
-std::vector<int> mLayer1, mLayer2;
 
 Vector2 origin = { 0, 0 };
 Rectangle mCurrRectangle;
+
+Rectangle topDoor, downDoor, leftDoor, rightDoor;
 
 Room::Room(Texture2D aDungeonTileset, std::vector<std::string> aLayerList,  int aNbCol, int aNbRow)
 {
@@ -38,9 +39,9 @@ void Room::Draw() {
 
 	int lIterator = 0;
 
-	for (size_t itRow = 0; itRow < 20; itRow++)
+	for (size_t itRow = 0; itRow < nbRowTiles; itRow++)
 	{
-		for (size_t itCol = 0; itCol < 40; itCol++)
+		for (size_t itCol = 0; itCol < nbColTiles; itCol++)
 		{
 			for (auto item : mLayerList) {
 

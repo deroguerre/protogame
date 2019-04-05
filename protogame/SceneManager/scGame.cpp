@@ -15,15 +15,22 @@ int framesSpeed = 8;
 ScGame::ScGame() : Scene()
 {
 
-	medievalTileset = LoadTexture("assets/0-tileset-x32.png");
+	//medievalTileset = LoadTexture("assets/0-tileset-x32.png");
+	//std::vector<std::string> medievalLayers = {
+	//	"maps/1-map_Calque1.csv",
+	//	"maps/1-map_Calque2.csv",
+	//	"maps/1-map_Calque3.csv"
+	//};
+	//oRoom = new Room(medievalTileset, medievalLayers, 40, 20);
 
+	medievalTileset = LoadTexture("assets/2-tileset-x32.png");
 	std::vector<std::string> medievalLayers = {
-		"maps/1-map_Calque1.csv",
-		"maps/1-map_Calque2.csv",
-		"maps/1-map_Calque3.csv"
+		"maps/2-map_Calque1.csv",
+		"maps/2-map_Calque2.csv",
+		"maps/2-map_Calque3.csv"
 	};
-	oRoom = new Room(medievalTileset, medievalLayers, 40, 20);
-	mPlayer = Player({ 20, 20 });
+	oRoom = new Room(medievalTileset, medievalLayers, 25, 19);
+	mPlayer = Player({ 100, 100 });
 }
 
 void ScGame::load() {}

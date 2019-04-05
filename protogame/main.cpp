@@ -32,7 +32,7 @@ int main()
 	// Initialization
 	//--------------------------------------------------------------------------------------
 
-	InitWindow(GLOBALS::SCREEN_WIDTH, GLOBALS::SCREEN_HEIGHT, "raylib [core] example - basic window");
+	InitWindow(GLOBALS::SCREEN_WIDTH, GLOBALS::SCREEN_HEIGHT, "Prot0Game");
 
 	SetTargetFPS(60);
 	//--------------------------------------------------------------------------------------
@@ -44,6 +44,9 @@ int main()
 	{
 		// Update
 		//----------------------------------------------------------------------------------
+		if (IsKeyDown(KEY_F11))
+			ToggleFullscreen();
+
 		mSceneManager.update();
 		//----------------------------------------------------------------------------------
 
