@@ -34,7 +34,6 @@ ScGame::ScGame() : Scene()
 	};
 	oRoom = new Room(medievalTileset, medievalLayers, 25, 19);
 	oRoom->BlockListCreator({ 0,1,2,3,4,5,10,15,20,25,30,35,40,41,42,43,44,45 });
-	//oRoom->blockList;
 
 	mPlayer = Player({ 100, 100 });
 }
@@ -48,17 +47,15 @@ void ScGame::load() {
 
 }
 
-void ScGame::update() 
+void ScGame::update()
 {
 	mPlayer.update(GetFrameTime());
 }
 
-void ScGame::draw() 
+void ScGame::draw()
 {
 	oRoom->Draw();
 	mPlayer.draw();
-	//BeginMode2D(mCamera);
-	//EndMode2D();
 }
 
 void ScGame::unload() {}

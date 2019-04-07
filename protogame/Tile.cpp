@@ -1,12 +1,11 @@
 #include "tile.h"
-#include <raylib.h>
-#include <string>
-#include <vector>
-#include <list>
 
-Tile::Tile(int aId, Rectangle aMapRectangle, Rectangle aTextureRectangle)
+Tile::Tile(int aTiledId, Vector2 aOrigin, Rectangle aTextureRectangle)
 {
-	
+	tiledId = aTiledId;
+	origin = aOrigin;
+	mapRectangle = { origin.x, origin.y, 32, 32 };
+	textureRectangle = aTextureRectangle;
 }
 
 

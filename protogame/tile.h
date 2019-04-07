@@ -7,11 +7,12 @@
 class Tile
 {
 public:
-	int mId;
-	Rectangle mMapRectangle;
-	Rectangle mTextureRectangle;
+	int tiledId;
+	Vector2 origin;
+	Rectangle mapRectangle;
+	Rectangle textureRectangle;
 
-	Tile(int aId, Rectangle aMapRectangle, Rectangle aTextureRectangle);
+	Tile(int aTiledId, Vector2 aOrigin, Rectangle aTextureRectangle);
 	~Tile();
 };
 

@@ -1,12 +1,6 @@
-#include "Room.h"
-#include <raylib.h>
 #include "globals.h"
-#include <iostream>
-#include <sstream>
-#include <fstream>
-#include <string>
-#include <vector>
-#include <list>
+#include "Room.h"
+#include "tile.h"
 
 int nbColTiles = 0;
 int nbRowTiles = 0;
@@ -18,7 +12,9 @@ Rectangle mCurrRectangle;
 
 Rectangle topDoor, downDoor, leftDoor, rightDoor;
 
-Room::Room(Texture2D aDungeonTileset, std::vector<std::string> aLayerList,  int aNbCol, int aNbRow)
+std::vector<Tile> tileList;
+
+Room::Room(Texture2D aDungeonTileset, std::vector<std::string> aLayerList, int aNbCol, int aNbRow)
 {
 	mTileset = aDungeonTileset;
 	nbColTiles = aNbCol;
@@ -28,92 +24,104 @@ Room::Room(Texture2D aDungeonTileset, std::vector<std::string> aLayerList,  int 
 	_layerRectangles = this->RectangleListCreator(mTileset);
 
 	//recupère les calques et les ajoutes à une liste 
-	for (size_t i = 0; i < aLayerList.size(); i++)
-	{
+	for (int i = 0; i < aLayerList.size(); i++) {
 		std::vector<int> lCurrentLayer = this->CSVParser(aLayerList[i]);
 		mLayerList.push_back(lCurrentLayer);
 	}
+
+	this->RoomCreator();
+}
+
+void Room::RoomCreator() {
+
+	int lIterator = 0;
+
+	for (int itRow = 0; itRow < nbRowTiles; itRow++)
+	{
+		for (int itCol = 0; itCol < nbColTiles; itCol++)
+		{
+			for (auto currLayer : mLayerList) {
+
+				Rectangle lCurrRectangle = { 0, 0, 0, 0 };
+				Vector2 currOrigin = { origin.x, origin.y };
+
+				if (currLayer[lIterator] != -1) {
+					lCurrRectangle = _layerRectangles[currLayer[lIterator]];
+				}
+
+				Tile *lCurrentTile = new Tile(currLayer[lIterator], currOrigin, lCurrRectangle);
+				tileList.push_back(*lCurrentTile);
+
+			}
+			origin.x += 32;
+			lIterator++;
+		}
+		origin.x = 0;
+		origin.y += 32;
+	}
+	lIterator = 0;
+	origin.x = 0;
+	origin.y = 0;
 }
 
 std::vector<Rectangle> Room::BlockListCreator(std::vector<int> blockIds) {
-
-	int lIterator = 0;
-
-
-	for (size_t itRow = 0; itRow < nbRowTiles; itRow++)			//each row
-	{
-		for (size_t itCol = 0; itCol < nbColTiles; itCol++)		//each col
-		{
-			for (auto currLayer : mLayerList) {					//each layer
-
-				if (currLayer[lIterator] != -1) {				//filter
-
-					for (auto tile : blockIds) {				//each block id
-
-						if (currLayer[lIterator] == tile) {		//filter
-							blockList.push_back(_layerRectangles[currLayer[lIterator]]);
-						}					
-					}			
+	for (auto lCurrentTile : tileList) {
+		if (lCurrentTile.tiledId != -1) {
+			for (auto lTiledId : blockIds) {
+				if (lCurrentTile.tiledId == lTiledId) {
+					mBlockList.push_back(lCurrentTile.mapRectangle);
 				}
 			}
-			origin.x += 32;
-			lIterator++;
 		}
-		origin.x = 0;
-		origin.y += 32;
 	}
-	lIterator = 0;
-	origin.x = 0;
-	origin.y = 0;
 
-	return blockList;
+	return mBlockList;
 }
 
-//void Room::DrawDoors() {
-//	Rectangle topDoor = { (nbColTiles / 2) * 32, 32, 32, 32 };
-//	Rectangle downDoor = { (nbColTiles / 2) * 32, (nbRowTiles * 32) - 64, 32, 32 };
-//	Rectangle leftDoor = { 0, (nbRowTiles/2) * 32, 32, 32 };
-//	Rectangle rightDoor = { (nbColTiles * 32) - 32, (nbRowTiles/2) * 32, 32, 32 };
-//	if (GLOBALS::DEBUG) {
-//		DrawRectangle(topDoor.x, topDoor.y, topDoor.width, topDoor.height, RED);
-//		DrawRectangle(downDoor.x, downDoor.y, downDoor.width, downDoor.height, RED);
-//		DrawRectangle(leftDoor.x, leftDoor.y, leftDoor.width, leftDoor.height, RED);
-//		DrawRectangle(rightDoor.x, rightDoor.y, rightDoor.width, rightDoor.height, RED);
-//	}
-//}
+void Room::DrawDoors() {
+	Rectangle topDoor = { 384, 32, 32, 32 };
+	Rectangle downDoor = { 384, 544, 32, 32 };
+	Rectangle leftDoor = { 0, 288, 32, 32 };
+	Rectangle rightDoor = { 768, 288, 32, 32 };
 
+	if (GLOBALS::DEBUG) {
+		DrawRectangleLines((int)topDoor.x, (int)topDoor.y, (int)topDoor.width, (int)topDoor.height, BLUE);
+		DrawRectangleLines((int)downDoor.x, (int)downDoor.y, (int)downDoor.width, (int)downDoor.height, BLUE);
+		DrawRectangleLines((int)leftDoor.x, (int)leftDoor.y, (int)leftDoor.width, (int)leftDoor.height, BLUE);
+		DrawRectangleLines((int)rightDoor.x, (int)rightDoor.y, (int)rightDoor.width, (int)rightDoor.height, BLUE);
+	}
+}
 
 void Room::Draw() {
 
-	int lIterator = 0;
-
-	for (size_t itRow = 0; itRow < nbRowTiles; itRow++)
-	{
-		for (size_t itCol = 0; itCol < nbColTiles; itCol++)
-		{
-			for (auto currLayer : mLayerList) {
-				// on ignore -1 qui représente une tuile vide
-				if (currLayer[lIterator] != -1) {
-
-					mCurrRectangle = _layerRectangles[currLayer[lIterator]];
-					DrawTextureRec(mTileset, mCurrRectangle, origin, WHITE);
-					//this->DrawDoors();
-
-					if (GLOBALS::DEBUG) {
-						DrawRectangleLines(origin.x, origin.y, 32, 32, RED);
-					}
-
-				}
-			}
-			origin.x += 32;
-			lIterator++;
-		}
-		origin.x = 0;
-		origin.y += 32;
+	//dessine chaque tile de la liste
+	for (auto currentTile : tileList) {
+		DrawTextureRec(mTileset, currentTile.textureRectangle, currentTile.origin, WHITE);
 	}
-	lIterator = 0;
-	origin.x = 0;
-	origin.y = 0;
+
+	this->DrawDoors();
+
+	if (GLOBALS::DEBUG) {
+
+		//tiles counter
+		//int lIterator = 0;
+		//for (int itRow = 0; itRow < nbRowTiles; itRow++)
+		//{
+		//	for (int itCol = 0; itCol < nbColTiles; itCol++)
+		//	{
+		//		char buf[256];
+		//		sprintf_s(buf, "%d", lIterator);
+		//		DrawText(buf, itCol * 32, itRow * 32, 10, LIGHTGRAY);
+		//		lIterator++;
+		//	}
+		//}
+		//lIterator = 0;
+
+		//show block l
+		for (auto block : mBlockList) {
+			DrawRectangleLines((int)block.x, (int)block.y, (int)block.width, (int)block.height, YELLOW);
+		}
+	}
 }
 
 std::vector<Rectangle> Room::RectangleListCreator(Texture2D aTileset) {
@@ -129,9 +137,9 @@ std::vector<Rectangle> Room::RectangleListCreator(Texture2D aTileset) {
 	float nextCol = 0;
 	float nextRow = 0;
 
-	for (size_t i = 0; i < nbRow; i++)
+	for (int i = 0; i < nbRow; i++)
 	{
-		for (size_t j = 0; j < nbCol; j++)
+		for (int j = 0; j < nbCol; j++)
 		{
 			Rectangle lTempRec = { nextCol, nextRow, (float)mTileset.width / nbCol, (float)mTileset.height / nbRow };
 			lListOfRect.push_back(lTempRec);
