@@ -344,3 +344,10 @@ healthchecksdb
 
 # Backup folder for Package Reference Convert tool in Visual Studio 2017
 MigrationBackup/
+
+CppProperties.json
+
+**/assets/medieval-fantasy
+**/assets/2D Pixel Dungeon Asset Pack
+protogame/protogame.vcxproj
+protogame/protogame.vcxproj.filters

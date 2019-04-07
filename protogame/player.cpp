@@ -1,6 +1,6 @@
 #include "player.h"
 
-namespace PLAYER 
+namespace PLAYER
 {
 	const std::string SPRITESHEET_PATH = "assets/player.png";
 	const int WIDTH = 48;
@@ -13,7 +13,7 @@ namespace PLAYER
 	const std::string ANIM_RUN_RIGHT = "RunRight";
 	const std::string ANIM_IDLE_DOWN = "IdleDown";
 	const std::string ANIM_IDLE_LEFT = "IdleLeft";
-	const std::string ANIM_IDLE_UP= "IdleUp";
+	const std::string ANIM_IDLE_UP = "IdleUp";
 	const std::string ANIM_IDLE_RIGHT = "IdleRight";
 }
 
@@ -27,7 +27,7 @@ Player::Player(Vector2 aSpawnPoint) :
 	playAnimation(PLAYER::ANIM_IDLE_RIGHT);
 }
 
-void Player::setupAnimations() 
+void Player::setupAnimations()
 {
 	addAnimation(4, false, 0, 0, PLAYER::ANIM_RUN_DOWN, PLAYER::WIDTH, PLAYER::HEIGHT);
 	addAnimation(4, false, PLAYER::WIDTH, 0, PLAYER::ANIM_RUN_LEFT, PLAYER::WIDTH, PLAYER::HEIGHT);
@@ -40,55 +40,51 @@ void Player::setupAnimations()
 	addAnimation(1, false, PLAYER::WIDTH * 3, 0, PLAYER::ANIM_IDLE_RIGHT, PLAYER::WIDTH, PLAYER::HEIGHT);
 }
 
-void Player::moveLeft() 
+void Player::moveLeft()
 {
-	mDirection.x = -PLAYER::WALK_SPEED;
-	mDirection.y = 0;
+	//mDirection.x = -PLAYER::WALK_SPEED;
 	playAnimation(PLAYER::ANIM_RUN_LEFT);
 	mFacing = LEFT;
 }
 
-void Player::moveRight() 
+void Player::moveRight()
 {
-	mDirection.x = PLAYER::WALK_SPEED;
-	mDirection.y = 0;
+	//mDirection.x = PLAYER::WALK_SPEED;
 	playAnimation(PLAYER::ANIM_RUN_RIGHT);
 	mFacing = RIGHT;
 }
 
 void Player::moveUp()
 {
-	mDirection.y = -PLAYER::WALK_SPEED;
-	mDirection.x = 0;
+	//mDirection.y = -PLAYER::WALK_SPEED;
 	playAnimation(PLAYER::ANIM_RUN_UP);
 	mFacing = UP;
 }
 
-void Player::moveDown() 
+void Player::moveDown()
 {
-	mDirection.y = PLAYER::WALK_SPEED;
-	mDirection.x = 0;
+	//mDirection.y = PLAYER::WALK_SPEED;
 	playAnimation(PLAYER::ANIM_RUN_DOWN);
 	mFacing = DOWN;
 }
 
-void Player::stopMoving() 
+void Player::stopMoving()
 {
-	mDirection.x = 0.0f;
-	mDirection.y = 0.0f;
+	//mDirection.x = 0.0f;
+	//mDirection.y = 0.0f;
 
 	switch (mFacing) {
-	case LEFT:
-		playAnimation(PLAYER::ANIM_IDLE_LEFT);
-		break;
-	case RIGHT:
-		playAnimation(PLAYER::ANIM_IDLE_RIGHT);
-		break;
 	case UP:
 		playAnimation(PLAYER::ANIM_IDLE_UP);
 		break;
 	case DOWN:
 		playAnimation(PLAYER::ANIM_IDLE_DOWN);
+		break;
+	case LEFT:
+		playAnimation(PLAYER::ANIM_IDLE_LEFT);
+		break;
+	case RIGHT:
+		playAnimation(PLAYER::ANIM_IDLE_RIGHT);
 		break;
 	}
 }
@@ -115,17 +111,62 @@ void Player::handleTileCollisions(std::vector<Rectangle> aOthersRects) {
 
 		}
 	}
+
+}
+
+void Player::draw()
+{
+	AnimatedSprite::draw(mPosition);
 }
 
 void Player::update(float aFrameTime)
 {
-	mPosition.x += mDirection.x;
-	mPosition.y += mDirection.y;
+
+	// Controls
+	//--------------------------------------------------------------------------------------
+
+	//binding animation
+	if (IsKeyDown(KEY_A) && IsKeyUp(KEY_W) && IsKeyUp(KEY_S)) {
+		this->moveLeft();
+	}
+	else if (IsKeyDown(KEY_D) && IsKeyUp(KEY_W) && IsKeyUp(KEY_S)) {
+		this->moveRight();
+	}
+	else if (IsKeyDown(KEY_W)) {
+		this->moveUp();
+	}
+	else if (IsKeyDown(KEY_S)) {
+		this->moveDown();
+	}
+	else
+		this->stopMoving();
+
+	//prevent opponents keys animation
+	//(left and right)
+	if (IsKeyDown(KEY_A) && IsKeyDown(KEY_D) && IsKeyUp(KEY_W) && IsKeyUp(KEY_S)) {
+		this->stopMoving();
+	}
+	//(up and down)
+	if (IsKeyDown(KEY_W) && IsKeyDown(KEY_S) && IsKeyUp(KEY_A) && IsKeyUp(KEY_D)) {
+		this->stopMoving();
+	}
+
+	//prevent all keys press animation
+	if (IsKeyDown(KEY_W) && IsKeyDown(KEY_S) && IsKeyDown(KEY_A) && IsKeyDown(KEY_D)) {
+		this->stopMoving();
+	}
+
+	//movement
+	if (IsKeyDown(KEY_A))
+		mPosition.x += -PLAYER::WALK_SPEED;
+	if (IsKeyDown(KEY_D))
+		mPosition.x += PLAYER::WALK_SPEED;
+	if (IsKeyDown(KEY_W))
+		mPosition.y += -PLAYER::WALK_SPEED;
+	if (IsKeyDown(KEY_S))
+		mPosition.y += PLAYER::WALK_SPEED;
+
+	//--------------------------------------------------------------------------------------
 
 	AnimatedSprite::update(aFrameTime);
-}
-
-void Player::draw() 
-{
-	AnimatedSprite::draw(mPosition);
 }

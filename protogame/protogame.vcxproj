@@ -122,6 +122,7 @@
   <ItemGroup>
     <ClCompile Include="animatedsprite.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Room.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="SceneManager\sceneManager.cpp" />
     <ClCompile Include="SceneManager\scGame.cpp" />
@@ -129,8 +130,11 @@
     <ClCompile Include="SceneManager\scIntro.cpp" />
     <ClCompile Include="SceneManager\scMenu.cpp" />
     <ClCompile Include="sprite.cpp" />
+    <ClCompile Include="Tile.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Room.h" />
     <ClInclude Include="animatedsprite.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="player.h" />
@@ -141,9 +145,13 @@
     <ClInclude Include="SceneManager\scIntro.h" />
     <ClInclude Include="SceneManager\scMenu.h" />
     <ClInclude Include="sprite.h" />
+    <ClInclude Include="tile.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\player.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="protogame.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

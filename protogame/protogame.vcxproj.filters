@@ -17,7 +17,7 @@
       <UniqueIdentifier>{72e0011d-f9da-4a42-89a9-ddf4c3d2a269}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\SceneManager">
-      <UniqueIdentifier>{80ad7cbf-8146-492e-bbd7-a32d7cbf38f7}</UniqueIdentifier>
+      <UniqueIdentifier>{3ae133e7-279e-4280-99d4-3b0f8f31d9f6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -39,7 +39,7 @@
     <ClCompile Include="SceneManager\scMenu.cpp">
       <Filter>Source Files\SceneManager</Filter>
     </ClCompile>
-    <ClCompile Include="sprite.cpp">
+    <ClCompile Include="Room.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="animatedsprite.cpp">
@@ -48,8 +48,20 @@
     <ClCompile Include="player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="sprite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Room.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="animatedsprite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -62,24 +74,32 @@
     <ClInclude Include="sprite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="tile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager\scMenu.h">
+      <Filter>Header Files\SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager\scIntro.h">
+      <Filter>Header Files\SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager\scGameOver.h">
+      <Filter>Header Files\SceneManager</Filter>
+    </ClInclude>
     <ClInclude Include="SceneManager\sceneManager.h">
       <Filter>Header Files\SceneManager</Filter>
     </ClInclude>
     <ClInclude Include="SceneManager\scGame.h">
       <Filter>Header Files\SceneManager</Filter>
     </ClInclude>
-    <ClInclude Include="SceneManager\scGameOver.h">
-      <Filter>Header Files\SceneManager</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneManager\scIntro.h">
-      <Filter>Header Files\SceneManager</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneManager\scMenu.h">
-      <Filter>Header Files\SceneManager</Filter>
-    </ClInclude>
     <ClInclude Include="SceneManager\scene.h">
       <Filter>Header Files\SceneManager</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="protogame.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\player.png">

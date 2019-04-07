@@ -21,7 +21,9 @@
 
 #include <raylib.h>
 #include "SceneManager/sceneManager.h"
+#include "SceneManager/scIntro.h"
 #include "SceneManager/scGame.h"
+#include "SceneManager/scMenu.h"
 #include "globals.h"
 
 SceneManager& mSceneManager = SceneManager::getInstance();
@@ -42,18 +44,19 @@ int main()
 	{
 		// Update
 		//----------------------------------------------------------------------------------
-		// TODO: Update your variables here
-		//----------------------------------------------------------------------------------
+		if (IsKeyPressed(KEY_F11) || IsKeyPressed(KEY_F))
+			ToggleFullscreen();
 
 		mSceneManager.update();
+		//----------------------------------------------------------------------------------
+
 
 		// Draw
 		//----------------------------------------------------------------------------------
 		BeginDrawing();
 
-		ClearBackground(RAYWHITE);
-
-		mSceneManager.draw();
+			ClearBackground(RAYWHITE);
+			mSceneManager.draw();
 
 		EndDrawing();
 		//----------------------------------------------------------------------------------
