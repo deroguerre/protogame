@@ -3,6 +3,7 @@
 
 #include <raylib.h>
 #include <string>
+#include "globals.h"
 
 class Sprite 
 {
@@ -12,9 +13,12 @@ public:
 	virtual void update(float aFrameTime) = 0;
 	void draw(Vector2 aPosition);
 	Vector2 getPosition();
+	const Rectangle getCollisionRect() const { return mCollisionRect; }
+	const sides::Side getCollisionSide(Rectangle aOtherRect) const;
 
 protected:
 	Rectangle mSourceRect;
+	Rectangle mCollisionRect;
 	Texture2D mSpriteSheet;
 	Vector2 mPosition;
 };

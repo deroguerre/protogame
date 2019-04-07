@@ -19,6 +19,8 @@ public:
 	void moveDown();
 	void stopMoving();
 
+	void handleTileCollisions(std::vector<Rectangle> aOthersRects);
+
 private:
 	Direction mFacing;
 	Vector2 mDirection;

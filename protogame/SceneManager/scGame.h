@@ -14,5 +14,7 @@ public:
 	void unload() override;
 private:
 	Player mPlayer;
+	Texture2D mRoom;
+	Camera2D mCamera;
 };
 #endif

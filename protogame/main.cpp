@@ -30,7 +30,6 @@ int main()
 {
 	// Initialization
 	//--------------------------------------------------------------------------------------
-
 	InitWindow(GLOBALS::SCREEN_WIDTH, GLOBALS::SCREEN_HEIGHT, "raylib [core] example - basic window");
 
 	SetTargetFPS(60);
