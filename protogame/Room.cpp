@@ -47,11 +47,9 @@ void Room::RoomCreator() {
 
 				if (currLayer[lIterator] != -1) {
 					lCurrRectangle = _layerRectangles[currLayer[lIterator]];
+					Tile *lCurrentTile = new Tile(currLayer[lIterator], currOrigin, lCurrRectangle);
+					tileList.push_back(*lCurrentTile);
 				}
-
-				Tile *lCurrentTile = new Tile(currLayer[lIterator], currOrigin, lCurrRectangle);
-				tileList.push_back(*lCurrentTile);
-
 			}
 			origin.x += 32;
 			lIterator++;
@@ -64,13 +62,11 @@ void Room::RoomCreator() {
 	origin.y = 0;
 }
 
-std::vector<Rectangle> Room::BlockListCreator(std::vector<int> blockIds) {
+std::vector<Rectangle> Room::BlockListCreator(std::vector<int> aBlockIds) {
 	for (auto lCurrentTile : tileList) {
-		if (lCurrentTile.tiledId != -1) {
-			for (auto lTiledId : blockIds) {
-				if (lCurrentTile.tiledId == lTiledId) {
-					mBlockList.push_back(lCurrentTile.mapRectangle);
-				}
+		for (auto lBlockId : aBlockIds) {
+			if (lCurrentTile.tiledId == lBlockId) {
+				mBlockList.push_back(lCurrentTile.mapRectangle);
 			}
 		}
 	}

@@ -23,6 +23,7 @@
 #include "SceneManager/sceneManager.h"
 #include "SceneManager/scIntro.h"
 #include "SceneManager/scGame.h"
+#include "SceneManager/scMenu.h"
 #include "globals.h"
 
 SceneManager& mSceneManager = SceneManager::getInstance();

@@ -27,13 +27,16 @@ ScGame::ScGame() : Scene()
 	//oRoom = new Room(medievalTileset, medievalLayers, 40, 20);
 
 	medievalTileset = LoadTexture("assets/2-tileset-x32.png");
+
 	std::vector<std::string> medievalLayers = {
 		"maps/2-map_Calque1.csv",
 		"maps/2-map_Calque2.csv",
 		"maps/2-map_Calque3.csv"
 	};
 	oRoom = new Room(medievalTileset, medievalLayers, 25, 19);
+
 	oRoom->BlockListCreator({ 0,1,2,3,4,5,10,15,20,25,30,35,40,41,42,43,44,45 });
+	oRoom->mBlockList;
 
 	mPlayer = Player({ 100, 100 });
 }
