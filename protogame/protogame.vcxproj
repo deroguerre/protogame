@@ -130,6 +130,7 @@
     <ClCompile Include="SceneManager\scIntro.cpp" />
     <ClCompile Include="SceneManager\scMenu.cpp" />
     <ClCompile Include="sprite.cpp" />
+    <ClCompile Include="Tile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -144,6 +145,7 @@
     <ClInclude Include="SceneManager\scIntro.h" />
     <ClInclude Include="SceneManager\scMenu.h" />
     <ClInclude Include="sprite.h" />
+    <ClInclude Include="tile.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\player.png" />
