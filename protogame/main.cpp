@@ -44,7 +44,7 @@ int main()
 	{
 		// Update
 		//----------------------------------------------------------------------------------
-		if (IsKeyDown(KEY_F11))
+		if (IsKeyPressed(KEY_F11) || IsKeyPressed(KEY_F))
 			ToggleFullscreen();
 
 		mSceneManager.update();

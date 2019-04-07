@@ -33,6 +33,7 @@ ScGame::ScGame() : Scene()
 		"maps/2-map_Calque3.csv"
 	};
 	oRoom = new Room(medievalTileset, medievalLayers, 25, 19);
+	oRoom->BlockListCreator({ 0,1,2,3,4,5,10,15,20,25,30,35,40,41,42,43,44,45 });
 	//oRoom->blockList;
 
 	mPlayer = Player({ 100, 100 });
@@ -49,30 +50,6 @@ void ScGame::load() {
 
 void ScGame::update() 
 {
-	if (IsKeyDown(KEY_LEFT))
-	{
-		mPlayer.moveLeft();
-		mCamera.offset.x += CAMERA_SPEED;
-	}
-	else if (IsKeyDown(KEY_RIGHT))
-	{
-		mPlayer.moveRight();
-		mCamera.offset.x -= CAMERA_SPEED;
-	}
-
-	else if (IsKeyDown(KEY_UP))
-	{
-		mPlayer.moveUp();
-		mCamera.offset.y += CAMERA_SPEED;
-	}
-	else if (IsKeyDown(KEY_DOWN))
-	{
-		mPlayer.moveDown();
-		mCamera.offset.y -= CAMERA_SPEED;
-	}
-	else
-		mPlayer.stopMoving();
-
 	mPlayer.update(GetFrameTime());
 }
 

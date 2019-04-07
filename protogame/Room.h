@@ -11,14 +11,17 @@ public:
 	std::vector<Rectangle> blockList;
 
 	Room(Texture2D texture, std::vector<std::string> aLayerList, int aNbCol, int aNbRow);
-	std::vector<Rectangle> CreateBlockList();
 	~Room();
 
 	void Draw();
-	std::vector<Rectangle> CreateBlockList(Texture2D aTileset);
+	std::vector<Rectangle> BlockListCreator(std::vector<int> blockIds);
+
+	void DrawDoors();
+
 private:
+	std::vector<Rectangle> _layerRectangles;
+
 	std::vector<Rectangle> RectangleListCreator(Texture2D aDungeonTile);
 	std::vector<int> CSVParser(std::string layerPath);
-	std::vector<Rectangle> _layerRectangles;
 };
 
