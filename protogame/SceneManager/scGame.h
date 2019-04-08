@@ -3,6 +3,7 @@
 
 #include "scene.h"
 #include "../player.h"
+#include "../Level.h"
 
 class ScGame : public Scene 
 {
@@ -13,6 +14,7 @@ public:
 	void draw() override;
 	void unload() override;
 private:
-	Player mPlayer;
+	Player* mPlayer;
+	Level* mLevel;
 };
 #endif

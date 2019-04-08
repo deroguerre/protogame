@@ -59,6 +59,7 @@ int main()
 			ClearBackground(RAYWHITE);
 			mSceneManager.draw();
 
+			DrawFPS(0.0f, 0.0f);
 		EndDrawing();
 		//----------------------------------------------------------------------------------
 	}

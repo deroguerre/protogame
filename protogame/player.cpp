@@ -1,7 +1,6 @@
 #include "player.h"
 
-namespace PLAYER
-{
+namespace PLAYER {
 	const std::string SPRITESHEET_PATH = "assets/player.png";
 	const int WIDTH = 48;
 	const int HEIGHT = 48;
@@ -40,6 +39,8 @@ void Player::setupAnimations()
 	addAnimation(1, false, PLAYER::WIDTH * 3, 0, PLAYER::ANIM_IDLE_RIGHT, PLAYER::WIDTH, PLAYER::HEIGHT);
 }
 
+#pragma region Player movements
+
 void Player::moveLeft()
 {
 	//mDirection.x = -PLAYER::WALK_SPEED;
@@ -68,10 +69,7 @@ void Player::moveDown()
 	mFacing = DOWN;
 }
 
-void Player::stopMoving()
-{
-	//mDirection.x = 0.0f;
-	//mDirection.y = 0.0f;
+void Player::stopMoving() {
 
 	switch (mFacing) {
 	case UP:
@@ -89,72 +87,105 @@ void Player::stopMoving()
 	}
 }
 
+#pragma endregion
+
+#pragma region Player collisions
+
 void Player::handleTileCollisions(std::vector<Rectangle> aOthersRects) {
 
-	for (int i = 0; i < aOthersRects.size(); i++) {
-		sides::Side lCollisionSide = Sprite::getCollisionSide(aOthersRects.at(i));
-		if (lCollisionSide != sides::NONE) {
-			switch (lCollisionSide) {
-			case sides::TOP: //Player Top side
-				mPosition.y = aOthersRects.at(i).y + aOthersRects.at(i).height + 1;
-				break;
-			case sides::BOTTOM: //Player Bottom side
-				mPosition.y = aOthersRects.at(i).y - getCollisionRect().height - 1;
-				break;
-			case sides::LEFT: //Player Left side
-				mPosition.x = aOthersRects.at(i).x + aOthersRects.at(i).width + 1;
-				break;
-			case sides::RIGHT: //Player Right side
-				mPosition.x = aOthersRects.at(i).x - getCollisionRect().width - 1;
-				break;
+	std::vector<Rectangle> lCollisions;
+	for (auto lTile : aOthersRects)
+		if (CheckCollisionRecs(getCollisionRect(), lTile))
+			lCollisions.push_back(lTile);
+	
+	if (!lCollisions.empty()) {
+		for (auto lCollision : lCollisions) {
+			sides::Side lCollisionSide = Sprite::getCollisionSide(lCollision);
+			if (lCollisionSide != sides::NONE) {
+				switch (lCollisionSide) {
+				case sides::TOP: //Player Top side
+					mPosition.y = lCollision.y + lCollision.height + 1;
+					break;
+				case sides::BOTTOM: //Player Bottom side
+					mPosition.y = lCollision.y - getCollisionRect().height - 1;
+					break;
+				case sides::LEFT: //Player Left side
+					mPosition.x = lCollision.x + lCollision.width + 1;
+					break;
+				case sides::RIGHT: //Player Right side
+					mPosition.x = lCollision.x - getCollisionRect().width - 1;
+					break;
+				}
 			}
-
 		}
 	}
-
 }
 
-void Player::draw()
-{
-	AnimatedSprite::draw(mPosition);
+void Player::handleDoorCollisions(Level* aLevel) {
+	std::vector<Rectangle> lDoors = aLevel->getCurrentRoom()->getCollisionDoors();
+
+	std::vector<Rectangle> lCollisions;
+	for (auto lDoor : lDoors)
+		if (CheckCollisionRecs(getCollisionRect(), lDoor))
+			lCollisions.push_back(lDoor);
+
+	if (!lCollisions.empty()) {
+		for (auto lCollison : lCollisions) {
+			sides::Side lCollisionSide = Sprite::getCollisionSide(lCollison);
+			if (lCollisionSide != sides::NONE) {
+				switch (lCollisionSide) {
+				case sides::TOP: //Player Top side
+					aLevel->nextRoom(ROOM_DOOR_TOP);
+					setPosition({ (GLOBALS::SCREEN_WIDTH / 2) - (PLAYER::WIDTH / 2), GLOBALS::SCREEN_HEIGHT - PLAYER::HEIGHT - 64 - 1 });
+					break;
+				case sides::BOTTOM: //Player Bottom side
+					aLevel->nextRoom(ROOM_DOOR_BOTTOM);
+					setPosition({ (GLOBALS::SCREEN_WIDTH / 2) - (PLAYER::WIDTH / 2), PLAYER::HEIGHT + 64 + 1 });
+					break;
+				case sides::LEFT: //Player Left side
+					aLevel->nextRoom(ROOM_DOOR_LEFT);
+					setPosition({ GLOBALS::SCREEN_WIDTH - PLAYER::WIDTH - 32 - 1, (GLOBALS::SCREEN_HEIGHT / 2) - (PLAYER::HEIGHT / 2) });
+					break;
+				case sides::RIGHT: //Player Right side
+					aLevel->nextRoom(ROOM_DOOR_RIGHT);
+					setPosition({ PLAYER::WIDTH + 32 + 1, (GLOBALS::SCREEN_HEIGHT / 2) - (PLAYER::HEIGHT / 2) });
+					break;
+				}
+			}
+		}
+	}
 }
 
-void Player::update(float aFrameTime)
-{
+#pragma endregion
 
+void Player::update(float aFrameTime) {
 	// Controls
 	//--------------------------------------------------------------------------------------
 
 	//binding animation
-	if (IsKeyDown(KEY_A) && IsKeyUp(KEY_W) && IsKeyUp(KEY_S)) {
-		this->moveLeft();
-	}
-	else if (IsKeyDown(KEY_D) && IsKeyUp(KEY_W) && IsKeyUp(KEY_S)) {
-		this->moveRight();
-	}
-	else if (IsKeyDown(KEY_W)) {
-		this->moveUp();
-	}
-	else if (IsKeyDown(KEY_S)) {
-		this->moveDown();
-	}
+	if (IsKeyDown(KEY_A) && IsKeyUp(KEY_W) && IsKeyUp(KEY_S))
+		moveLeft();
+	else if (IsKeyDown(KEY_D) && IsKeyUp(KEY_W) && IsKeyUp(KEY_S))
+		moveRight();
+	else if (IsKeyDown(KEY_W))
+		moveUp();
+	else if (IsKeyDown(KEY_S))
+		moveDown();
 	else
-		this->stopMoving();
+		stopMoving();
 
 	//prevent opponents keys animation
 	//(left and right)
-	if (IsKeyDown(KEY_A) && IsKeyDown(KEY_D) && IsKeyUp(KEY_W) && IsKeyUp(KEY_S)) {
-		this->stopMoving();
-	}
+	if (IsKeyDown(KEY_A) && IsKeyDown(KEY_D) && IsKeyUp(KEY_W) && IsKeyUp(KEY_S))
+		stopMoving();
+
 	//(up and down)
-	if (IsKeyDown(KEY_W) && IsKeyDown(KEY_S) && IsKeyUp(KEY_A) && IsKeyUp(KEY_D)) {
-		this->stopMoving();
-	}
+	if (IsKeyDown(KEY_W) && IsKeyDown(KEY_S) && IsKeyUp(KEY_A) && IsKeyUp(KEY_D))
+		stopMoving();
 
 	//prevent all keys press animation
-	if (IsKeyDown(KEY_W) && IsKeyDown(KEY_S) && IsKeyDown(KEY_A) && IsKeyDown(KEY_D)) {
-		this->stopMoving();
-	}
+	if (IsKeyDown(KEY_W) && IsKeyDown(KEY_S) && IsKeyDown(KEY_A) && IsKeyDown(KEY_D))
+		stopMoving();
 
 	//movement
 	if (IsKeyDown(KEY_A))
@@ -170,3 +201,10 @@ void Player::update(float aFrameTime)
 
 	AnimatedSprite::update(aFrameTime);
 }
+
+void Player::draw()
+{
+	AnimatedSprite::draw(mPosition);
+}
+
+

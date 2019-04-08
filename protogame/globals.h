@@ -35,4 +35,12 @@ enum Direction
 	DOWN
 };
 
+enum {
+	ROOM_DOOR_TOP = 0x01,
+	ROOM_DOOR_RIGHT = 0x02,
+	ROOM_DOOR_BOTTOM = 0x04,
+	ROOM_DOOR_LEFT = 0x08,
+	ROOM_VISITED = 0x10
+};
+
 #endif

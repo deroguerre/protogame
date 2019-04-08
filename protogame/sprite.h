@@ -13,6 +13,7 @@ public:
 	virtual void update(float aFrameTime) = 0;
 	void draw(Vector2 aPosition);
 	Vector2 getPosition();
+	void setPosition(Vector2 aPosition);
 	const Rectangle getCollisionRect() const { return mCollisionRect; }
 	const sides::Side getCollisionSide(Rectangle aOtherRect) const;
 

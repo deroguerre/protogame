@@ -1,18 +1,8 @@
 #include "globals.h"
 #include "room.h"
-#include "tile.h"
 
 const int NB_COL_TILES = 25;
 const int NB_ROW_TILES = 19;
-
-Texture2D mTileset;
-
-Vector2 origin = { 0, 0 };
-Rectangle mCurrRectangle;
-
-Rectangle topDoor, downDoor, leftDoor, rightDoor;
-
-std::vector<Tile> tileList;
 
 Room::Room(std::pair<int, int> aPosition, Texture2D aDungeonTileset, std::vector<std::string> aLayerList)
 {
@@ -20,7 +10,7 @@ Room::Room(std::pair<int, int> aPosition, Texture2D aDungeonTileset, std::vector
 	mTileset = aDungeonTileset;
 
 	//crée la liste des rectangles depuis la texture fournis (only 32x32)
-	_layerRectangles = this->rectangleListCreator(mTileset);
+	mLayerRects = this->rectangleListCreator(mTileset);
 
 	//recupère les calques et les ajoutes à une liste 
 	for (int i = 0; i < aLayerList.size(); i++) {
@@ -34,6 +24,7 @@ Room::Room(std::pair<int, int> aPosition, Texture2D aDungeonTileset, std::vector
 void Room::roomCreator() {
 
 	int lIterator = 0;
+	Vector2 lOrigin = { 0, 0 };
 
 	for (int itRow = 0; itRow < NB_ROW_TILES; itRow++)
 	{
@@ -42,35 +33,51 @@ void Room::roomCreator() {
 			for (auto currLayer : mLayerList) {
 
 				Rectangle lCurrRectangle = { 0, 0, 0, 0 };
-				Vector2 currOrigin = { origin.x, origin.y };
+				Vector2 currOrigin = { lOrigin.x, lOrigin.y };
 
 				if (currLayer[lIterator] != -1) {
-					lCurrRectangle = _layerRectangles[currLayer[lIterator]];
+					lCurrRectangle = mLayerRects[currLayer[lIterator]];
 					Tile *lCurrentTile = new Tile(currLayer[lIterator], currOrigin, lCurrRectangle);
-					tileList.push_back(*lCurrentTile);
+					mTiles.push_back(*lCurrentTile);
 				}
 			}
-			origin.x += 32;
+			lOrigin.x += 32;
 			lIterator++;
 		}
-		origin.x = 0;
-		origin.y += 32;
+		lOrigin.x = 0;
+		lOrigin.y += 32;
 	}
 	lIterator = 0;
-	origin.x = 0;
-	origin.y = 0;
+	lOrigin.x = 0;
+	lOrigin.y = 0;
 }
 
-std::vector<Rectangle> Room::blockListCreator(std::vector<int> aBlockIds) {
-	for (auto lCurrentTile : tileList) {
-		for (auto lBlockId : aBlockIds) {
+std::vector<Rectangle> Room::getCollisionTiles() {
+	return mCollisionTiles;
+}
+
+std::vector<Rectangle> Room::getCollisionDoors() {
+	return mCollisionDoors;
+}
+
+void Room::setCollisionTiles(std::vector<int> aTileIds) {
+	for (auto lCurrentTile : mTiles) {
+		for (auto lBlockId : aTileIds) {
 			if (lCurrentTile.tiledId == lBlockId) {
-				mBlockList.push_back(lCurrentTile.mapRectangle);
+				mCollisionTiles.push_back(lCurrentTile.mapRectangle);
 			}
 		}
 	}
+}
 
-	return mBlockList;
+void Room::setCollisionDoors(std::vector<int> aDoorIds) {
+	for (auto lCurrentTile : mTiles) {
+		for (auto lDoorId : aDoorIds) {
+			if (lCurrentTile.tiledId == lDoorId) {
+				mCollisionDoors.push_back(lCurrentTile.mapRectangle);
+			}
+		}
+	}
 }
 
 void Room::drawDoors() {
@@ -90,7 +97,7 @@ void Room::drawDoors() {
 void Room::draw() {
 
 	//dessine chaque tile de la liste
-	for (auto currentTile : tileList) {
+	for (auto currentTile : mTiles) {
 		DrawTextureRec(mTileset, currentTile.textureRectangle, currentTile.origin, WHITE);
 	}
 
@@ -113,7 +120,7 @@ void Room::draw() {
 		//lIterator = 0;
 
 		//show block l
-		for (auto block : mBlockList) {
+		for (auto block : mCollisionTiles) {
 			DrawRectangleLines((int)block.x, (int)block.y, (int)block.width, (int)block.height, YELLOW);
 		}
 	}

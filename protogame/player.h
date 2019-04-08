@@ -3,6 +3,7 @@
 
 #include "animatedsprite.h"
 #include "globals.h"
+#include "Level.h"
 
 class Player : public AnimatedSprite 
 {
@@ -20,6 +21,7 @@ public:
 	void stopMoving();
 
 	void handleTileCollisions(std::vector<Rectangle> aOthersRects);
+	void handleDoorCollisions(Level* aLevel);
 
 private:
 	Direction mFacing;

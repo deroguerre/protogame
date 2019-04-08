@@ -12,9 +12,12 @@ Sprite::Sprite(const std::string &aFilePath, int aSourceX, int aSourceY, int aWi
 	mSpriteSheet = LoadTexture(aFilePath.c_str());
 }
 
-Vector2 Sprite::getPosition()
-{
+Vector2 Sprite::getPosition(){
 	return mPosition;
+}
+
+void Sprite::setPosition(Vector2 aPosition) {
+	mPosition = aPosition;
 }
 
 const sides::Side Sprite::getCollisionSide(Rectangle aOtherRect) const {

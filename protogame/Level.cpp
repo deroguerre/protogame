@@ -1,12 +1,12 @@
 #include "Level.h"
 #include <set>
+#include "globals.h"
 
 float mTinyMapWidth = 128.0f;
 float mTinyMapHeight = 96.0f;
 Vector2 mTinyMapOffset;
 
-
-Level::Level(int aRoomNumber, Texture2D aTileset, vector<string> aLayerList) {
+Level::Level(int aRoomNumber, Texture2D aTileset, vector<string> aLayerList, vector<int> aTileCollisions, vector<int> aDoorCollisions) {
 	mMazeWidth = sqrt(aRoomNumber) + 1;
 	mMazeHeight = sqrt(aRoomNumber) + 1;
 	mRoomNumber = aRoomNumber;
@@ -16,49 +16,26 @@ Level::Level(int aRoomNumber, Texture2D aTileset, vector<string> aLayerList) {
 
 	mTileset = aTileset;
 	mLayers = aLayerList;
+	mTileCollisions = aTileCollisions;
+	mDoorCollisions = aDoorCollisions;
+
+	generateMaze();
 }
 
 void Level::update() {
 	if (IsKeyPressed(KEY_ENTER)) {
 		generateMaze();
 	}
-	if (IsKeyPressed(KEY_LEFT)) {
-		nextRoom(ROOM_DOOR_LEFT);
-	}
-	else if (IsKeyPressed(KEY_RIGHT)) {
-		nextRoom(ROOM_DOOR_RIGHT);
-	}
-	else if (IsKeyPressed(KEY_UP)) {
-		nextRoom(ROOM_DOOR_TOP);
-	}
-	else if (IsKeyPressed(KEY_DOWN)) {
-		nextRoom(ROOM_DOOR_BOTTOM);
-	}
 }
 
 void Level::draw() {
-	// Draw the current room
-	/*DrawRectangle(0.0f, 0.0f, mRoomWidth, 32, GRAY);
-	DrawRectangle(0.0f, 0.0f, 32, mRoomHeight, GRAY);
-	DrawRectangle(mRoomWidth - 32, 0.0f, 32, mRoomHeight, GRAY);
-	DrawRectangle(0.0f, mRoomHeight - 32, mRoomWidth, 32, GRAY);
-	DrawRectangle(32, 32, mRoomWidth - 64, mRoomHeight - 64, LIGHTGRAY);
-
-	if (mCurrentRoom->getDoors() & ROOM_DOOR_TOP)
-		DrawRectangle(mRoomWidth / 2 - 16, 0.0f, 32, 32, DARKGRAY);
-	if (mCurrentRoom->getDoors() & ROOM_DOOR_LEFT)
-		DrawRectangle(0.0f, mRoomHeight / 2 - 16, 32, 32, DARKGRAY);
-	if (mCurrentRoom->getDoors() & ROOM_DOOR_RIGHT)
-		DrawRectangle(mRoomWidth - 32, mRoomHeight / 2 - 16, 32, 32, DARKGRAY);
-	if (mCurrentRoom->getDoors() & ROOM_DOOR_BOTTOM)
-		DrawRectangle(mRoomWidth / 2 - 16, mRoomHeight - 32, 32, 32, DARKGRAY);*/
 
 	mCurrentRoom->draw();
 
 	// Draw the mini map
 	DrawRectangle(mTinyMapOffset.x, mTinyMapOffset.y, mTinyMapWidth, mTinyMapHeight, Fade(RAYWHITE, 0.4f));
 	DrawRectangleLines(mTinyMapOffset.x, mTinyMapOffset.y, mTinyMapWidth, mTinyMapHeight, Fade(BLACK, 0.5f));
-	for (int i = 0; i < mRooms.size(); i++)	{
+	for (int i = 0; i < mRooms.size(); i++) {
 
 		DrawRectangle(
 			(mTinyMapOffset.x + mRooms[i]->getPosition().first * (mTinyMapWidth / mMazeWidth)),
@@ -79,7 +56,7 @@ void Level::draw() {
 			(mTinyMapOffset.y + mRooms[0]->getPosition().second * (mTinyMapHeight / mMazeHeight)),
 			mTinyMapWidth / mMazeWidth,
 			mTinyMapHeight / mMazeHeight,
-			Fade(DARKGREEN,0.1f));
+			Fade(DARKGREEN, 0.1f));
 
 		DrawRectangle(
 			(mTinyMapOffset.x + mCurrentRoom->getPosition().first * (mTinyMapWidth / mMazeWidth)),
@@ -89,7 +66,7 @@ void Level::draw() {
 			Fade(RAYWHITE, 0.1f));
 
 		DrawRectangleLinesEx(
-			{( mTinyMapOffset.x + mRooms[i]->getPosition().first * (mTinyMapWidth / mMazeWidth)),
+			{ (mTinyMapOffset.x + mRooms[i]->getPosition().first * (mTinyMapWidth / mMazeWidth)),
 			(mTinyMapOffset.y + mRooms[i]->getPosition().second * (mTinyMapHeight / mMazeHeight)),
 			mTinyMapWidth / mMazeWidth,
 			mTinyMapHeight / mMazeHeight },
@@ -99,39 +76,39 @@ void Level::draw() {
 		if (mRooms[i]->getDoors() & ROOM_DOOR_TOP) {
 			DrawRectangle(
 				(mTinyMapOffset.x + mRooms[i]->getPosition().first * (mTinyMapWidth / mMazeWidth)) + ((mTinyMapWidth / mMazeWidth) / 2) - 2.0f,
-				mTinyMapOffset.y + mRooms[i]->getPosition().second * (mTinyMapHeight / mMazeHeight), 
-				4.0f, 
-				4.0f, 
+				mTinyMapOffset.y + mRooms[i]->getPosition().second * (mTinyMapHeight / mMazeHeight),
+				4.0f,
+				4.0f,
 				Fade(BLACK, 0.7f));
 		}
-			
+
 		if (mRooms[i]->getDoors() & ROOM_DOOR_LEFT) {
 			DrawRectangle(
 				mTinyMapOffset.x + mRooms[i]->getPosition().first * (mTinyMapWidth / mMazeWidth),
 				(mTinyMapOffset.y + mRooms[i]->getPosition().second * (mTinyMapHeight / mMazeHeight)) + ((mTinyMapHeight / mMazeHeight) / 2) - 2.0f,
-				4.0f, 
-				4.0f, 
+				4.0f,
+				4.0f,
 				Fade(BLACK, 0.7f));
 		}
-			
+
 		if (mRooms[i]->getDoors() & ROOM_DOOR_RIGHT) {
 			DrawRectangle(
 				(mTinyMapOffset.x + mRooms[i]->getPosition().first * (mTinyMapWidth / mMazeWidth)) + (mTinyMapWidth / mMazeWidth) - 4.0f,
 				(mTinyMapOffset.y + mRooms[i]->getPosition().second * (mTinyMapHeight / mMazeHeight)) + ((mTinyMapHeight / mMazeHeight) / 2) - 2.0f,
-				4.0f, 
-				4.0f, 
+				4.0f,
+				4.0f,
 				Fade(BLACK, 0.7f));
 		}
-			
+
 		if (mRooms[i]->getDoors() & ROOM_DOOR_BOTTOM) {
 			DrawRectangle(
 				(mTinyMapOffset.x + mRooms[i]->getPosition().first * (mTinyMapWidth / mMazeWidth)) + ((mTinyMapWidth / mMazeWidth) / 2) - 2.0f,
 				(mTinyMapOffset.y + mRooms[i]->getPosition().second * (mTinyMapHeight / mMazeHeight)) + (mTinyMapHeight / mMazeHeight) - 4.0f,
-				4.0f, 
-				4.0f, 
+				4.0f,
+				4.0f,
 				Fade(BLACK, 0.7f));
 		}
-			
+
 	}
 
 }
@@ -145,13 +122,12 @@ void Level::generateMaze() {
 	mRooms.clear();
 
 	//Choose a random position for the first room.
-	mCurrentRoom = new Room(make_pair(rand() % mMazeWidth, rand() % mMazeHeight), mTileset, mLayers);
-	mCurrentRoom->blockListCreator({ 0,1,2,3,4,5,10,15,20,25,30,35,40,41,42,43,44,45 });
+	mCurrentRoom = generateRoom(make_pair(rand() % mMazeWidth, rand() % mMazeHeight));
 
 	mRooms.push_back(mCurrentRoom);
 	mMaze[mCurrentRoom->getPosition().second * mMazeWidth + mCurrentRoom->getPosition().first] |= ROOM_VISITED;
 
-	createRoom(mCurrentRoom->getPosition());
+	createRooms(mCurrentRoom->getPosition());
 
 	// Set doors for our Rooms
 	for (auto lRoom : mRooms) {
@@ -162,7 +138,7 @@ void Level::generateMaze() {
 	findFarestRoom();
 }
 
-void Level::createRoom(pair<int, int> aPosition) {
+void Level::createRooms(pair<int, int> aPosition) {
 	// Little lambda function to calculate index in a readable way
 	auto offset = [&](int x, int y)
 	{
@@ -182,31 +158,30 @@ void Level::createRoom(pair<int, int> aPosition) {
 		case 0: // North
 			mMaze[offset(0, -1)] |= ROOM_VISITED | ROOM_DOOR_BOTTOM;
 			mMaze[offset(0, 0)] |= ROOM_DOOR_TOP;
-			lNewRoom = new Room(make_pair((aPosition.first + 0), (aPosition.second - 1)), mTileset, mLayers);
+			lNewRoom = generateRoom(make_pair((aPosition.first + 0), (aPosition.second - 1)));
 			break;
 
 		case 1: // East
 			mMaze[offset(+1, 0)] |= ROOM_VISITED | ROOM_DOOR_LEFT;
 			mMaze[offset(0, 0)] |= ROOM_DOOR_RIGHT;
-			lNewRoom = new Room(make_pair((aPosition.first + 1), (aPosition.second + 0)), mTileset, mLayers);
+			lNewRoom = generateRoom(make_pair((aPosition.first + 1), (aPosition.second + 0)));
 			break;
 
 		case 2: // South
 			mMaze[offset(0, +1)] |= ROOM_VISITED | ROOM_DOOR_TOP;
 			mMaze[offset(0, 0)] |= ROOM_DOOR_BOTTOM;
-			lNewRoom = new Room(make_pair((aPosition.first + 0), (aPosition.second + 1)), mTileset, mLayers);
+			lNewRoom = generateRoom(make_pair((aPosition.first + 0), (aPosition.second + 1)));
 			break;
 
 		case 3: // West
 			mMaze[offset(-1, 0)] |= ROOM_VISITED | ROOM_DOOR_RIGHT;
 			mMaze[offset(0, 0)] |= ROOM_DOOR_LEFT;
-			lNewRoom = new Room(make_pair((aPosition.first - 1), (aPosition.second + 0)), mTileset, mLayers);
+			lNewRoom = generateRoom(make_pair((aPosition.first - 1), (aPosition.second + 0)));
 			break;
 		}
 
 		if (&lNewRoom != NULL) {
 			mRooms.push_back(lNewRoom);
-			lNewRoom->blockListCreator({ 0,1,2,3,4,5,10,15,20,25,30,35,40,41,42,43,44,45 });
 		}
 
 		lNeighbours.clear();
@@ -235,8 +210,15 @@ void Level::createRoom(pair<int, int> aPosition) {
 		else 
 			lNewCase = mRooms[rand() % mRooms.size()]->getPosition();
 
-		createRoom(make_pair(lNewCase.first, lNewCase.second));
+		createRooms(make_pair(lNewCase.first, lNewCase.second));
 	}
+}
+
+Room * Level::generateRoom(pair<int, int> aPosition) {
+	Room* lRoom = new Room(aPosition, mTileset, mLayers);
+	lRoom->setCollisionTiles(mTileCollisions);
+	lRoom->setCollisionDoors(mDoorCollisions);
+	return lRoom;
 }
 
 vector<int> Level::getNeighbours(pair<int, int> aPosition, bool aVisited)
