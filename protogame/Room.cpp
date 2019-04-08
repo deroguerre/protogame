@@ -2,8 +2,8 @@
 #include "room.h"
 #include "tile.h"
 
-int nbColTiles = 0;
-int nbRowTiles = 0;
+const int NB_COL_TILES = 25;
+const int NB_ROW_TILES = 19;
 
 Texture2D mTileset;
 
@@ -14,11 +14,10 @@ Rectangle topDoor, downDoor, leftDoor, rightDoor;
 
 std::vector<Tile> tileList;
 
-Room::Room(Texture2D aDungeonTileset, std::vector<std::string> aLayerList, int aNbCol, int aNbRow)
+Room::Room(std::pair<int, int> aPosition, Texture2D aDungeonTileset, std::vector<std::string> aLayerList)
 {
+	mPosition = aPosition;
 	mTileset = aDungeonTileset;
-	nbColTiles = aNbCol;
-	nbRowTiles = aNbRow;
 
 	//crée la liste des rectangles depuis la texture fournis (only 32x32)
 	_layerRectangles = this->rectangleListCreator(mTileset);
@@ -36,9 +35,9 @@ void Room::roomCreator() {
 
 	int lIterator = 0;
 
-	for (int itRow = 0; itRow < nbRowTiles; itRow++)
+	for (int itRow = 0; itRow < NB_ROW_TILES; itRow++)
 	{
-		for (int itCol = 0; itCol < nbColTiles; itCol++)
+		for (int itCol = 0; itCol < NB_COL_TILES; itCol++)
 		{
 			for (auto currLayer : mLayerList) {
 
@@ -88,7 +87,7 @@ void Room::drawDoors() {
 	}
 }
 
-void Room::Draw() {
+void Room::draw() {
 
 	//dessine chaque tile de la liste
 	for (auto currentTile : tileList) {

@@ -38,7 +38,7 @@ int main()
 	SetTargetFPS(60);
 	//--------------------------------------------------------------------------------------
 	
-	mSceneManager.changeScene(new scWorld());
+	mSceneManager.changeScene(new ScGame());
 
 	// Main game loop
 	while (!WindowShouldClose())    // Detect window close button or ESC key

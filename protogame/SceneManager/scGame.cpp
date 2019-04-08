@@ -4,17 +4,9 @@
 #include "../globals.h"
 #include "../Room.h"
 #include <charconv>
+#include "../Level.h"
 
-Texture2D medievalTileset;
-Room* oRoom;
-Rectangle frameRec;
-
-int currentFrame = 0;
-int framesCounter = 0;
-int framesSpeed = 8;
-
-const float CAMERA_SPEED = 1.5f;
-Camera2D mCamera;
+Level* mLevel;
 
 void ScGame::load() {
 
@@ -32,41 +24,44 @@ ScGame::ScGame() : Scene()
 	//};
 	//oRoom = new Room(medievalTileset, medievalLayers, 40, 20);
 
-	medievalTileset = LoadTexture("assets/2-tileset-x32.png");
+	Texture2D lTileset = LoadTexture("assets/2-tileset-x32.png");
 
-	std::vector<std::string> medievalLayers = {
+	std::vector<std::string> lLayers = {
 		"maps/2-map_Calque1.csv",
 		"maps/2-map_Calque2.csv",
 		"maps/2-map_Calque3.csv"
 	};
-	oRoom = new Room(medievalTileset, medievalLayers, 25, 19);
+
+	mLevel = new Level(8, lTileset, lLayers);
+	mLevel->generateMaze();
+	/*oRoom = new Room(mTileset, lLayers);
 
 	oRoom->blockListCreator({ 0,1,2,3,4,5,10,15,20,25,30,35,40,41,42,43,44,45 });
-	oRoom->mBlockList;
+	oRoom->mBlockList;*/
 
 	mPlayer = Player({ 100, 100 });
 }
 
 void ScGame::update()
 {
+	mLevel->update();
 	mPlayer.update(GetFrameTime());
 
-	//std::vector<Rectangle> lCollisions;
-	//for (auto lWall : mWalls)
-	//	if (CheckCollisionRecs(mPlayer.getCollisionRect(), lWall))
-	//		lCollisions.push_back(lWall);
+	std::vector<Rectangle> lCollisions;
+	for (auto lWall : mLevel->getCurrentRoom()->mBlockList)
+		if (CheckCollisionRecs(mPlayer.getCollisionRect(), lWall))
+			lCollisions.push_back(lWall);
 
-	//if (lCollisions.size() > 0)
-	//	mPlayer.handleTileCollisions(lCollisions);
+	if (lCollisions.size() > 0)
+		mPlayer.handleTileCollisions(lCollisions);
 }
 
 void ScGame::draw()
 {
-	DrawTexture(mRoom, 0, 0, RAYWHITE);
-	oRoom->Draw();
+	mLevel->draw();
 	mPlayer.draw();
 }
 
 void ScGame::unload() {
-	UnloadTexture(mRoom);
+
 }
