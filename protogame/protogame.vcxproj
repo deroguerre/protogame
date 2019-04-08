@@ -129,6 +129,7 @@
     <ClCompile Include="SceneManager\scGameOver.cpp" />
     <ClCompile Include="SceneManager\scIntro.cpp" />
     <ClCompile Include="SceneManager\scMenu.cpp" />
+    <ClCompile Include="scWorld.cpp" />
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="Tile.cpp" />
   </ItemGroup>
@@ -144,6 +145,7 @@
     <ClInclude Include="SceneManager\scGameOver.h" />
     <ClInclude Include="SceneManager\scIntro.h" />
     <ClInclude Include="SceneManager\scMenu.h" />
+    <ClInclude Include="scWorld.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="tile.h" />
   </ItemGroup>

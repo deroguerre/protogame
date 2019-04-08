@@ -54,6 +54,9 @@
     <ClCompile Include="Tile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="scWorld.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Room.h">
@@ -94,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="SceneManager\scene.h">
       <Filter>Header Files\SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="scWorld.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

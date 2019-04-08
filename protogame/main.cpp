@@ -24,6 +24,7 @@
 #include "SceneManager/scIntro.h"
 #include "SceneManager/scGame.h"
 #include "SceneManager/scMenu.h"
+#include "scWorld.h"
 #include "globals.h"
 
 SceneManager& mSceneManager = SceneManager::getInstance();
@@ -37,7 +38,7 @@ int main()
 	SetTargetFPS(60);
 	//--------------------------------------------------------------------------------------
 	
-	mSceneManager.changeScene(new ScGame());
+	mSceneManager.changeScene(new scWorld());
 
 	// Main game loop
 	while (!WindowShouldClose())    // Detect window close button or ESC key
