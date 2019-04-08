@@ -1,5 +1,5 @@
 #include "globals.h"
-#include "Room.h"
+#include "room.h"
 #include "tile.h"
 
 int nbColTiles = 0;
@@ -21,18 +21,18 @@ Room::Room(Texture2D aDungeonTileset, std::vector<std::string> aLayerList, int a
 	nbRowTiles = aNbRow;
 
 	//crée la liste des rectangles depuis la texture fournis (only 32x32)
-	_layerRectangles = this->RectangleListCreator(mTileset);
+	_layerRectangles = this->rectangleListCreator(mTileset);
 
 	//recupère les calques et les ajoutes à une liste 
 	for (int i = 0; i < aLayerList.size(); i++) {
-		std::vector<int> lCurrentLayer = this->CSVParser(aLayerList[i]);
+		std::vector<int> lCurrentLayer = this->csvParser(aLayerList[i]);
 		mLayerList.push_back(lCurrentLayer);
 	}
 
-	this->RoomCreator();
+	this->roomCreator();
 }
 
-void Room::RoomCreator() {
+void Room::roomCreator() {
 
 	int lIterator = 0;
 
@@ -62,7 +62,7 @@ void Room::RoomCreator() {
 	origin.y = 0;
 }
 
-std::vector<Rectangle> Room::BlockListCreator(std::vector<int> aBlockIds) {
+std::vector<Rectangle> Room::blockListCreator(std::vector<int> aBlockIds) {
 	for (auto lCurrentTile : tileList) {
 		for (auto lBlockId : aBlockIds) {
 			if (lCurrentTile.tiledId == lBlockId) {
@@ -74,7 +74,7 @@ std::vector<Rectangle> Room::BlockListCreator(std::vector<int> aBlockIds) {
 	return mBlockList;
 }
 
-void Room::DrawDoors() {
+void Room::drawDoors() {
 	Rectangle topDoor = { 384, 32, 32, 32 };
 	Rectangle downDoor = { 384, 544, 32, 32 };
 	Rectangle leftDoor = { 0, 288, 32, 32 };
@@ -95,7 +95,7 @@ void Room::Draw() {
 		DrawTextureRec(mTileset, currentTile.textureRectangle, currentTile.origin, WHITE);
 	}
 
-	this->DrawDoors();
+	this->drawDoors();
 
 	if (GLOBALS::DEBUG) {
 
@@ -120,7 +120,7 @@ void Room::Draw() {
 	}
 }
 
-std::vector<Rectangle> Room::RectangleListCreator(Texture2D aTileset) {
+std::vector<Rectangle> Room::rectangleListCreator(Texture2D aTileset) {
 
 	std::vector<Rectangle> lListOfRect;
 
@@ -150,7 +150,7 @@ std::vector<Rectangle> Room::RectangleListCreator(Texture2D aTileset) {
 }
 
 //parse csv to vector
-std::vector<int> Room::CSVParser(std::string layerPath) {
+std::vector<int> Room::csvParser(std::string layerPath) {
 	std::ifstream  data(layerPath);
 
 	std::vector<int> lCurrentLayer;

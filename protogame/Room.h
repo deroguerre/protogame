@@ -17,14 +17,14 @@ public:
 	~Room();
 
 	void Draw();
-	std::vector<Rectangle> BlockListCreator(std::vector<int> blockIds);
+	std::vector<Rectangle> blockListCreator(std::vector<int> blockIds);
 
 private:
-	void RoomCreator();
-	void DrawDoors();
+	void roomCreator();
+	void drawDoors();
 
 	std::vector<Rectangle> _layerRectangles;
-	std::vector<Rectangle> RectangleListCreator(Texture2D aDungeonTile);
-	std::vector<int> CSVParser(std::string layerPath);
+	std::vector<Rectangle> rectangleListCreator(Texture2D aDungeonTile);
+	std::vector<int> csvParser(std::string layerPath);
 };
 

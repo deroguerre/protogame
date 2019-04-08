@@ -41,7 +41,7 @@ ScGame::ScGame() : Scene()
 	};
 	oRoom = new Room(medievalTileset, medievalLayers, 25, 19);
 
-	oRoom->BlockListCreator({ 0,1,2,3,4,5,10,15,20,25,30,35,40,41,42,43,44,45 });
+	oRoom->blockListCreator({ 0,1,2,3,4,5,10,15,20,25,30,35,40,41,42,43,44,45 });
 	oRoom->mBlockList;
 
 	mPlayer = Player({ 100, 100 });
