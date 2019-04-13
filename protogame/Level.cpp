@@ -152,7 +152,7 @@ void Level::createRooms(pair<int, int> aPosition) {
 		// Choose one available neighbour at random
 		int lNextCellDirection = lNeighbours[rand() % lNeighbours.size()];
 
-		Room* lNewRoom;
+		World* lNewRoom;
 		// Create a path between the neighbour and the current cell
 		switch (lNextCellDirection) {
 		case 0: // North
@@ -214,8 +214,8 @@ void Level::createRooms(pair<int, int> aPosition) {
 	}
 }
 
-Room * Level::generateRoom(pair<int, int> aPosition) {
-	Room* lRoom = new Room(aPosition, mTileset, mLayers);
+	World* Level::generateRoom(pair<int, int> aPosition) {
+	World* lRoom = new World(aPosition, mTileset, mLayers);
 	lRoom->setCollisionTiles(mTileCollisions);
 	lRoom->setCollisionDoors(mDoorCollisions);
 	return lRoom;

@@ -8,11 +8,11 @@
 #include <list>
 #include "tile.h"
 
-class Room
+class World
 {
 public:
-	Room(std::pair<int, int> aPosition, Texture2D aTexture, std::vector<std::string> aLayerList);
-	~Room();
+	World(std::pair<int, int> aPosition, Texture2D aTexture, std::vector<std::string> aLayerList);
+	~World();
 	void draw();
 
 	std::list<std::vector<int>>  mLayerList;

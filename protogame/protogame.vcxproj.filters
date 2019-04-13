@@ -39,9 +39,6 @@
     <ClCompile Include="SceneManager\scMenu.cpp">
       <Filter>Source Files\SceneManager</Filter>
     </ClCompile>
-    <ClCompile Include="Room.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="animatedsprite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -57,14 +54,11 @@
     <ClCompile Include="Level.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="scWorld.cpp">
-      <Filter>Source Files\SceneManager</Filter>
+    <ClCompile Include="world.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Room.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -101,10 +95,10 @@
     <ClInclude Include="SceneManager\scene.h">
       <Filter>Header Files\SceneManager</Filter>
     </ClInclude>
-    <ClInclude Include="scWorld.h">
+    <ClInclude Include="Level.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Level.h">
+    <ClInclude Include="world.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

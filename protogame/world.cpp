@@ -1,10 +1,10 @@
 #include "globals.h"
-#include "room.h"
+#include "world.h"
 
 const int NB_COL_TILES = 25;
 const int NB_ROW_TILES = 19;
 
-Room::Room(std::pair<int, int> aPosition, Texture2D aDungeonTileset, std::vector<std::string> aLayerList)
+World::World(std::pair<int, int> aPosition, Texture2D aDungeonTileset, std::vector<std::string> aLayerList)
 {
 	mPosition = aPosition;
 	mTileset = aDungeonTileset;
@@ -21,7 +21,7 @@ Room::Room(std::pair<int, int> aPosition, Texture2D aDungeonTileset, std::vector
 	this->roomCreator();
 }
 
-void Room::roomCreator() {
+void World::roomCreator() {
 
 	int lIterator = 0;
 	Vector2 lOrigin = { 0, 0 };
@@ -52,15 +52,15 @@ void Room::roomCreator() {
 	lOrigin.y = 0;
 }
 
-std::vector<Rectangle> Room::getCollisionTiles() {
+std::vector<Rectangle> World::getCollisionTiles() {
 	return mCollisionTiles;
 }
 
-std::vector<Rectangle> Room::getCollisionDoors() {
+std::vector<Rectangle> World::getCollisionDoors() {
 	return mCollisionDoors;
 }
 
-void Room::setCollisionTiles(std::vector<int> aTileIds) {
+void World::setCollisionTiles(std::vector<int> aTileIds) {
 	for (auto lCurrentTile : mTiles) {
 		for (auto lBlockId : aTileIds) {
 			if (lCurrentTile.tiledId == lBlockId) {
@@ -70,7 +70,7 @@ void Room::setCollisionTiles(std::vector<int> aTileIds) {
 	}
 }
 
-void Room::setCollisionDoors(std::vector<int> aDoorIds) {
+void World::setCollisionDoors(std::vector<int> aDoorIds) {
 	for (auto lCurrentTile : mTiles) {
 		for (auto lDoorId : aDoorIds) {
 			if (lCurrentTile.tiledId == lDoorId) {
@@ -80,7 +80,7 @@ void Room::setCollisionDoors(std::vector<int> aDoorIds) {
 	}
 }
 
-void Room::drawDoors() {
+void World::drawDoors() {
 	Rectangle topDoor = { 384, 32, 32, 32 };
 	Rectangle downDoor = { 384, 544, 32, 32 };
 	Rectangle leftDoor = { 0, 288, 32, 32 };
@@ -94,7 +94,7 @@ void Room::drawDoors() {
 	}
 }
 
-void Room::draw() {
+void World::draw() {
 
 	//dessine chaque tile de la liste
 	for (auto currentTile : mTiles) {
@@ -126,7 +126,7 @@ void Room::draw() {
 	}
 }
 
-std::vector<Rectangle> Room::rectangleListCreator(Texture2D aTileset) {
+std::vector<Rectangle> World::rectangleListCreator(Texture2D aTileset) {
 
 	std::vector<Rectangle> lListOfRect;
 
@@ -156,7 +156,7 @@ std::vector<Rectangle> Room::rectangleListCreator(Texture2D aTileset) {
 }
 
 //parse csv to vector
-std::vector<int> Room::csvParser(std::string layerPath) {
+std::vector<int> World::csvParser(std::string layerPath) {
 	std::ifstream  data(layerPath);
 
 	std::vector<int> lCurrentLayer;
@@ -176,6 +176,6 @@ std::vector<int> Room::csvParser(std::string layerPath) {
 	return lCurrentLayer;
 }
 
-Room::~Room()
+World::~World()
 {
 }

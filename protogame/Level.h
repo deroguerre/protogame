@@ -2,7 +2,7 @@
 #define LEVEL_H
 #include <raylib.h>
 #include <stack>
-#include "Room.h"
+#include "world.h"
 
 using namespace std;
 
@@ -19,7 +19,7 @@ public:
 
 	void nextRoom(int aDoor);
 
-	Room* getCurrentRoom() { return mCurrentRoom; }
+	World* getCurrentRoom() { return mCurrentRoom; }
 
 private:
 	int mMazeWidth;
@@ -28,13 +28,13 @@ private:
 	float mRoomHeight;
 	int mRoomNumber;
 	int* mMaze;
-	Room* mCurrentRoom;
-	vector<Room*> mRooms;
+	World* mCurrentRoom;
+	vector<World*> mRooms;
 	pair<int, int> mFarestRoom;
 
 	void generateMaze();
 	void createRooms(pair<int, int> aPosition);
-	Room* generateRoom(pair<int, int> aPosition);
+	World* generateRoom(pair<int, int> aPosition);
 	vector<int> getNeighbours(pair<int, int> aPosition, bool aVisited);
 	vector<int> getRoomDoors(int* aMaze, pair<int, int> aPosition);
 	vector<stack<pair<int, int>>> findAllPaths();

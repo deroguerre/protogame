@@ -24,7 +24,6 @@
 #include "SceneManager/scIntro.h"
 #include "SceneManager/scGame.h"
 #include "SceneManager/scMenu.h"
-#include "scWorld.h"
 #include "globals.h"
 
 SceneManager& mSceneManager = SceneManager::getInstance();
