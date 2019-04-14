@@ -4,7 +4,7 @@ Tile::Tile(int aTiledId, Vector2 aPosition, Rectangle aTextureRectangle)
 {
 	mTileId = aTiledId;
 	mPosition = aPosition;
-	mTileRec = { mPosition.x, mPosition.y, 32, 32 };
+	mTileRec = { mPosition.x, mPosition.y, aTextureRectangle.width, aTextureRectangle.height };
 	textureRectangle = aTextureRectangle;
 }
 

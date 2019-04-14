@@ -1,18 +1,21 @@
 #include "globals.h"
 #include "world.h"
 
-const int NB_COL_TILES = 25;
-const int NB_ROW_TILES = 18;
+int tileSize;
+const int NB_COL_TILES = 64;
+const int NB_ROW_TILES = 36;
 
-World::World(std::pair<int, int> aPosition, Texture2D aDungeonTileset, std::vector<std::string> aLayerList)
+World::World(std::pair<int, int> aPosition, Texture2D aDungeonTileset, std::vector<std::string> aLayerList, int aTileSize)
 {
+	tileSize = aTileSize;
+
 	mPosition = aPosition;
 	mTileset = aDungeonTileset;
 
-	//crée la liste des rectangles depuis la texture fournis (only 32x32)
+	//crï¿½e la liste des rectangles depuis la texture fournis (only 32x32)
 	mLayerRects = this->rectangleListCreator(mTileset);
 
-	//recupère les calques et les ajoutes à une liste 
+	//recupï¿½re les calques et les ajoutes ï¿½ une liste 
 	for (int i = 0; i < aLayerList.size(); i++) {
 		std::vector<int> lCurrentLayer = this->csvParser(aLayerList[i]);
 		mLayerList.push_back(lCurrentLayer);
@@ -41,11 +44,11 @@ void World::roomCreator() {
 					mTiles.push_back(*lCurrentTile);
 				}
 			}
-			lOrigin.x += 32;
+			lOrigin.x += tileSize;
 			lIterator++;
 		}
 		lOrigin.x = 0;
-		lOrigin.y += 32;
+		lOrigin.y += tileSize;
 	}
 	lIterator = 0;
 	lOrigin.x = 0;
@@ -130,10 +133,8 @@ std::vector<Rectangle> World::rectangleListCreator(Texture2D aTileset) {
 
 	std::vector<Rectangle> lListOfRect;
 
-	int tileSilze = 32;
-
-	float nbCol = (float)aTileset.width / 32;
-	float nbRow = (float)aTileset.height / 32;
+	float nbCol = (float)aTileset.width / tileSize;
+	float nbRow = (float)aTileset.height / tileSize;
 	float nbTile = nbCol * nbRow;
 
 	float nextCol = 0;
@@ -146,10 +147,10 @@ std::vector<Rectangle> World::rectangleListCreator(Texture2D aTileset) {
 			Rectangle lTempRec = { nextCol, nextRow, (float)mTileset.width / nbCol, (float)mTileset.height / nbRow };
 			lListOfRect.push_back(lTempRec);
 
-			nextCol += 32;
+			nextCol += tileSize;
 		}
 		nextCol = 0;
-		nextRow += 32;
+		nextRow += tileSize;
 	}
 
 	return lListOfRect;
