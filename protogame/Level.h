@@ -2,14 +2,14 @@
 #define LEVEL_H
 #include <raylib.h>
 #include <stack>
-#include "world.h"
+#include "room.h"
 
 using namespace std;
 
 class Level {
 public:
 	Level();
-	Level(int aRoomNumber, Texture2D aTileset, vector<string> aLayerList, vector<int> aTileCollisions, vector<int> aDoorCollisions);
+	Level(int aRoomNumber, const char* aTilemap);
 	~Level();
 
 	// Update the current scene
@@ -19,7 +19,7 @@ public:
 
 	void nextRoom(int aDoor);
 
-	World* getCurrentRoom() { return mCurrentRoom; }
+	Room* getCurrentRoom() { return mCurrentRoom; }
 
 private:
 	int mMazeWidth;
@@ -28,22 +28,18 @@ private:
 	float mRoomHeight;
 	int mRoomNumber;
 	int* mMaze;
-	World* mCurrentRoom;
-	vector<World*> mRooms;
+	Room* mCurrentRoom;
+	vector<Room*> mRooms;
 	pair<int, int> mFarestRoom;
 
 	void generateMaze();
 	void createRooms(pair<int, int> aPosition);
-	World* generateRoom(pair<int, int> aPosition);
 	vector<int> getNeighbours(pair<int, int> aPosition, bool aVisited);
 	vector<int> getRoomDoors(int* aMaze, pair<int, int> aPosition);
 	vector<stack<pair<int, int>>> findAllPaths();
 	void findFarestRoom();
 
-	Texture2D mTileset;
-	vector<string> mLayers;
-	vector<int> mTileCollisions;
-	vector<int> mDoorCollisions;
+	const char* mTilemap;
 };
 
 #endif

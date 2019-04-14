@@ -12,10 +12,10 @@ World::World(std::pair<int, int> aPosition, Texture2D aDungeonTileset, std::vect
 	mPosition = aPosition;
 	mTileset = aDungeonTileset;
 
-	//crée la liste des rectangles depuis la texture fournis (only 32x32)
+	//crï¿½e la liste des rectangles depuis la texture fournis (only 32x32)
 	mLayerRects = this->rectangleListCreator(mTileset);
 
-	//recupère les calques et les ajoutes à une liste 
+	//recupï¿½re les calques et les ajoutes ï¿½ une liste 
 	for (int i = 0; i < aLayerList.size(); i++) {
 		std::vector<int> lCurrentLayer = this->csvParser(aLayerList[i]);
 		mLayerList.push_back(lCurrentLayer);
@@ -66,8 +66,8 @@ std::vector<Rectangle> World::getCollisionDoors() {
 void World::setCollisionTiles(std::vector<int> aTileIds) {
 	for (auto lCurrentTile : mTiles) {
 		for (auto lBlockId : aTileIds) {
-			if (lCurrentTile.tiledId == lBlockId) {
-				mCollisionTiles.push_back(lCurrentTile.mapRectangle);
+			if (lCurrentTile.getTileId() == lBlockId) {
+				mCollisionTiles.push_back(lCurrentTile.getTileRec());
 			}
 		}
 	}
@@ -76,8 +76,8 @@ void World::setCollisionTiles(std::vector<int> aTileIds) {
 void World::setCollisionDoors(std::vector<int> aDoorIds) {
 	for (auto lCurrentTile : mTiles) {
 		for (auto lDoorId : aDoorIds) {
-			if (lCurrentTile.tiledId == lDoorId) {
-				mCollisionDoors.push_back(lCurrentTile.mapRectangle);
+			if (lCurrentTile.getTileId() == lDoorId) {
+				mCollisionDoors.push_back(lCurrentTile.getTileRec());
 			}
 		}
 	}
@@ -101,11 +101,7 @@ void World::draw() {
 
 	//dessine chaque tile de la liste
 	for (auto currentTile : mTiles) {
-		DrawTextureRec(mTileset, currentTile.textureRectangle, currentTile.origin, WHITE);
-
-		if (GLOBALS::DEBUG) {
-			DrawRectangleLines(currentTile.origin.x, currentTile.origin.y, tileSize, tileSize, YELLOW);
-		}
+		DrawTextureRec(mTileset, currentTile.textureRectangle, currentTile.getPosition(), WHITE);
 	}
 
 	this->drawDoors();

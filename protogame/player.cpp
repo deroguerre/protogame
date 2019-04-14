@@ -133,22 +133,27 @@ void Player::handleDoorCollisions(Level* aLevel) {
 		for (auto lCollison : lCollisions) {
 			sides::Side lCollisionSide = Sprite::getCollisionSide(lCollison);
 			if (lCollisionSide != sides::NONE) {
+				Vector2 lSpawn;
 				switch (lCollisionSide) {
 				case sides::TOP: //Player Top side
 					aLevel->nextRoom(ROOM_DOOR_TOP);
-					setPosition({ (GLOBALS::SCREEN_WIDTH / 2) - (PLAYER::WIDTH / 2), GLOBALS::SCREEN_HEIGHT - PLAYER::HEIGHT - 64 - 1 });
+					lSpawn = aLevel->getCurrentRoom()->getPlayerSpawn(ROOM_DOOR_BOTTOM);
+					setPosition({lSpawn.x - PLAYER::WIDTH / 2, lSpawn.y - PLAYER::HEIGHT});
 					break;
 				case sides::BOTTOM: //Player Bottom side
 					aLevel->nextRoom(ROOM_DOOR_BOTTOM);
-					setPosition({ (GLOBALS::SCREEN_WIDTH / 2) - (PLAYER::WIDTH / 2), PLAYER::HEIGHT + 64 + 1 });
+					lSpawn = aLevel->getCurrentRoom()->getPlayerSpawn(ROOM_DOOR_TOP);
+					setPosition({ lSpawn.x - PLAYER::WIDTH / 2, lSpawn.y});
 					break;
 				case sides::LEFT: //Player Left side
 					aLevel->nextRoom(ROOM_DOOR_LEFT);
-					setPosition({ GLOBALS::SCREEN_WIDTH - PLAYER::WIDTH - 32 - 1, (GLOBALS::SCREEN_HEIGHT / 2) - (PLAYER::HEIGHT / 2) });
+					lSpawn = aLevel->getCurrentRoom()->getPlayerSpawn(ROOM_DOOR_RIGHT);
+					setPosition({ lSpawn.x - PLAYER::WIDTH, lSpawn.y - PLAYER::HEIGHT / 2 });
 					break;
 				case sides::RIGHT: //Player Right side
 					aLevel->nextRoom(ROOM_DOOR_RIGHT);
-					setPosition({ PLAYER::WIDTH + 32 + 1, (GLOBALS::SCREEN_HEIGHT / 2) - (PLAYER::HEIGHT / 2) });
+					lSpawn = aLevel->getCurrentRoom()->getPlayerSpawn(ROOM_DOOR_LEFT);
+					setPosition({ lSpawn.x, lSpawn.y - PLAYER::HEIGHT / 2 });
 					break;
 				}
 			}

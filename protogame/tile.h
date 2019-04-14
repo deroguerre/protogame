@@ -1,4 +1,6 @@
-#pragma once
+#ifndef TILE_H
+#define TILE_H
+
 #include <raylib.h>
 #include <string>
 #include <vector>
@@ -7,12 +9,25 @@
 class Tile
 {
 public:
-	int tiledId;
-	Vector2 origin;
-	Rectangle mapRectangle;
+	Tile(int aTiledId, Vector2 aOrigin, Rectangle aTextureRectangle);
+	Tile(Texture2D aTileset, Vector2 aPosition, Rectangle aTileRec);
+	~Tile();
+
 	Rectangle textureRectangle;
 
-	Tile(int aTiledId, Vector2 aOrigin, Rectangle aTextureRectangle);
-	~Tile();
+	int getTileId();
+	Texture2D getTileset();
+	Vector2 getPosition();
+	Rectangle getTileRec();
+
+	void draw();
+
+private:
+	int mTileId;
+	Texture2D mTileset;
+	Vector2 mPosition;
+	Rectangle mTileRec;
 };
+
+#endif
 

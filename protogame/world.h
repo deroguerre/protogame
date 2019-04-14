@@ -1,4 +1,6 @@
-#pragma once
+#ifndef WORLD_H
+#define WORLD_H
+
 #include <raylib.h>
 #include <iostream>
 #include <sstream>
@@ -41,4 +43,6 @@ private:
 	std::vector<Rectangle> rectangleListCreator(Texture2D aDungeonTile);
 	std::vector<int> csvParser(std::string layerPath);
 };
+
+#endif
 
