@@ -20,12 +20,12 @@
 ********************************************************************************************/
 
 #include <raylib.h>
-#include "SceneManager/sceneManager.h"
-#include "SceneManager/scIntro.h"
-#include "SceneManager/scGame.h"
-#include "SceneManager/scMenu.h"
-#include "scworldmap.h"
-#include "globals.h"
+#include "SceneManager/SceneManager.h"
+#include "SceneManager/IntroScene.h"
+#include "SceneManager/GameScene.h"
+#include "SceneManager/MenuScene.h"
+#include "WorldMapScene.h"
+#include "Globals.h"
 
 SceneManager& mSceneManager = SceneManager::getInstance();
 
@@ -33,12 +33,12 @@ int main()
 {
 	// Initialization
 	//--------------------------------------------------------------------------------------
-	InitWindow(GLOBALS::SCREEN_WIDTH, GLOBALS::SCREEN_HEIGHT, "raylib [core] example - basic window");
+	InitWindow(Globals::SCREEN_WIDTH, Globals::SCREEN_HEIGHT, "raylib [core] example - basic window");
 
 	SetTargetFPS(60);
 	//--------------------------------------------------------------------------------------
 	
-	mSceneManager.changeScene(new ScWorldmap());
+	mSceneManager.changeScene(new WorldMapScene());
 
 	// Main game loop
 	while (!WindowShouldClose())    // Detect window close button or ESC key

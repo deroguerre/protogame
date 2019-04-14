@@ -1,16 +1,16 @@
-#include "scMenu.h"
-#include "../globals.h"
+#include "MenuScene.h"
+#include "../Globals.h"
 
-ScMenu::ScMenu() {}
+MenuScene::MenuScene() {}
 
-void ScMenu::load() {}
+void MenuScene::load() {}
 
-void ScMenu::update() {}
+void MenuScene::update() {}
 
-Rectangle playButton = { GLOBALS::SCREEN_WIDTH / 2 - 64, GLOBALS::SCREEN_HEIGHT / 2 - 16, 128, 32 };
+Rectangle playButton = { Globals::SCREEN_WIDTH / 2 - 64, Globals::SCREEN_HEIGHT / 2 - 16, 128, 32 };
 Rectangle quitButton = { 32, 96, 128, 32 };
 
-void ScMenu::draw() {
+void MenuScene::draw() {
 
 	DrawRectangleRec(playButton, LIGHTGRAY); 
 	DrawText("Jouer", playButton.x + playButton.width/2 - (MeasureText("Jouer", 20)/2), playButton.y + playButton.height/2 - 10, 20, BLACK);
@@ -20,4 +20,4 @@ void ScMenu::draw() {
 
 }
 
-void ScMenu::unload() {}
+void MenuScene::unload() {}

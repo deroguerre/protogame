@@ -2,9 +2,6 @@
 #define TILE_H
 
 #include <raylib.h>
-#include <string>
-#include <vector>
-#include <list>
 
 class Tile
 {

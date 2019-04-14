@@ -1,4 +1,4 @@
-#include "globals.h"
+#include "Globals.h"
 #include "Room.h"
 
 Room::Room(std::string aTilemap, std::pair<int, int> aPosition) {

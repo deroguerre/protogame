@@ -1,8 +1,8 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "animatedsprite.h"
-#include "globals.h"
+#include "AnimatedSprite.h"
+#include "Globals.h"
 #include "Level.h"
 
 class Player : public AnimatedSprite 

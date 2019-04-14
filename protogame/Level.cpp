@@ -1,6 +1,6 @@
 #include "Level.h"
 #include <set>
-#include "globals.h"
+#include "Globals.h"
 
 float mTinyMapWidth = 128.0f;
 float mTinyMapHeight = 96.0f;
@@ -10,7 +10,7 @@ Level::Level(int aRoomNumber, const char* aTilemap) {
 	mMazeWidth = sqrt(aRoomNumber) + 1;
 	mMazeHeight = sqrt(aRoomNumber) + 1;
 	mRoomNumber = aRoomNumber;
-	mTinyMapOffset = {GLOBALS::SCREEN_WIDTH - mTinyMapWidth, 0.0f};
+	mTinyMapOffset = {Globals::SCREEN_WIDTH - mTinyMapWidth, 0.0f};
 
 	mTilemap = aTilemap;
 	generateMaze();

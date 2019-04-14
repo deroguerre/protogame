@@ -1,7 +1,7 @@
 #ifndef SCENEMANAGER_H
 #define SCENEMANAGER_H
 
-#include "scene.h"
+#include "Scene.h"
 
 // Class to manage all the scene of the game
 class SceneManager 

@@ -1,12 +1,12 @@
-#ifndef SCMENU_H
-#define SCMENU_H
+#ifndef INTROSCENE_H
+#define INTROSCENE_H
 
-#include "scene.h"
+#include "Scene.h"
 
-class ScMenu : public Scene 
+class IntroScene : public Scene 
 {
 public:
-	ScMenu();
+	IntroScene();
 	void load() override;
 	void update() override;
 	void draw() override;

@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 #include <list>
-#include "tile.h"
+#include "Tile.h"
 
 class World
 {

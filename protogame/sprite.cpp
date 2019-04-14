@@ -1,4 +1,4 @@
-#include "sprite.h"
+#include "Sprite.h"
 
 Sprite::Sprite() {}
 
@@ -20,7 +20,7 @@ void Sprite::setPosition(Vector2 aPosition) {
 	mPosition = aPosition;
 }
 
-const sides::Side Sprite::getCollisionSide(Rectangle aOtherRect) const {
+const Sides::Side Sprite::getCollisionSide(Rectangle aOtherRect) const {
 	
 	int lAmtRight, lAmtLeft, lAmtTop, lAmtBottom;
 	lAmtRight = getCollisionRect().x + getCollisionRect().width - aOtherRect.x;
@@ -36,11 +36,11 @@ const sides::Side Sprite::getCollisionSide(Rectangle aOtherRect) const {
 			lLowest = lVals[i];
 	
 	return
-		lLowest == abs(lAmtRight) ? sides::RIGHT :
-		lLowest == abs(lAmtLeft) ? sides::LEFT :
-		lLowest == abs(lAmtTop) ? sides::TOP :
-		lLowest == abs(lAmtBottom) ? sides::BOTTOM :
-		sides::NONE;
+		lLowest == abs(lAmtRight) ? Sides::RIGHT :
+		lLowest == abs(lAmtLeft) ? Sides::LEFT :
+		lLowest == abs(lAmtTop) ? Sides::TOP :
+		lLowest == abs(lAmtBottom) ? Sides::BOTTOM :
+		Sides::NONE;
 
 }
 

@@ -3,7 +3,7 @@
 
 #include <raylib.h>
 #include <string>
-#include "globals.h"
+#include "Globals.h"
 
 class Sprite 
 {
@@ -15,7 +15,7 @@ public:
 	Vector2 getPosition();
 	void setPosition(Vector2 aPosition);
 	const Rectangle getCollisionRect() const { return mCollisionRect; }
-	const sides::Side getCollisionSide(Rectangle aOtherRect) const;
+	const Sides::Side getCollisionSide(Rectangle aOtherRect) const;
 
 protected:
 	Rectangle mSourceRect;

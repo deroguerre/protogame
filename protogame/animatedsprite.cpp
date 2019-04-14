@@ -1,4 +1,4 @@
-#include "animatedsprite.h"
+#include "AnimatedSprite.h"
 
 AnimatedSprite::AnimatedSprite() {}
 

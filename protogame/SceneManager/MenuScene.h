@@ -1,12 +1,12 @@
-#ifndef SCINTRO_H
-#define SCINTRO_H
+#ifndef MENUSCENE_H
+#define MENUSCENE_H
 
-#include "scene.h"
+#include "Scene.h"
 
-class ScIntro : public Scene 
+class MenuScene : public Scene 
 {
 public:
-	ScIntro();
+	MenuScene();
 	void load() override;
 	void update() override;
 	void draw() override;

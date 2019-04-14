@@ -1,5 +1,5 @@
-#include "sceneManager.h"
-#include "scene.h"
+#include "SceneManager.h"
+#include "Scene.h"
 
 SceneManager SceneManager::mInstance = SceneManager();
 

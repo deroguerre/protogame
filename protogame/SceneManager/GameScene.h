@@ -1,14 +1,14 @@
-#ifndef SCGAME_H
-#define SCGAME_H
+#ifndef GAMESCENE_H
+#define GAMESCENE_H
 
-#include "scene.h"
-#include "../player.h"
+#include "Scene.h"
+#include "../Player.h"
 #include "../Level.h"
 
-class ScGame : public Scene 
+class GameScene : public Scene 
 {
 public:
-	ScGame();
+	GameScene();
 	void load() override;
 	void update() override;
 	void draw() override;

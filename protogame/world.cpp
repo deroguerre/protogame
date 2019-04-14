@@ -1,5 +1,5 @@
-#include "globals.h"
-#include "world.h"
+#include "Globals.h"
+#include "World.h"
 
 int tileSize;
 const int NB_COL_TILES = 64;
@@ -89,7 +89,7 @@ void World::drawDoors() {
 	Rectangle leftDoor = { 0, 288, 32, 32 };
 	Rectangle rightDoor = { 768, 288, 32, 32 };
 
-	if (GLOBALS::DEBUG) {
+	if (Globals::DEBUG) {
 		DrawRectangleLines((int)topDoor.x, (int)topDoor.y, (int)topDoor.width, (int)topDoor.height, BLUE);
 		DrawRectangleLines((int)downDoor.x, (int)downDoor.y, (int)downDoor.width, (int)downDoor.height, BLUE);
 		DrawRectangleLines((int)leftDoor.x, (int)leftDoor.y, (int)leftDoor.width, (int)leftDoor.height, BLUE);
@@ -106,7 +106,7 @@ void World::draw() {
 
 	this->drawDoors();
 
-	if (GLOBALS::DEBUG) {
+	if (Globals::DEBUG) {
 
 		//tiles counter
 		//int lIterator = 0;

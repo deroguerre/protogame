@@ -1,7 +1,7 @@
-#ifndef ANIMATED_SPRITE_H
-#define ANIMATED_SPRITE_H
+#ifndef ANIMATEDSPRITE_H
+#define ANIMATEDSPRITE_H
 
-#include "sprite.h"
+#include "Sprite.h"
 #include <map>
 #include <vector>
 

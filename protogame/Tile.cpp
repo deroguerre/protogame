@@ -1,4 +1,4 @@
-#include "tile.h"
+#include "Tile.h"
 
 Tile::Tile(int aTiledId, Vector2 aPosition, Rectangle aTextureRectangle)
 {

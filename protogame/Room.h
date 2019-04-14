@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 #include <map>
-#include "tile.h"
+#include "Tile.h"
 
 using namespace tinyxml2;
 

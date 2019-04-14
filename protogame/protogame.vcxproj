@@ -120,46 +120,42 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="animatedsprite.cpp" />
-    <ClCompile Include="Level.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="scworldmap.cpp" />
-    <ClCompile Include="Room.cpp" />
-    <ClCompile Include="tinyxml2.cpp" />
-    <ClCompile Include="world.cpp" />
-    <ClCompile Include="player.cpp" />
-    <ClCompile Include="SceneManager\sceneManager.cpp" />
-    <ClCompile Include="SceneManager\scGame.cpp" />
-    <ClCompile Include="SceneManager\scGameOver.cpp" />
-    <ClCompile Include="SceneManager\scIntro.cpp" />
-    <ClCompile Include="SceneManager\scMenu.cpp" />
-    <ClCompile Include="sprite.cpp" />
-    <ClCompile Include="Tile.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Level.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="scworldmap.h" />
-    <ClInclude Include="Room.h" />
-    <ClInclude Include="tinyxml2.h" />
-    <ClInclude Include="world.h" />
-    <ClInclude Include="animatedsprite.h" />
-    <ClInclude Include="globals.h" />
-    <ClInclude Include="player.h" />
-    <ClInclude Include="SceneManager\scene.h" />
-    <ClInclude Include="SceneManager\sceneManager.h" />
-    <ClInclude Include="SceneManager\scGame.h" />
-    <ClInclude Include="SceneManager\scGameOver.h" />
-    <ClInclude Include="SceneManager\scIntro.h" />
-    <ClInclude Include="SceneManager\scMenu.h" />
-    <ClInclude Include="sprite.h" />
-    <ClInclude Include="tile.h" />
-  </ItemGroup>
-  <ItemGroup>
     <Image Include="assets\player.png" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="protogame.rc" />
+    <ClInclude Include="AnimatedSprite.h" />
+    <ClInclude Include="Globals.h" />
+    <ClInclude Include="Level.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Room.h" />
+    <ClInclude Include="SceneManager\GameOverScene.h" />
+    <ClInclude Include="SceneManager\GameScene.h" />
+    <ClInclude Include="SceneManager\IntroScene.h" />
+    <ClInclude Include="SceneManager\MenuScene.h" />
+    <ClInclude Include="SceneManager\Scene.h" />
+    <ClInclude Include="SceneManager\SceneManager.h" />
+    <ClInclude Include="Sprite.h" />
+    <ClInclude Include="Tile.h" />
+    <ClInclude Include="tinyxml2.h" />
+    <ClInclude Include="World.h" />
+    <ClInclude Include="WorldMapScene.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AnimatedSprite.cpp" />
+    <ClCompile Include="Level.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Room.cpp" />
+    <ClCompile Include="SceneManager\GameOverScene.cpp" />
+    <ClCompile Include="SceneManager\GameScene.cpp" />
+    <ClCompile Include="SceneManager\IntroScene.cpp" />
+    <ClCompile Include="SceneManager\MenuScene.cpp" />
+    <ClCompile Include="SceneManager\SceneManager.cpp" />
+    <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="tinyxml2.cpp" />
+    <ClCompile Include="World.cpp" />
+    <ClCompile Include="WorldMapScene.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

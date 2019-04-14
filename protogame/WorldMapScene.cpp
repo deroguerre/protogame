@@ -1,15 +1,15 @@
-#include "scworldmap.h"
-#include "SceneManager/sceneManager.h"
-#include "globals.h"
-#include "world.h"
+#include "WorldMapScene.h"
+#include "SceneManager/SceneManager.h"
+#include "Globals.h"
+#include "World.h"
 #include <charconv>
 #include "Level.h"
-#include "player.h"
+#include "Player.h"
 
 World* objWorld;
 Player* mPlayer;
 
-ScWorldmap::ScWorldmap()
+WorldMapScene::WorldMapScene()
 {
 	Texture2D lTileset = LoadTexture("assets/overworld_tileset_grass.png");
 
@@ -23,24 +23,24 @@ ScWorldmap::ScWorldmap()
 
 	objWorld = new World(aPosition, lTileset, lLayers, 16);
 
-	mPlayer = new Player(Vector2{ GLOBALS::SCREEN_WIDTH / 2, GLOBALS::SCREEN_HEIGHT / 2 });
+	mPlayer = new Player(Vector2{ Globals::SCREEN_WIDTH / 2, Globals::SCREEN_HEIGHT / 2 });
 }
 
 
-ScWorldmap::~ScWorldmap() {
+WorldMapScene::~WorldMapScene() {
 }
 
-void ScWorldmap::load() {
+void WorldMapScene::load() {
 }
 
-void ScWorldmap::update() {
+void WorldMapScene::update() {
 	mPlayer->update(GetFrameTime());
 }
 
-void ScWorldmap::draw() {
+void WorldMapScene::draw() {
 	objWorld->draw();
 	mPlayer->draw();
 }
 
-void ScWorldmap::unload() {
+void WorldMapScene::unload() {
 }
