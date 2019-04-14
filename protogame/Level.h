@@ -12,9 +12,7 @@ public:
 	Level(int aRoomNumber, const char* aTilemap);
 	~Level();
 
-	// Update the current scene
 	void update();
-	// Draw the current scene
 	void draw();
 
 	void nextRoom(int aDoor);
@@ -24,8 +22,6 @@ public:
 private:
 	int mMazeWidth;
 	int mMazeHeight;
-	float mRoomWidth;
-	float mRoomHeight;
 	int mRoomNumber;
 	int* mMaze;
 	Room* mCurrentRoom;

@@ -10,9 +10,7 @@ Level::Level(int aRoomNumber, const char* aTilemap) {
 	mMazeWidth = sqrt(aRoomNumber) + 1;
 	mMazeHeight = sqrt(aRoomNumber) + 1;
 	mRoomNumber = aRoomNumber;
-	mRoomWidth = 800;
-	mRoomHeight = 600;
-	mTinyMapOffset = {mRoomWidth - mTinyMapWidth, 0.0f};
+	mTinyMapOffset = {GLOBALS::SCREEN_WIDTH - mTinyMapWidth, 0.0f};
 
 	mTilemap = aTilemap;
 	generateMaze();
@@ -29,7 +27,7 @@ void Level::draw() {
 	mCurrentRoom->draw();
 
 	// Draw the mini map
-	DrawRectangle(mTinyMapOffset.x, mTinyMapOffset.y, mTinyMapWidth, mTinyMapHeight, Fade(RAYWHITE, 0.4f));
+	//DrawRectangle(mTinyMapOffset.x, mTinyMapOffset.y, mTinyMapWidth, mTinyMapHeight, Fade(RAYWHITE, 0.4f));
 	DrawRectangleLines(mTinyMapOffset.x, mTinyMapOffset.y, mTinyMapWidth, mTinyMapHeight, Fade(BLACK, 0.5f));
 	for (int i = 0; i < mRooms.size(); i++) {
 
@@ -38,7 +36,7 @@ void Level::draw() {
 			(mTinyMapOffset.y + mRooms[i]->getPosition().second * (mTinyMapHeight / mMazeHeight)),
 			mTinyMapWidth / mMazeWidth,
 			mTinyMapHeight / mMazeHeight,
-			Fade(BLACK, 0.4f));
+			Fade(DARKGRAY, 0.4f));
 
 		DrawRectangle(
 			(mTinyMapOffset.x + mFarestRoom.first * (mTinyMapWidth / mMazeWidth)),
@@ -67,7 +65,7 @@ void Level::draw() {
 			mTinyMapWidth / mMazeWidth,
 			mTinyMapHeight / mMazeHeight },
 			1,
-			Fade(BLACK, 0.5f));
+			Fade(RAYWHITE, 0.5f));
 
 		if (mRooms[i]->getDoors() & ROOM_DOOR_TOP) {
 			DrawRectangle(
@@ -125,13 +123,11 @@ void Level::generateMaze() {
 
 	createRooms(mCurrentRoom->getPosition());
 
-	// Set doors for our Rooms
+	// Set doors for our Rooms and load map
 	for (auto lRoom : mRooms) {
 		lRoom->setDoors(mMaze[lRoom->getPosition().second * mMazeWidth + lRoom->getPosition().first]);
-		printf("\nPosition: (%d, %d) Doors: %d", lRoom->getPosition().first, lRoom->getPosition().second, lRoom->getDoors());
+		lRoom->loadMap();
 	}
-
-	mCurrentRoom->loadMap();
 
 	findFarestRoom();
 }
@@ -256,9 +252,6 @@ vector<stack<pair<int, int>>> Level::findAllPaths() {
 	lVisitedCase.insert(mRooms[0]->getPosition());
 
 	while (lVisitedCase.size() < mRooms.size())	{		
-		printf("\n(%d, %d) : ", lStack.top().first, lStack.top().second);
-		for (int i = 0; i < lDoors.size(); i++)
-			printf("\n%d  ", lDoors.at(i));
 
 		lDoors = getRoomDoors(lTempMaze, lStack.top());
 
@@ -310,10 +303,6 @@ vector<stack<pair<int, int>>> Level::findAllPaths() {
 		lDoors.clear();
 	} 
 
-	printf("\nNb of path = %d", lAllPaths.size());
-	for (int i = 0; i < lAllPaths.size(); i++)
-		printf("\n%d : %d", i, lAllPaths.at(i).size());
-
 	delete lTempMaze;
 	return lAllPaths;
 }
@@ -328,7 +317,6 @@ void Level::findFarestRoom() {
 			mFarestRoom = lAllPaths.at(i).top();
 		}
 	}
-	printf("\n Farest case: (%d, %d)", mFarestRoom.first, mFarestRoom.second);
 }
 
 vector<int> Level::getRoomDoors(int* aMaze, pair<int, int> aPosition) {
@@ -369,7 +357,6 @@ void Level::nextRoom(int aDoor) {
 		for (auto lRoom : mRooms) {
 			if (lRoom->getPosition().first == lNewPosition.first && lRoom->getPosition().second == lNewPosition.second) {
 				mCurrentRoom = lRoom;
-				mCurrentRoom->loadMap();
 				break;
 			}
 		}
