@@ -11,7 +11,7 @@
 class World
 {
 public:
-	World(std::pair<int, int> aPosition, Texture2D aTexture, std::vector<std::string> aLayerList);
+	World(std::pair<int, int> aPosition, Texture2D aTexture, std::vector<std::string> aLayerList, int aTileSize = 32);
 	~World();
 	void draw();
 
