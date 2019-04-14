@@ -2,7 +2,7 @@
 #include "world.h"
 
 const int NB_COL_TILES = 25;
-const int NB_ROW_TILES = 19;
+const int NB_ROW_TILES = 18;
 
 World::World(std::pair<int, int> aPosition, Texture2D aDungeonTileset, std::vector<std::string> aLayerList)
 {
@@ -63,8 +63,8 @@ std::vector<Rectangle> World::getCollisionDoors() {
 void World::setCollisionTiles(std::vector<int> aTileIds) {
 	for (auto lCurrentTile : mTiles) {
 		for (auto lBlockId : aTileIds) {
-			if (lCurrentTile.tiledId == lBlockId) {
-				mCollisionTiles.push_back(lCurrentTile.mapRectangle);
+			if (lCurrentTile.getTileId() == lBlockId) {
+				mCollisionTiles.push_back(lCurrentTile.getTileRec());
 			}
 		}
 	}
@@ -73,8 +73,8 @@ void World::setCollisionTiles(std::vector<int> aTileIds) {
 void World::setCollisionDoors(std::vector<int> aDoorIds) {
 	for (auto lCurrentTile : mTiles) {
 		for (auto lDoorId : aDoorIds) {
-			if (lCurrentTile.tiledId == lDoorId) {
-				mCollisionDoors.push_back(lCurrentTile.mapRectangle);
+			if (lCurrentTile.getTileId() == lDoorId) {
+				mCollisionDoors.push_back(lCurrentTile.getTileRec());
 			}
 		}
 	}
@@ -98,7 +98,7 @@ void World::draw() {
 
 	//dessine chaque tile de la liste
 	for (auto currentTile : mTiles) {
-		DrawTextureRec(mTileset, currentTile.textureRectangle, currentTile.origin, WHITE);
+		DrawTextureRec(mTileset, currentTile.textureRectangle, currentTile.getPosition(), WHITE);
 	}
 
 	this->drawDoors();

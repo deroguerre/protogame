@@ -123,6 +123,8 @@
     <ClCompile Include="animatedsprite.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Room.cpp" />
+    <ClCompile Include="tinyxml2.cpp" />
     <ClCompile Include="world.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="SceneManager\sceneManager.cpp" />
@@ -136,6 +138,8 @@
   <ItemGroup>
     <ClInclude Include="Level.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Room.h" />
+    <ClInclude Include="tinyxml2.h" />
     <ClInclude Include="world.h" />
     <ClInclude Include="animatedsprite.h" />
     <ClInclude Include="globals.h" />

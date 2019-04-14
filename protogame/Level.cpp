@@ -6,7 +6,7 @@ float mTinyMapWidth = 128.0f;
 float mTinyMapHeight = 96.0f;
 Vector2 mTinyMapOffset;
 
-Level::Level(int aRoomNumber, Texture2D aTileset, vector<string> aLayerList, vector<int> aTileCollisions, vector<int> aDoorCollisions) {
+Level::Level(int aRoomNumber, const char* aTilemap) {
 	mMazeWidth = sqrt(aRoomNumber) + 1;
 	mMazeHeight = sqrt(aRoomNumber) + 1;
 	mRoomNumber = aRoomNumber;
@@ -14,11 +14,7 @@ Level::Level(int aRoomNumber, Texture2D aTileset, vector<string> aLayerList, vec
 	mRoomHeight = 600;
 	mTinyMapOffset = {mRoomWidth - mTinyMapWidth, 0.0f};
 
-	mTileset = aTileset;
-	mLayers = aLayerList;
-	mTileCollisions = aTileCollisions;
-	mDoorCollisions = aDoorCollisions;
-
+	mTilemap = aTilemap;
 	generateMaze();
 }
 
@@ -122,7 +118,7 @@ void Level::generateMaze() {
 	mRooms.clear();
 
 	//Choose a random position for the first room.
-	mCurrentRoom = generateRoom(make_pair(rand() % mMazeWidth, rand() % mMazeHeight));
+	mCurrentRoom = new Room(mTilemap, make_pair(rand() % mMazeWidth, rand() % mMazeHeight));
 
 	mRooms.push_back(mCurrentRoom);
 	mMaze[mCurrentRoom->getPosition().second * mMazeWidth + mCurrentRoom->getPosition().first] |= ROOM_VISITED;
@@ -134,6 +130,8 @@ void Level::generateMaze() {
 		lRoom->setDoors(mMaze[lRoom->getPosition().second * mMazeWidth + lRoom->getPosition().first]);
 		printf("\nPosition: (%d, %d) Doors: %d", lRoom->getPosition().first, lRoom->getPosition().second, lRoom->getDoors());
 	}
+
+	mCurrentRoom->loadMap();
 
 	findFarestRoom();
 }
@@ -152,36 +150,31 @@ void Level::createRooms(pair<int, int> aPosition) {
 		// Choose one available neighbour at random
 		int lNextCellDirection = lNeighbours[rand() % lNeighbours.size()];
 
-		World* lNewRoom;
 		// Create a path between the neighbour and the current cell
 		switch (lNextCellDirection) {
 		case 0: // North
 			mMaze[offset(0, -1)] |= ROOM_VISITED | ROOM_DOOR_BOTTOM;
 			mMaze[offset(0, 0)] |= ROOM_DOOR_TOP;
-			lNewRoom = generateRoom(make_pair((aPosition.first + 0), (aPosition.second - 1)));
+			mRooms.push_back(new Room(mTilemap, make_pair((aPosition.first + 0), (aPosition.second - 1))));
 			break;
 
 		case 1: // East
 			mMaze[offset(+1, 0)] |= ROOM_VISITED | ROOM_DOOR_LEFT;
 			mMaze[offset(0, 0)] |= ROOM_DOOR_RIGHT;
-			lNewRoom = generateRoom(make_pair((aPosition.first + 1), (aPosition.second + 0)));
+			mRooms.push_back(new Room(mTilemap, make_pair((aPosition.first + 1), (aPosition.second + 0))));
 			break;
 
 		case 2: // South
 			mMaze[offset(0, +1)] |= ROOM_VISITED | ROOM_DOOR_TOP;
 			mMaze[offset(0, 0)] |= ROOM_DOOR_BOTTOM;
-			lNewRoom = generateRoom(make_pair((aPosition.first + 0), (aPosition.second + 1)));
+			mRooms.push_back(new Room(mTilemap, make_pair((aPosition.first + 0), (aPosition.second + 1))));
 			break;
 
 		case 3: // West
 			mMaze[offset(-1, 0)] |= ROOM_VISITED | ROOM_DOOR_RIGHT;
 			mMaze[offset(0, 0)] |= ROOM_DOOR_LEFT;
-			lNewRoom = generateRoom(make_pair((aPosition.first - 1), (aPosition.second + 0)));
+			mRooms.push_back(new Room(mTilemap, make_pair((aPosition.first - 1), (aPosition.second + 0))));
 			break;
-		}
-
-		if (&lNewRoom != NULL) {
-			mRooms.push_back(lNewRoom);
 		}
 
 		lNeighbours.clear();
@@ -212,13 +205,6 @@ void Level::createRooms(pair<int, int> aPosition) {
 
 		createRooms(make_pair(lNewCase.first, lNewCase.second));
 	}
-}
-
-	World* Level::generateRoom(pair<int, int> aPosition) {
-	World* lRoom = new World(aPosition, mTileset, mLayers);
-	lRoom->setCollisionTiles(mTileCollisions);
-	lRoom->setCollisionDoors(mDoorCollisions);
-	return lRoom;
 }
 
 vector<int> Level::getNeighbours(pair<int, int> aPosition, bool aVisited)
@@ -383,6 +369,7 @@ void Level::nextRoom(int aDoor) {
 		for (auto lRoom : mRooms) {
 			if (lRoom->getPosition().first == lNewPosition.first && lRoom->getPosition().second == lNewPosition.second) {
 				mCurrentRoom = lRoom;
+				mCurrentRoom->loadMap();
 				break;
 			}
 		}
