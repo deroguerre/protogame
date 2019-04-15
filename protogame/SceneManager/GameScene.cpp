@@ -23,11 +23,13 @@ GameScene::GameScene() : Scene() {
 	};
 
 	mRoom = new Room(lTileset, lLayers);
+	mRoom->setCollisionTiles({ 0,1,2,3,4,5,10,15,20,25,30,35,40,41,42,43,44,45 });
 
 	mPlayer = new Player(Vector2{ Globals::SCREEN_WIDTH / 2, Globals::SCREEN_HEIGHT / 2 });
 }
 
 void GameScene::update() {
+
 	//mLevel->update();
 	mPlayer->update(GetFrameTime());
 

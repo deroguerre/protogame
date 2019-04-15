@@ -71,20 +71,25 @@ void Room::setCollisionTiles(std::vector<int> aTileIds) {
 }
 
 void Room::setCollisionDoors(std::vector<int> aDoorIds) {
-	for (auto lCurrentTile : mTiles) {
-		for (auto lDoorId : aDoorIds) {
-			if (lCurrentTile.tiledId == lDoorId) {
-				mCollisionDoors.push_back(lCurrentTile.mapRectangle);
-			}
-		}
-	}
+	//for (auto lCurrentTile : mTiles) {
+	//	for (auto lDoorId : aDoorIds) {
+	//		if (lCurrentTile.tiledId == lDoorId) {
+	//			mCollisionDoors.push_back(lCurrentTile.mapRectangle);
+	//		}
+	//	}
+	//}
 }
 
 void Room::drawDoors() {
-	Rectangle topDoor = { 384, 32, 32, 32 };
-	Rectangle downDoor = { 384, 544, 32, 32 };
-	Rectangle leftDoor = { 0, 288, 32, 32 };
-	Rectangle rightDoor = { 768, 288, 32, 32 };
+	Rectangle topDoor = { 480, 0, 64, 32 };
+	Rectangle downDoor = { 480, 544, 64, 32 };
+	Rectangle leftDoor = { 96, 256, 32, 64 };
+	Rectangle rightDoor = { 896, 256, 32, 64 };
+
+	mCollisionDoors.push_back(topDoor);
+	mCollisionDoors.push_back(downDoor);
+	mCollisionDoors.push_back(leftDoor);
+	mCollisionDoors.push_back(rightDoor);
 
 	if (Globals::DEBUG) {
 		DrawRectangleLines((int)topDoor.x, (int)topDoor.y, (int)topDoor.width, (int)topDoor.height, BLUE);
