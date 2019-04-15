@@ -24,7 +24,7 @@
 #include "SceneManager/IntroScene.h"
 #include "SceneManager/GameScene.h"
 #include "SceneManager/MenuScene.h"
-#include "WorldMapScene.h"
+//#include "WorldMapScene.h"
 #include "Globals.h"
 
 SceneManager& mSceneManager = SceneManager::getInstance();
@@ -38,7 +38,7 @@ int main()
 	SetTargetFPS(60);
 	//--------------------------------------------------------------------------------------
 	
-	mSceneManager.changeScene(new WorldMapScene());
+	mSceneManager.changeScene(new GameScene());
 
 	// Main game loop
 	while (!WindowShouldClose())    // Detect window close button or ESC key

@@ -1,9 +1,55 @@
 #include "Globals.h"
-#include "Room.h"
+#include "room.h"
 
-Room::Room(std::string aTilemap, std::pair<int, int> aPosition) {
-	mPosition = aPosition;
-	mTilemap = aTilemap;
+const int NB_COL_TILES = 25;
+const int NB_ROW_TILES = 19;
+
+Room::Room(Texture2D aDungeonTileset, std::vector<std::string> aLayerList)
+{
+	//mPosition = aPosition;
+	mTileset = aDungeonTileset;
+
+	//crée la liste des rectangles depuis la texture fournis (only 32x32)
+	mLayerRects = this->rectangleListCreator(mTileset);
+
+	//recupère les calques et les ajoutes à une liste 
+	for (int i = 0; i < aLayerList.size(); i++) {
+		std::vector<int> lCurrentLayer = this->csvParser(aLayerList[i]);
+		mLayerList.push_back(lCurrentLayer);
+	}
+
+	this->roomCreator();
+}
+
+void Room::roomCreator() {
+
+	int lIterator = 0;
+	Vector2 lOrigin = { 0, 0 };
+
+	for (int itRow = 0; itRow < NB_ROW_TILES; itRow++)
+	{
+		for (int itCol = 0; itCol < NB_COL_TILES; itCol++)
+		{
+			for (auto currLayer : mLayerList) {
+
+				Rectangle lCurrRectangle = { 0, 0, 0, 0 };
+				Vector2 currOrigin = { lOrigin.x, lOrigin.y };
+
+				if (currLayer[lIterator] != -1) {
+					lCurrRectangle = mLayerRects[currLayer[lIterator]];
+					Tile *lCurrentTile = new Tile(currLayer[lIterator], currOrigin, lCurrRectangle);
+					mTiles.push_back(*lCurrentTile);
+				}
+			}
+			lOrigin.x += 32;
+			lIterator++;
+		}
+		lOrigin.x = 0;
+		lOrigin.y += 32;
+	}
+	lIterator = 0;
+	lOrigin.x = 0;
+	lOrigin.y = 0;
 }
 
 std::vector<Rectangle> Room::getCollisionTiles() {
@@ -11,317 +57,123 @@ std::vector<Rectangle> Room::getCollisionTiles() {
 }
 
 std::vector<Rectangle> Room::getCollisionDoors() {
-	std::vector<Rectangle> lDoors;
-	for (auto lDoor : mDoors) {
-		lDoors.push_back(lDoor.mCollisionRect);
-	}
-	return lDoors;
+	return mCollisionDoors;
 }
 
-Vector2 Room::getPlayerSpawn(int aDoor) {
-	return aDoor & ROOM_DOOR_TOP ? mPlayerSpawns["north_spawn"] :
-		aDoor & ROOM_DOOR_LEFT ? mPlayerSpawns["west_spawn"] :
-		aDoor & ROOM_DOOR_BOTTOM ? mPlayerSpawns["south_spawn"] :
-		aDoor & ROOM_DOOR_RIGHT ? mPlayerSpawns["east_spawn"] :
-		Vector2{ 0, 0 };
-}
-
-void Room::setDoors(int aDoors) {
-	mDoorsFlags = aDoors;
-}
-
-void Room::loadMap() {
-	//Parse the .tmx file
-	XMLDocument lTilemap;
-	std::stringstream lStrStream;
-	lStrStream << "maps/" << mTilemap << ".tmx";
-	lTilemap.LoadFile(lStrStream.str().c_str());
-
-	XMLElement* lMapNode = lTilemap.FirstChildElement("map");
-
-	//Get the width and the height of the tilemap
-	lMapNode->QueryFloatAttribute("width", &mTilemapSize.x);
-	lMapNode->QueryFloatAttribute("height", &mTilemapSize.y);
-
-	//Get the width and the height of the tiles
-	lMapNode->QueryFloatAttribute("tilewidth", &mTileSize.x);
-	lMapNode->QueryFloatAttribute("tileheight", &mTileSize.y);
-
-	createTilesets(lMapNode);
-	createTiles(lMapNode);
-
-	//Parse object group
-	XMLElement* lObjectGroupNode = lMapNode->FirstChildElement("objectgroup");
-	if (lObjectGroupNode != NULL) {
-		while (lObjectGroupNode) {
-			const char* lName = lObjectGroupNode->Attribute("name");
-			std::stringstream lStrStream;
-			lStrStream << lName;
-			
-			if (lStrStream.str() == "wall")
-				createWallCollision(lObjectGroupNode);
-			else if (lStrStream.str() == "door")
-				createDoors(lObjectGroupNode);
-			else if (lStrStream.str() == "spawn")
-				createSpawn(lObjectGroupNode);
-
-			lObjectGroupNode = lObjectGroupNode->NextSiblingElement("objectgroup");
-		}
-	}
-}
-
-void Room::createTilesets(XMLElement* aMapNode) {
-	//Loading the tilesets
-	XMLElement* lTilesetNode = aMapNode->FirstChildElement("tileset");
-	if (lTilesetNode != NULL) {
-		while (lTilesetNode) {
-			int lFirstGid;
-			const char* lTilesetSource = lTilesetNode->Attribute("source");
-
-			//Parse .tsx file
-			XMLDocument lTileset;
-			std::stringstream lStrStream;
-			lStrStream << "maps/" << lTilesetSource;
-			lTileset.LoadFile(lStrStream.str().c_str());
-
-			const char* lImageSource = lTileset.FirstChildElement("tileset")->FirstChildElement("image")->Attribute("source");
-
-			lImageSource += 3; // to remove the ../
-
-			lTilesetNode->QueryIntAttribute("firstgid", &lFirstGid);
-			Texture2D lTexture = LoadTextureFromImage(LoadImage(lImageSource));
-			mTilesets.push_back(Tileset(lTexture, lFirstGid));
-			lTilesetNode = lTilesetNode->NextSiblingElement("tileset");
-		}
-	}
-}
-
-void Room::createTiles(XMLElement* aMapNode) {
-	//Loading the layers
-	XMLElement* lLayerNode = aMapNode->FirstChildElement("layer");
-	if (lLayerNode != NULL) {
-		while (lLayerNode) {
-			//Loading the data element
-			XMLElement* lDataNode = lLayerNode->FirstChildElement("data");
-			if (lDataNode != NULL) {
-				while (lDataNode) {
-					//Loading the tile element
-					XMLElement* lTileNode = lDataNode->FirstChildElement("tile");
-					if (lTileNode != NULL) {
-						int lTileCounter = 0;
-						while (lTileNode) {
-							//Build each individual tile here
-							//If gid is 0, no tile should be drawn. Continue loop
-							if (lTileNode->IntAttribute("gid") == 0) {
-								lTileCounter++;
-								if (lTileNode->NextSiblingElement("tile")) {
-									lTileNode = lTileNode->NextSiblingElement("tile");
-									continue;
-								}
-								else {
-									break;
-								}
-							}
-
-							//Get the tileset for this specific gid
-							int lGid = lTileNode->IntAttribute("gid");
-							Tileset lTileset;
-							int lClosest = 0;
-							for (int i = 0; i < mTilesets.size(); i++) {
-								if (mTilesets[i].mFirstGid <= lGid) {
-									if (mTilesets[i].mFirstGid > lClosest) {
-										lClosest = mTilesets[i].mFirstGid;
-										lTileset = mTilesets.at(i);
-									}
-								}
-							}
-
-							if (lTileset.mFirstGid == -1) {
-								//No tileset was found for this gid
-								lTileCounter++;
-								if (lTileNode->NextSiblingElement("tile")) {
-									lTileNode = lTileNode->NextSiblingElement("tile");
-									continue;
-								}
-								else {
-									break;
-								}
-							}
-
-							//Get the position of the tile in the screen
-							int lTileX = 0;
-							int lTileY = 0;
-							lTileX = lTileCounter % (int)mTilemapSize.x;
-							lTileX *= mTileSize.x;
-							lTileY += mTileSize.y * (lTileCounter / (int)mTilemapSize.x);
-							Vector2 lTilePosition = Vector2{ (float)lTileX, (float)lTileY };
-
-							//Calculate the position of the tile in the tileset
-							Vector2 lTilesetPosition = this->getTilesetPosition(lTileset, lGid, mTileSize.x, mTileSize.y);
-
-							Rectangle lTileRec = Rectangle{ lTilesetPosition.x, lTilesetPosition.y, (float)mTileSize.x, (float)mTileSize.y };
-
-							Tile* lTile = new Tile(lTileset.mTexture, lTilePosition, lTileRec);
-							mTiles.push_back(lTile);
-
-							lTileCounter++;
-							lTileNode = lTileNode->NextSiblingElement("tile");
-						}
-					}
-
-					lDataNode = lDataNode->NextSiblingElement("data");
-				}
+void Room::setCollisionTiles(std::vector<int> aTileIds) {
+	for (auto lCurrentTile : mTiles) {
+		for (auto lBlockId : aTileIds) {
+			if (lCurrentTile.tiledId == lBlockId) {
+				mCollisionTiles.push_back(lCurrentTile.mapRectangle);
 			}
-
-			lLayerNode = lLayerNode->NextSiblingElement("layer");
 		}
 	}
 }
 
-void Room::createDoors(XMLElement * aObjectGroupNode) {
-	XMLElement* lObjectNode = aObjectGroupNode->FirstChildElement("object");
-	if (lObjectNode != NULL) {
-		while (lObjectNode) {
-			float lX, lY, lWidth, lHeight;
-			const char* lName = lObjectNode->Attribute("name");
-			std::stringstream lStrStream;
-			lStrStream << lName;
-			lX = lObjectNode->FloatAttribute("x");
-			lY = lObjectNode->FloatAttribute("y");
-			lWidth = lObjectNode->FloatAttribute("width");
-			lHeight = lObjectNode->FloatAttribute("height");
-
-			mCollisionTiles.push_back(Rectangle{ lX, lY, lWidth, lHeight });
-
-			if (lStrStream.str() == "north_door" && mDoorsFlags & ROOM_DOOR_TOP) {
-				Vector2 lTilePosition1 = Vector2{ lX, lY };
-				Vector2 lTilePosition2 = Vector2{ lX + lWidth / 2, lY };
-
-				Vector2 lTilesetPosition1 = this->getTilesetPosition(mTilesets[0], NORTH_DOOR_1, mTileSize.x, mTileSize.y, 0);
-				Vector2 lTilesetPosition2 = this->getTilesetPosition(mTilesets[0], NORTH_DOOR_2, mTileSize.x, mTileSize.y, 0);
-
-				Rectangle lTileRec1 = Rectangle{ lTilesetPosition1.x, lTilesetPosition1.y, (float)mTileSize.x, (float)mTileSize.y };
-				Rectangle lTileRec2 = Rectangle{ lTilesetPosition2.x, lTilesetPosition2.y, (float)mTileSize.x, (float)mTileSize.y };
-
-				Tile* lTile1 = new Tile(mTilesets[0].mTexture, lTilePosition1, lTileRec1);
-				Tile* lTile2 = new Tile(mTilesets[0].mTexture, lTilePosition2, lTileRec2);
-
-				Door lDoor = Door(lX, lY, lWidth, lHeight, lTile1, lTile2);
-				mDoors.push_back(lDoor);
-
+void Room::setCollisionDoors(std::vector<int> aDoorIds) {
+	for (auto lCurrentTile : mTiles) {
+		for (auto lDoorId : aDoorIds) {
+			if (lCurrentTile.tiledId == lDoorId) {
+				mCollisionDoors.push_back(lCurrentTile.mapRectangle);
 			}
-			else if (lStrStream.str() == "west_door" && mDoorsFlags & ROOM_DOOR_LEFT) {
-				Vector2 lTilePosition1 = Vector2{ lX, lY };
-				Vector2 lTilePosition2 = Vector2{ lX, lY + lHeight / 2 };
-
-				Vector2 lTilesetPosition1 = this->getTilesetPosition(mTilesets[0], WEST_DOOR_1, mTileSize.x, mTileSize.y, 0);
-				Vector2 lTilesetPosition2 = this->getTilesetPosition(mTilesets[0], WEST_DOOR_2, mTileSize.x, mTileSize.y, 0);
-
-				Rectangle lTileRec1 = Rectangle{ lTilesetPosition1.x, lTilesetPosition1.y, (float)mTileSize.x, (float)mTileSize.y };
-				Rectangle lTileRec2 = Rectangle{ lTilesetPosition2.x, lTilesetPosition2.y, (float)mTileSize.x, (float)mTileSize.y };
-
-				Tile* lTile1 = new Tile(mTilesets[0].mTexture, lTilePosition1, lTileRec1);
-				Tile* lTile2 = new Tile(mTilesets[0].mTexture, lTilePosition2, lTileRec2);
-
-				Door lDoor = Door(lX, lY, lWidth, lHeight, lTile1, lTile2);
-				mDoors.push_back(lDoor);
-			}
-			else if (lStrStream.str() == "south_door" && mDoorsFlags & ROOM_DOOR_BOTTOM) {
-				Vector2 lTilePosition1 = Vector2{ lX, lY };
-				Vector2 lTilePosition2 = Vector2{ lX + lWidth / 2, lY };
-
-				Vector2 lTilesetPosition1 = this->getTilesetPosition(mTilesets[0], SOUTH_DOOR_1, mTileSize.x, mTileSize.y, 0);
-				Vector2 lTilesetPosition2 = this->getTilesetPosition(mTilesets[0], SOUTH_DOOR_2, mTileSize.x, mTileSize.y, 0);
-
-				Rectangle lTileRec1 = Rectangle{ lTilesetPosition1.x, lTilesetPosition1.y, (float)mTileSize.x, (float)mTileSize.y };
-				Rectangle lTileRec2 = Rectangle{ lTilesetPosition2.x, lTilesetPosition2.y, (float)mTileSize.x, (float)mTileSize.y };
-
-				Tile* lTile1 = new Tile(mTilesets[0].mTexture, lTilePosition1, lTileRec1);
-				Tile* lTile2 = new Tile(mTilesets[0].mTexture, lTilePosition2, lTileRec2);
-
-				Door lDoor = Door(lX, lY, lWidth, lHeight, lTile1, lTile2);
-				mDoors.push_back(lDoor);
-			}
-			else if (lStrStream.str() == "east_door" && mDoorsFlags & ROOM_DOOR_RIGHT) {
-				Vector2 lTilePosition1 = Vector2{ lX, lY };
-				Vector2 lTilePosition2 = Vector2{ lX, lY + lHeight / 2 };
-
-				Vector2 lTilesetPosition1 = this->getTilesetPosition(mTilesets[0], EAST_DOOR_1, mTileSize.x, mTileSize.y, 0);
-				Vector2 lTilesetPosition2 = this->getTilesetPosition(mTilesets[0], EAST_DOOR_2, mTileSize.x, mTileSize.y, 0);
-
-				Rectangle lTileRec1 = Rectangle{ lTilesetPosition1.x, lTilesetPosition1.y, (float)mTileSize.x, (float)mTileSize.y };
-				Rectangle lTileRec2 = Rectangle{ lTilesetPosition2.x, lTilesetPosition2.y, (float)mTileSize.x, (float)mTileSize.y };
-
-				Tile* lTile1 = new Tile(mTilesets[0].mTexture, lTilePosition1, lTileRec1);
-				Tile* lTile2 = new Tile(mTilesets[0].mTexture, lTilePosition2, lTileRec2);
-
-				Door lDoor = Door(lX, lY, lWidth, lHeight, lTile1, lTile2);
-				mDoors.push_back(lDoor);
-			}
-
-			lObjectNode = lObjectNode->NextSiblingElement("object");
 		}
 	}
 }
 
-void Room::createSpawn(XMLElement * aObjectGroupNode) {
-	XMLElement* lObjectNode = aObjectGroupNode->FirstChildElement("object");
-	if (lObjectNode != NULL) {
-		while (lObjectNode) {
-			float lX = lObjectNode->FloatAttribute("x");
-			float lY = lObjectNode->FloatAttribute("y");
-			const char* lName = lObjectNode->Attribute("name");
-			std::stringstream lStrStream;
-			lStrStream << lName;
-			mPlayerSpawns[lStrStream.str()] = Vector2{ lX, lY };
-			lObjectNode = lObjectNode->NextSiblingElement("object");
-		}
+void Room::drawDoors() {
+	Rectangle topDoor = { 384, 32, 32, 32 };
+	Rectangle downDoor = { 384, 544, 32, 32 };
+	Rectangle leftDoor = { 0, 288, 32, 32 };
+	Rectangle rightDoor = { 768, 288, 32, 32 };
+
+	if (Globals::DEBUG) {
+		DrawRectangleLines((int)topDoor.x, (int)topDoor.y, (int)topDoor.width, (int)topDoor.height, BLUE);
+		DrawRectangleLines((int)downDoor.x, (int)downDoor.y, (int)downDoor.width, (int)downDoor.height, BLUE);
+		DrawRectangleLines((int)leftDoor.x, (int)leftDoor.y, (int)leftDoor.width, (int)leftDoor.height, BLUE);
+		DrawRectangleLines((int)rightDoor.x, (int)rightDoor.y, (int)rightDoor.width, (int)rightDoor.height, BLUE);
 	}
-}
-
-void Room::createWallCollision(XMLElement * aObjectGroupNode) {
-	XMLElement* lObjectNode = aObjectGroupNode->FirstChildElement("object");
-	if (lObjectNode != NULL) {
-		while (lObjectNode) {
-			float lX, lY, lWidth, lHeight;
-			lX = lObjectNode->FloatAttribute("x");
-			lY = lObjectNode->FloatAttribute("y");
-			lWidth = lObjectNode->FloatAttribute("width");
-			lHeight = lObjectNode->FloatAttribute("height");
-
-			mCollisionTiles.push_back(Rectangle{ lX, lY, lWidth, lHeight });
-
-			lObjectNode = lObjectNode->NextSiblingElement("object");
-		}
-	}
-}
-
-Vector2 Room::getTilesetPosition(Tileset aTileset, int aGid, int aTileWidth, int aTileHeight, int aTilesetXoffset) {
-
-	int lTilesetWidth = aTileset.mTexture.width;
-	int lTilesetHeight = aTileset.mTexture.height;
-
-	int lTilesetX = aGid % (lTilesetWidth / aTileWidth) - aTilesetXoffset;
-	lTilesetX *= aTileWidth;
-
-	int lTilesetY = 0;
-	int lAmount = ((aGid - aTileset.mFirstGid) / (lTilesetWidth / aTileWidth));
-
-	lTilesetY = aTileHeight * lAmount;
-	Vector2 lTilesetPosition = Vector2{ (float)lTilesetX, (float)lTilesetY };
-	return lTilesetPosition;
 }
 
 void Room::draw() {
 
-	for (auto lTile : mTiles) {
-		DrawTextureRec(lTile->getTileset(), lTile->getTileRec(), lTile->getPosition(), RAYWHITE);
+	//dessine chaque tile de la liste
+	for (auto currentTile : mTiles) {
+		DrawTextureRec(mTileset, currentTile.textureRectangle, currentTile.origin, WHITE);
 	}
 
-	for (auto lDoor : mDoors) {
-		lDoor.mTiles.first->draw();
-		lDoor.mTiles.second->draw();
+	this->drawDoors();
+
+	if (Globals::DEBUG) {
+
+		//tiles counter
+		//int lIterator = 0;
+		//for (int itRow = 0; itRow < nbRowTiles; itRow++)
+		//{
+		//	for (int itCol = 0; itCol < nbColTiles; itCol++)
+		//	{
+		//		char buf[256];
+		//		sprintf_s(buf, "%d", lIterator);
+		//		DrawText(buf, itCol * 32, itRow * 32, 10, LIGHTGRAY);
+		//		lIterator++;
+		//	}
+		//}
+		//lIterator = 0;
+
+		//show block l
+		for (auto block : mCollisionTiles) {
+			DrawRectangleLines((int)block.x, (int)block.y, (int)block.width, (int)block.height, YELLOW);
+		}
 	}
+}
+
+std::vector<Rectangle> Room::rectangleListCreator(Texture2D aTileset) {
+
+	std::vector<Rectangle> lListOfRect;
+
+	int tileSilze = 32;
+
+	float nbCol = (float)aTileset.width / 32;
+	float nbRow = (float)aTileset.height / 32;
+	float nbTile = nbCol * nbRow;
+
+	float nextCol = 0;
+	float nextRow = 0;
+
+	for (int i = 0; i < nbRow; i++)
+	{
+		for (int j = 0; j < nbCol; j++)
+		{
+			Rectangle lTempRec = { nextCol, nextRow, (float)mTileset.width / nbCol, (float)mTileset.height / nbRow };
+			lListOfRect.push_back(lTempRec);
+
+			nextCol += 32;
+		}
+		nextCol = 0;
+		nextRow += 32;
+	}
+
+	return lListOfRect;
+}
+
+//parse csv to vector
+std::vector<int> Room::csvParser(std::string layerPath) {
+	std::ifstream  data(layerPath);
+
+	std::vector<int> lCurrentLayer;
+
+	std::string line;
+	while (std::getline(data, line))
+	{
+		std::stringstream  lineStream(line);
+		std::string        cell;
+		while (std::getline(lineStream, cell, ','))
+		{
+			//parse to int and add to vector
+			lCurrentLayer.push_back(std::stoi(cell));
+		}
+	}
+
+	return lCurrentLayer;
 }
 
 Room::~Room()

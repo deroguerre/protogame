@@ -1,93 +1,43 @@
-#ifndef ROOM_H
-#define ROOM_H
-
+#pragma once
 #include <raylib.h>
-#include "tinyxml2.h"
+#include <iostream>
 #include <sstream>
+#include <fstream>
 #include <string>
 #include <vector>
-#include <map>
-#include "Tile.h"
-
-using namespace tinyxml2;
-
-struct Tileset;
-struct Door;
+#include <list>
+#include "tile.h"
 
 class Room
 {
 public:
-	Room(std::string aTilemap, std::pair<int, int> aPosition);
+	Room(Texture2D aTexture, std::vector<std::string> aLayerList);
 	~Room();
 	void draw();
+
+	std::list<std::vector<int>>  mLayerList;
 
 	std::vector<Rectangle> getCollisionTiles();
 	std::vector<Rectangle> getCollisionDoors();
 
+	void setCollisionTiles(std::vector<int> aTileIds);
+	void setCollisionDoors(std::vector<int> aDoorIds);
+
 	std::pair<int, int> getPosition() { return mPosition; }
 
-	int getDoors() { return mDoorsFlags; }
-	void setDoors(int aDoors);
-
-	void loadMap();
-	Vector2 getPlayerSpawn(int aDoor);
+	int getDoors() { return mDoors; }
+	void setDoors(int aDoors) { mDoors = aDoors; }
 
 private:
-	std::string mTilemap;
-	std::pair<int, int> mPosition;
-	int mDoorsFlags;
+	void roomCreator();
+	void drawDoors();
+	int mDoors;
+	std::vector<Tile> mTiles;
+	Texture2D mTileset;
 	std::vector<Rectangle> mCollisionTiles;
-	std::vector<Door> mDoors;
-	Vector2 mTilemapSize;
-	Vector2 mTileSize;
-	std::vector<Tileset> mTilesets;
-	std::vector<Tile*> mTiles;
-	std::map<std::string, Vector2> mPlayerSpawns;
-
-	void createTilesets(XMLElement* aMapNode);
-	void createTiles(XMLElement* aMapNode);
-	void createDoors(XMLElement* aObjectGroupNode);
-	void createSpawn(XMLElement* aObjectGroupNode);
-	void createWallCollision(XMLElement* aObjectGroupNode);
-
-	Vector2 getTilesetPosition(Tileset aTileset, int aGid, int aTileWidth, int aTileHeight, int aTilesetXoffset = 1);
-
-	enum {
-		NORTH_DOOR_1 = 36,
-		NORTH_DOOR_2 = 37,
-		WEST_DOOR_1 = 48,
-		WEST_DOOR_2 = 58,
-		SOUTH_DOOR_1 = 36,
-		SOUTH_DOOR_2 = 37,
-		EAST_DOOR_1 = 47,
-		EAST_DOOR_2 = 57
-	};
+	std::vector<Rectangle> mCollisionDoors;
+	std::pair<int, int> mPosition;
+	std::vector<Rectangle> mLayerRects;
+	std::vector<Rectangle> rectangleListCreator(Texture2D aDungeonTile);
+	std::vector<int> csvParser(std::string layerPath);
 };
-
-struct Tileset {
-	Texture2D mTexture;
-	int mFirstGid;
-
-	Tileset() {
-		mFirstGid = -1;
-	}
-
-	Tileset(Texture2D aTexture, int aFirstGid) {
-		mTexture = aTexture;
-		mFirstGid = aFirstGid;
-	}
-};
-
-struct Door {
-public:
-	Rectangle mCollisionRect;
-	std::pair<Tile*, Tile*> mTiles;
-
-	Door(float aX, float aY, float aWidth, float aHeight, Tile* aTile1, Tile* aTile2) {
-		mCollisionRect = Rectangle{ aX, aY, aWidth, aHeight };
-		mTiles = std::make_pair(aTile1, aTile2);
-	}
-};
-
-#endif
-

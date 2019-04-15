@@ -1,30 +1,17 @@
-#ifndef TILE_H
-#define TILE_H
-
+#pragma once
 #include <raylib.h>
+#include <string>
+#include <vector>
+#include <list>
 
 class Tile
 {
 public:
-	Tile(int aTiledId, Vector2 aOrigin, Rectangle aTextureRectangle);
-	Tile(Texture2D aTileset, Vector2 aPosition, Rectangle aTileRec);
-	~Tile();
-
+	int tiledId;
+	Vector2 origin;
+	Rectangle mapRectangle;
 	Rectangle textureRectangle;
 
-	int getTileId();
-	Texture2D getTileset();
-	Vector2 getPosition();
-	Rectangle getTileRec();
-
-	void draw();
-
-private:
-	int mTileId;
-	Texture2D mTileset;
-	Vector2 mPosition;
-	Rectangle mTileRec;
+	Tile(int aTiledId, Vector2 aOrigin, Rectangle aTextureRectangle);
+	~Tile();
 };
-
-#endif
-
