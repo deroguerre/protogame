@@ -1,8 +1,8 @@
 #include "Globals.h"
 #include "room.h"
 
-const int NB_COL_TILES = 25;
-const int NB_ROW_TILES = 19;
+const int NB_COL_TILES = 32;
+const int NB_ROW_TILES = 18;
 
 Room::Room(Texture2D aDungeonTileset, std::vector<std::string> aLayerList)
 {
