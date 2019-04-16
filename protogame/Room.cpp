@@ -3,49 +3,88 @@
 
 const int NB_COL_TILES = 32;
 const int NB_ROW_TILES = 18;
+const int TILE_SIZE = 32;
 
-Room::Room(Texture2D aDungeonTileset, std::vector<std::string> aLayerList)
-{
-	//mPosition = aPosition;
-	mTileset = aDungeonTileset;
+XMLDocument lXMLFile;
+
+Room::Room(std::string aTilemap, Texture2D aTileset) {
+
+	mTilemap = aTilemap;
+	mTileset = aTileset;
 
 	//crée la liste des rectangles depuis la texture fournis (only 32x32)
-	mLayerRects = this->rectangleListCreator(mTileset);
+	mLayerRects = this->createTilesetRectangles(mTileset);
 
-	//recupère les calques et les ajoutes à une liste 
-	for (int i = 0; i < aLayerList.size(); i++) {
-		std::vector<int> lCurrentLayer = this->csvParser(aLayerList[i]);
-		mLayerList.push_back(lCurrentLayer);
-	}
-
-	this->roomCreator();
+	this->loadTmx();
+	this->createRoom();
 }
 
-void Room::roomCreator() {
+void Room::loadTmx() {
+	//recupère les calques et les ajoutes à une liste
+	lXMLFile.LoadFile(mTilemap.c_str());
+	XMLElement* lMapNode = lXMLFile.FirstChildElement("map");
+
+	for (XMLElement* lCurrentLayer = lMapNode->FirstChildElement("layer"); lCurrentLayer != NULL; lCurrentLayer = lCurrentLayer->NextSiblingElement("layer")) {
+
+		for (XMLElement* lCurrentCSV = lCurrentLayer->FirstChildElement("data"); lCurrentCSV != NULL; lCurrentCSV = lCurrentCSV->NextSiblingElement("data")) {
+
+			std::vector<int> lCurrentLayer = this->csvLineParser((std::string)lCurrentCSV->GetText());
+			mLayerList.push_back(lCurrentLayer);
+		}
+	}
+}
+
+std::vector<Rectangle> Room::createTilesetRectangles(Texture2D aTileset) {
+
+	std::vector<Rectangle> lListOfRect;
+
+	float nbCol = (float)aTileset.width / TILE_SIZE;
+	float nbRow = (float)aTileset.height / TILE_SIZE;
+	float nbTile = nbCol * nbRow;
+
+	float nextCol = 0;
+	float nextRow = 0;
+
+	for (int i = 0; i < nbRow; i++) {
+
+		for (int j = 0; j < nbCol; j++) {
+
+			Rectangle lTempRec = { nextCol, nextRow, (float)mTileset.width / nbCol, (float)mTileset.height / nbRow };
+			lListOfRect.push_back(lTempRec);
+
+			nextCol += TILE_SIZE;
+		}
+		nextCol = 0;
+		nextRow += TILE_SIZE;
+	}
+
+	return lListOfRect;
+}
+
+void Room::createRoom() {
 
 	int lIterator = 0;
 	Vector2 lOrigin = { 0, 0 };
 
-	for (int itRow = 0; itRow < NB_ROW_TILES; itRow++)
-	{
-		for (int itCol = 0; itCol < NB_COL_TILES; itCol++)
-		{
+	for (int itRow = 0; itRow < NB_ROW_TILES; itRow++) {
+
+		for (int itCol = 0; itCol < NB_COL_TILES; itCol++) {
+			
 			for (auto currLayer : mLayerList) {
 
-				Rectangle lCurrRectangle = { 0, 0, 0, 0 };
-				Vector2 currOrigin = { lOrigin.x, lOrigin.y };
+				Rectangle lTextureRectangle = { 0, 0, 0, 0 };
 
-				if (currLayer[lIterator] != -1) {
-					lCurrRectangle = mLayerRects[currLayer[lIterator]];
-					Tile *lCurrentTile = new Tile(currLayer[lIterator], currOrigin, lCurrRectangle);
+				if (currLayer[lIterator] != 0) {
+					lTextureRectangle = mLayerRects[currLayer[lIterator]-1];
+					Tile *lCurrentTile = new Tile(currLayer[lIterator], { lOrigin.x, lOrigin.y }, lTextureRectangle);
 					mTiles.push_back(*lCurrentTile);
 				}
 			}
-			lOrigin.x += 32;
+			lOrigin.x += TILE_SIZE;
 			lIterator++;
 		}
 		lOrigin.x = 0;
-		lOrigin.y += 32;
+		lOrigin.y += TILE_SIZE;
 	}
 	lIterator = 0;
 	lOrigin.x = 0;
@@ -71,13 +110,13 @@ void Room::setCollisionTiles(std::vector<int> aTileIds) {
 }
 
 void Room::setCollisionDoors(std::vector<int> aDoorIds) {
-	//for (auto lCurrentTile : mTiles) {
-	//	for (auto lDoorId : aDoorIds) {
-	//		if (lCurrentTile.tiledId == lDoorId) {
-	//			mCollisionDoors.push_back(lCurrentTile.mapRectangle);
-	//		}
-	//	}
-	//}
+	for (auto lCurrentTile : mTiles) {
+		for (auto lDoorId : aDoorIds) {
+			if (lCurrentTile.tiledId == lDoorId) {
+				mCollisionDoors.push_back(lCurrentTile.mapRectangle);
+			}
+		}
+	}
 }
 
 void Room::drawDoors() {
@@ -109,73 +148,22 @@ void Room::draw() {
 	this->drawDoors();
 
 	if (Globals::DEBUG) {
-
-		//tiles counter
-		//int lIterator = 0;
-		//for (int itRow = 0; itRow < nbRowTiles; itRow++)
-		//{
-		//	for (int itCol = 0; itCol < nbColTiles; itCol++)
-		//	{
-		//		char buf[256];
-		//		sprintf_s(buf, "%d", lIterator);
-		//		DrawText(buf, itCol * 32, itRow * 32, 10, LIGHTGRAY);
-		//		lIterator++;
-		//	}
-		//}
-		//lIterator = 0;
-
-		//show block l
+		//show blocks tiles
 		for (auto block : mCollisionTiles) {
 			DrawRectangleLines((int)block.x, (int)block.y, (int)block.width, (int)block.height, YELLOW);
 		}
 	}
 }
-
-std::vector<Rectangle> Room::rectangleListCreator(Texture2D aTileset) {
-
-	std::vector<Rectangle> lListOfRect;
-
-	int tileSilze = 32;
-
-	float nbCol = (float)aTileset.width / 32;
-	float nbRow = (float)aTileset.height / 32;
-	float nbTile = nbCol * nbRow;
-
-	float nextCol = 0;
-	float nextRow = 0;
-
-	for (int i = 0; i < nbRow; i++)
-	{
-		for (int j = 0; j < nbCol; j++)
-		{
-			Rectangle lTempRec = { nextCol, nextRow, (float)mTileset.width / nbCol, (float)mTileset.height / nbRow };
-			lListOfRect.push_back(lTempRec);
-
-			nextCol += 32;
-		}
-		nextCol = 0;
-		nextRow += 32;
-	}
-
-	return lListOfRect;
-}
-
 //parse csv to vector
-std::vector<int> Room::csvParser(std::string layerPath) {
-	std::ifstream  data(layerPath);
+std::vector<int> Room::csvLineParser(std::string aLayer) {
 
 	std::vector<int> lCurrentLayer;
 
-	std::string line;
-	while (std::getline(data, line))
-	{
-		std::stringstream  lineStream(line);
-		std::string        cell;
-		while (std::getline(lineStream, cell, ','))
-		{
-			//parse to int and add to vector
-			lCurrentLayer.push_back(std::stoi(cell));
-		}
+	std::stringstream  lineStream(aLayer);
+	std::string        cell;
+	while (std::getline(lineStream, cell, ',')) {
+		//parse to int and add to vector
+		lCurrentLayer.push_back(std::stoi(cell));
 	}
 
 	return lCurrentLayer;

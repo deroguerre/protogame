@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ROOM_H
+#define ROOM_H
+
 #include <raylib.h>
 #include <iostream>
 #include <sstream>
@@ -7,11 +9,16 @@
 #include <vector>
 #include <list>
 #include "tile.h"
+#include "tinyxml2.h"
+#include <map>
+
+using namespace tinyxml2;
 
 class Room
 {
 public:
-	Room(Texture2D aTexture, std::vector<std::string> aLayerList);
+	Room(std::string aTilemap, Texture2D aTexture);
+	std::vector<int> csvLineParser(std::string aLayer);
 	~Room();
 	void draw();
 
@@ -29,15 +36,20 @@ public:
 	void setDoors(int aDoors) { mDoors = aDoors; }
 
 private:
-	void roomCreator();
-	void drawDoors();
-	int mDoors;
-	std::vector<Tile> mTiles;
+	std::string mTilemap;
 	Texture2D mTileset;
+	std::vector<Tile> mTiles;
 	std::vector<Rectangle> mCollisionTiles;
 	std::vector<Rectangle> mCollisionDoors;
-	std::pair<int, int> mPosition;
 	std::vector<Rectangle> mLayerRects;
-	std::vector<Rectangle> rectangleListCreator(Texture2D aDungeonTile);
+	std::pair<int, int> mPosition;
+	int mDoors;
+
+	std::vector<Rectangle> createTilesetRectangles(Texture2D aDungeonTile);
 	std::vector<int> csvParser(std::string layerPath);
+	void loadTmx();
+	void createRoom();
+	void drawDoors();
 };
+
+#endif
