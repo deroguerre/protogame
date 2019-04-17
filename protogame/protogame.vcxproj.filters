@@ -124,5 +124,11 @@
     <ClCompile Include="room.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TilemapXmlParser.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TilemapXmlParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
