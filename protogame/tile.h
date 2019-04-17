@@ -7,11 +7,16 @@
 class Tile
 {
 public:
-	int tiledId;
-	Vector2 origin;
-	Rectangle mapRectangle;
-	Rectangle textureRectangle;
+	int mTiledId;
+	Vector2 mPosition;
+	Rectangle mMapRectangle;
+	Rectangle mTextureRectangle;
 
-	Tile(int aTiledId, Vector2 aOrigin, Rectangle aTextureRectangle);
+	Tile(int aTiledId, Texture2D aTileset, Rectangle aMapRetcangle, Rectangle aTextureRectangle);
+	void draw();
 	~Tile();
+
+private:
+	Texture2D mTileset;
+
 };

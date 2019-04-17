@@ -91,37 +91,37 @@ void Player::stopMoving() {
 
 #pragma region Player collisions
 
-void Player::handleTileCollisions(std::vector<Rectangle> aOthersRects) {}
+void Player::handleTileCollisions(std::vector<Rectangle> aOthersRects) {
 
-//void Player::handleTileCollisions(std::vector<Rectangle> aOthersRects) {
-//
-//	std::vector<Rectangle> lCollisions;
-//	for (auto lTile : aOthersRects)
-//		if (CheckCollisionRecs(getCollisionRect(), lTile))
-//			lCollisions.push_back(lTile);
-//	
-//	if (!lCollisions.empty()) {
-//		for (auto lCollision : lCollisions) {
-//			Sides::Side lCollisionSide = Sprite::getCollisionSide(lCollision);
-//			if (lCollisionSide != Sides::NONE) {
-//				switch (lCollisionSide) {
-//				case Sides::TOP: //Player Top side
-//					mPosition.y = lCollision.y + lCollision.height + 1;
-//					break;
-//				case Sides::BOTTOM: //Player Bottom side
-//					mPosition.y = lCollision.y - getCollisionRect().height - 1;
-//					break;
-//				case Sides::LEFT: //Player Left side
-//					mPosition.x = lCollision.x + lCollision.width + 1;
-//					break;
-//				case Sides::RIGHT: //Player Right side
-//					mPosition.x = lCollision.x - getCollisionRect().width - 1;
-//					break;
-//				}
-//			}
-//		}
-//	}
-//}
+	std::vector<Rectangle> lCollisions;
+	for (auto lTile : aOthersRects) {
+		if (CheckCollisionRecs(Sprite::getCollisionRect(), lTile)) {
+			lCollisions.push_back(lTile);
+		}
+	}
+	
+	if (!lCollisions.empty()) {
+		for (auto lCollision : lCollisions) {
+			Sides::Side lCollisionSide = Sprite::getCollisionSide(lCollision);
+			if (lCollisionSide != Sides::NONE) {
+				switch (lCollisionSide) {
+				case Sides::TOP: //Player Top side
+					mPosition.y = lCollision.y + lCollision.height + 1;
+					break;
+				case Sides::BOTTOM: //Player Bottom side
+					mPosition.y = lCollision.y - Sprite::getCollisionRect().height - 1;
+					break;
+				case Sides::LEFT: //Player Left side
+					mPosition.x = lCollision.x + lCollision.width + 1;
+					break;
+				case Sides::RIGHT: //Player Right side
+					mPosition.x = lCollision.x - Sprite::getCollisionRect().width - 1;
+					break;
+				}
+			}
+		}
+	}
+}
 
 void Player::handleDoorCollisions(Level* aLevel) {}
 

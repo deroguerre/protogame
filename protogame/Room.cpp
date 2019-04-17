@@ -75,8 +75,12 @@ void Room::createRoom() {
 				Rectangle lTextureRectangle = { 0, 0, 0, 0 };
 
 				if (currLayer[lIterator] != 0) {
+
 					lTextureRectangle = mLayerRects[currLayer[lIterator]-1];
-					Tile *lCurrentTile = new Tile(currLayer[lIterator], { lOrigin.x, lOrigin.y }, lTextureRectangle);
+
+					Rectangle lMapRectangle = { lOrigin.x, lOrigin.y, TILE_SIZE, TILE_SIZE };
+					Tile *lCurrentTile = new Tile(currLayer[lIterator], mTileset, lMapRectangle, lTextureRectangle);
+
 					mTiles.push_back(*lCurrentTile);
 				}
 			}
@@ -102,8 +106,8 @@ std::vector<Rectangle> Room::getCollisionDoors() {
 void Room::setCollisionTiles(std::vector<int> aTileIds) {
 	for (auto lCurrentTile : mTiles) {
 		for (auto lBlockId : aTileIds) {
-			if (lCurrentTile.tiledId == lBlockId) {
-				mCollisionTiles.push_back(lCurrentTile.mapRectangle);
+			if (lCurrentTile.mTiledId == lBlockId) {
+				mCollisionTiles.push_back(lCurrentTile.mMapRectangle);
 			}
 		}
 	}
@@ -112,8 +116,8 @@ void Room::setCollisionTiles(std::vector<int> aTileIds) {
 void Room::setCollisionDoors(std::vector<int> aDoorIds) {
 	for (auto lCurrentTile : mTiles) {
 		for (auto lDoorId : aDoorIds) {
-			if (lCurrentTile.tiledId == lDoorId) {
-				mCollisionDoors.push_back(lCurrentTile.mapRectangle);
+			if (lCurrentTile.mTiledId == lDoorId) {
+				mCollisionDoors.push_back(lCurrentTile.mMapRectangle);
 			}
 		}
 	}
@@ -142,7 +146,8 @@ void Room::draw() {
 
 	//dessine chaque tile de la liste
 	for (auto currentTile : mTiles) {
-		DrawTextureRec(mTileset, currentTile.textureRectangle, currentTile.origin, WHITE);
+		currentTile.draw();
+		DrawTextureRec(mTileset, currentTile.mTextureRectangle, currentTile.mPosition, WHITE);
 	}
 
 	this->drawDoors();

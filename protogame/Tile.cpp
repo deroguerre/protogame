@@ -1,13 +1,18 @@
 #include "tile.h"
 
-Tile::Tile(int aTiledId, Vector2 aOrigin, Rectangle aTextureRectangle)
+Tile::Tile(int aTiledId, Texture2D aTileset, Rectangle aMapRectangle, Rectangle aTextureRectangle)
 {
-	tiledId = aTiledId;
-	origin = aOrigin;
-	mapRectangle = { origin.x, origin.y, aTextureRectangle.width, aTextureRectangle.height };
-	textureRectangle = aTextureRectangle;
+	mTiledId = aTiledId;
+	mTileset = aTileset;
+	mMapRectangle = aMapRectangle;
+	mTextureRectangle = aTextureRectangle;
+
+	mPosition = { aMapRectangle.x, aMapRectangle.y };
 }
 
+void Tile::draw() {
+	DrawTextureRec(mTileset, mTextureRectangle, mPosition, WHITE);
+}
 
 Tile::~Tile()
 {
