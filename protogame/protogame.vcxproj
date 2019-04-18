@@ -153,6 +153,8 @@
     <ClCompile Include="SceneManager\SceneManager.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="TilemapXmlParser.cpp" />
+    <ClCompile Include="TilemapXmlParser.h" />
     <ClCompile Include="tinyxml2.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
