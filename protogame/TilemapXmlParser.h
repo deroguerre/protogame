@@ -44,6 +44,10 @@ struct Tileset {
 	Texture2D mTexture;
 	int mFirstGid;
 	
+	Tileset() {
+		mFirstGid = -1;
+	}
+
 	Tileset(Texture2D aTexture, int aFirstGid) {
 		mTexture = aTexture;
 		mFirstGid = aFirstGid;

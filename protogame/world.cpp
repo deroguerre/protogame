@@ -1,182 +1,84 @@
-#include "Globals.h"
 #include "World.h"
+#include "globals.h"
 
-int tileSize;
-const int NB_COL_TILES = 64;
-const int NB_ROW_TILES = 36;
-
-World::World(std::pair<int, int> aPosition, Texture2D aDungeonTileset, std::vector<std::string> aLayerList, int aTileSize)
-{
-	tileSize = aTileSize;
-
-	mPosition = aPosition;
-	mTileset = aDungeonTileset;
-
-	//cr�e la liste des rectangles depuis la texture fournis (only 32x32)
-	mLayerRects = this->rectangleListCreator(mTileset);
-
-	//recup�re les calques et les ajoutes � une liste 
-	for (int i = 0; i < aLayerList.size(); i++) {
-		std::vector<int> lCurrentLayer = this->csvParser(aLayerList[i]);
-		mLayerList.push_back(lCurrentLayer);
-	}
-
-	this->roomCreator();
+World::World() {
+	mTilemapXmlParser = new TilemapXmlParser(WorldHelper::TILEMAP);
+	createTiles();
 }
 
-void World::roomCreator() {
+void World::createTiles() {
+	int lTileCounter = 0;
 
-	int lIterator = 0;
-	Vector2 lOrigin = { 0, 0 };
+	//Build each individual tile here
 
-	for (int itRow = 0; itRow < NB_ROW_TILES; itRow++)
-	{
-		for (int itCol = 0; itCol < NB_COL_TILES; itCol++)
-		{
-			for (auto currLayer : mLayerList) {
+	for (auto lGid : mTilemapXmlParser->getTiles()) {
 
-				Rectangle lCurrRectangle = { 0, 0, 0, 0 };
-				Vector2 currOrigin = { lOrigin.x, lOrigin.y };
-
-				if (currLayer[lIterator] != -1) {
-					lCurrRectangle = mLayerRects[currLayer[lIterator]];
-					Tile *lCurrentTile = new Tile(currLayer[lIterator], currOrigin, lCurrRectangle);
-					mTiles.push_back(*lCurrentTile);
+		//If gid is 0, no tile should be drawn. Continue loop
+		if (lGid > 0) {
+			//Get the tileset for this specific gid
+			Tileset lTileset;
+			int lClosest = 0;
+			for (int i = 0; i < mTilemapXmlParser->getTilesets().size(); i++) {
+				if (mTilemapXmlParser->getTilesets()[i].mFirstGid <= lGid) {
+					if (mTilemapXmlParser->getTilesets()[i].mFirstGid > lClosest) {
+						lClosest = mTilemapXmlParser->getTilesets()[i].mFirstGid;
+						lTileset = mTilemapXmlParser->getTilesets().at(i);
+					}
 				}
 			}
-			lOrigin.x += tileSize;
-			lIterator++;
-		}
-		lOrigin.x = 0;
-		lOrigin.y += tileSize;
-	}
-	lIterator = 0;
-	lOrigin.x = 0;
-	lOrigin.y = 0;
-}
 
-std::vector<Rectangle> World::getCollisionTiles() {
-	return mCollisionTiles;
-}
+			if (lTileset.mFirstGid > -1) {
+				//Get the position of the tile in the screen
+				int lTileX = 0;
+				int lTileY = 0;
+				lTileX = lTileCounter % (int)mTilemapXmlParser->getTilemapSize().x;
+				lTileX *= mTilemapXmlParser->getTileSize().x;
+				lTileY += mTilemapXmlParser->getTileSize().y * (lTileCounter / (int)mTilemapXmlParser->getTilemapSize().x);
+				Vector2 lTilePosition = Vector2{ (float)lTileX, (float)lTileY };
 
-std::vector<Rectangle> World::getCollisionDoors() {
-	return mCollisionDoors;
-}
+				//Calculate the position of the tile in the tileset
+				Vector2 lTilesetPosition = this->getTilesetPosition(lTileset, lGid, mTilemapXmlParser->getTileSize().x, mTilemapXmlParser->getTileSize().y);
 
-void World::setCollisionTiles(std::vector<int> aTileIds) {
-	for (auto lCurrentTile : mTiles) {
-		for (auto lBlockId : aTileIds) {
-			if (lCurrentTile.getTileId() == lBlockId) {
-				mCollisionTiles.push_back(lCurrentTile.getTileRec());
+				Rectangle lTileRec = Rectangle{ lTilesetPosition.x, lTilesetPosition.y, (float)mTilemapXmlParser->getTileSize().x, (float)mTilemapXmlParser->getTileSize().y };
+
+				Tile* lTile = new Tile(lTileset.mTexture, lTilePosition, lTileRec);
+				mTiles.push_back(lTile);
 			}
+
 		}
+
+		lTileCounter++;
 	}
 }
 
-void World::setCollisionDoors(std::vector<int> aDoorIds) {
-	for (auto lCurrentTile : mTiles) {
-		for (auto lDoorId : aDoorIds) {
-			if (lCurrentTile.getTileId() == lDoorId) {
-				mCollisionDoors.push_back(lCurrentTile.getTileRec());
-			}
-		}
-	}
+Vector2 World::getTilesetPosition(Tileset aTileset, int aGid, int aTileWidth, int aTileHeight) {
+	
+	int lTilesetWidth = aTileset.mTexture.width;
+	int lTilesetHeight = aTileset.mTexture.height;
+	
+	int lTilesetX = aGid % (lTilesetWidth / aTileWidth) - 1;
+	lTilesetX *= aTileWidth;
+	
+	int lTilesetY = 0;
+	int lAmount = ((aGid - aTileset.mFirstGid) / (lTilesetWidth / aTileWidth));
+	
+	lTilesetY = aTileHeight * lAmount;
+	Vector2 lTilesetPosition = Vector2{ (float)lTilesetX, (float)lTilesetY };
+	return lTilesetPosition;
 }
 
-void World::drawDoors() {
-	Rectangle topDoor = { 384, 32, 32, 32 };
-	Rectangle downDoor = { 384, 544, 32, 32 };
-	Rectangle leftDoor = { 0, 288, 32, 32 };
-	Rectangle rightDoor = { 768, 288, 32, 32 };
-
-	if (Globals::DEBUG) {
-		DrawRectangleLines((int)topDoor.x, (int)topDoor.y, (int)topDoor.width, (int)topDoor.height, BLUE);
-		DrawRectangleLines((int)downDoor.x, (int)downDoor.y, (int)downDoor.width, (int)downDoor.height, BLUE);
-		DrawRectangleLines((int)leftDoor.x, (int)leftDoor.y, (int)leftDoor.width, (int)leftDoor.height, BLUE);
-		DrawRectangleLines((int)rightDoor.x, (int)rightDoor.y, (int)rightDoor.width, (int)rightDoor.height, BLUE);
+std::vector<Tile*> mChunk;
+void World::update(Vector2 aOffset) {
+	mChunk.clear();
+	for (int i = 0; i < mTiles.size(); i++) {
+		if (mTiles[i]->origin.x >= aOffset.x && mTiles[i]->origin.y >= aOffset.y && mTiles[i]->origin.x < Globals::SCREEN_WIDTH + aOffset.x && mTiles[i]->origin.y < Globals::SCREEN_HEIGHT + aOffset.y)
+			mChunk.push_back(mTiles[i]);
 	}
 }
 
 void World::draw() {
-
-	//dessine chaque tile de la liste
-	for (auto currentTile : mTiles) {
-		DrawTextureRec(mTileset, currentTile.textureRectangle, currentTile.getPosition(), WHITE);
+	for (int i = 0; i < mChunk.size(); i++) {
+		DrawTextureRec(mChunk[i]->mTileset, mChunk[i]->mapRectangle, mChunk[i]->origin, RAYWHITE);
 	}
-
-	this->drawDoors();
-
-	if (Globals::DEBUG) {
-
-		//tiles counter
-		//int lIterator = 0;
-		//for (int itRow = 0; itRow < nbRowTiles; itRow++)
-		//{
-		//	for (int itCol = 0; itCol < nbColTiles; itCol++)
-		//	{
-		//		char buf[256];
-		//		sprintf_s(buf, "%d", lIterator);
-		//		DrawText(buf, itCol * 32, itRow * 32, 10, LIGHTGRAY);
-		//		lIterator++;
-		//	}
-		//}
-		//lIterator = 0;
-
-		//show block l
-		for (auto block : mCollisionTiles) {
-			DrawRectangleLines((int)block.x, (int)block.y, (int)block.width, (int)block.height, YELLOW);
-		}
-	}
-}
-
-std::vector<Rectangle> World::rectangleListCreator(Texture2D aTileset) {
-
-	std::vector<Rectangle> lListOfRect;
-
-	float nbCol = (float)aTileset.width / tileSize;
-	float nbRow = (float)aTileset.height / tileSize;
-	float nbTile = nbCol * nbRow;
-
-	float nextCol = 0;
-	float nextRow = 0;
-
-	for (int i = 0; i < nbRow; i++)
-	{
-		for (int j = 0; j < nbCol; j++)
-		{
-			Rectangle lTempRec = { nextCol, nextRow, (float)mTileset.width / nbCol, (float)mTileset.height / nbRow };
-			lListOfRect.push_back(lTempRec);
-
-			nextCol += tileSize;
-		}
-		nextCol = 0;
-		nextRow += tileSize;
-	}
-
-	return lListOfRect;
-}
-
-//parse csv to vector
-std::vector<int> World::csvParser(std::string layerPath) {
-	std::ifstream  data(layerPath);
-
-	std::vector<int> lCurrentLayer;
-
-	std::string line;
-	while (std::getline(data, line))
-	{
-		std::stringstream  lineStream(line);
-		std::string        cell;
-		while (std::getline(lineStream, cell, ','))
-		{
-			//parse to int and add to vector
-			lCurrentLayer.push_back(std::stoi(cell));
-		}
-	}
-
-	return lCurrentLayer;
-}
-
-World::~World()
-{
+		
 }
