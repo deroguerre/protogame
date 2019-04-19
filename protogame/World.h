@@ -19,6 +19,9 @@ public:
 private:
 	TilemapXmlParser* mTilemapXmlParser;
 	std::vector<Tile*> mTiles;
+	std::vector<Tileset> mTilesets;
+	Vector2 mTilemapSize;
+	Vector2 mTileSize;
 
 	void createTiles();
 	Vector2 getTilesetPosition(Tileset aTileset, int aGid, int aTileWidth, int aTileHeight);

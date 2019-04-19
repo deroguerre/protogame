@@ -2,10 +2,8 @@
 
 AnimatedSprite::AnimatedSprite() {}
 
-AnimatedSprite::AnimatedSprite(const std::string &aFilePath, int aSourceX, int aSourceY,
-	int aWidth, int aHeight, Vector2 aPosition, float aTimeToUpdate) :
-	Sprite(aFilePath, aSourceX, aSourceY, aWidth, aHeight, aPosition)
-{
+AnimatedSprite::AnimatedSprite(const std::string &aFilePath, int aSourceX, int aSourceY, int aWidth, int aHeight, Vector2 aPosition, float aTimeToUpdate) :
+Sprite(aFilePath, aSourceX, aSourceY, aWidth, aHeight, aPosition) {
 	mFrameIndex = 0;
 	mTimeToUpdate = aTimeToUpdate;
 	mCurrentAnimation = "";

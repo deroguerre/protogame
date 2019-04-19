@@ -2,17 +2,21 @@
 
 Tile::Tile(int aTiledId, Vector2 aOrigin, Rectangle aTextureRectangle)
 {
-	tiledId = aTiledId;
-	origin = aOrigin;
-	mapRectangle = { origin.x, origin.y, aTextureRectangle.width, aTextureRectangle.height };
-	textureRectangle = aTextureRectangle;
+	mTiledId = aTiledId;
+	mTextureRectangle = aTextureRectangle;
+
+	mPosition = { aTextureRectangle.x, aTextureRectangle.y };
 }
 
 Tile::Tile(Texture2D aTileset, Vector2 aPosition, Rectangle aTileRec)
 {
 	mTileset = aTileset;
-	origin = aPosition;
-	mapRectangle = aTileRec;
+	mPosition = aPosition;
+	mMapRectangle = aTileRec;
+}
+
+void Tile::draw() {
+	DrawTextureRec(mTileset, mTextureRectangle, mPosition, WHITE);
 }
 
 

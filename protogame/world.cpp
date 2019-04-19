@@ -1,8 +1,12 @@
 #include "World.h"
 #include "globals.h"
 
+struct Tileset;
 World::World() {
 	mTilemapXmlParser = new TilemapXmlParser(WorldHelper::TILEMAP);
+	mTilemapSize = mTilemapXmlParser->getTilemapSize();
+	mTileSize = mTilemapXmlParser->getTileSize();
+	mTilesets = mTilemapXmlParser->getTilesets();
 	createTiles();
 }
 
@@ -18,11 +22,11 @@ void World::createTiles() {
 			//Get the tileset for this specific gid
 			Tileset lTileset;
 			int lClosest = 0;
-			for (int i = 0; i < mTilemapXmlParser->getTilesets().size(); i++) {
-				if (mTilemapXmlParser->getTilesets()[i].mFirstGid <= lGid) {
-					if (mTilemapXmlParser->getTilesets()[i].mFirstGid > lClosest) {
-						lClosest = mTilemapXmlParser->getTilesets()[i].mFirstGid;
-						lTileset = mTilemapXmlParser->getTilesets().at(i);
+			for (int i = 0; i < mTilesets.size(); i++) {
+				if (mTilesets[i].mFirstGid <= lGid) {
+					if (mTilesets[i].mFirstGid > lClosest) {
+						lClosest = mTilesets[i].mFirstGid;
+						lTileset = mTilesets.at(i);
 					}
 				}
 			}
@@ -31,18 +35,18 @@ void World::createTiles() {
 				//Get the position of the tile in the screen
 				int lTileX = 0;
 				int lTileY = 0;
-				lTileX = lTileCounter % (int)mTilemapXmlParser->getTilemapSize().x;
-				lTileX *= mTilemapXmlParser->getTileSize().x;
-				lTileY += mTilemapXmlParser->getTileSize().y * (lTileCounter / (int)mTilemapXmlParser->getTilemapSize().x);
+				lTileX = lTileCounter % (int)mTilemapSize.x;
+				lTileX *= mTileSize.x;
+				lTileY += mTileSize.y * (lTileCounter / (int)mTilemapSize.x);
 				Vector2 lTilePosition = Vector2{ (float)lTileX, (float)lTileY };
 
 				//Calculate the position of the tile in the tileset
-				Vector2 lTilesetPosition = this->getTilesetPosition(lTileset, lGid, mTilemapXmlParser->getTileSize().x, mTilemapXmlParser->getTileSize().y);
+				Vector2 lTilesetPosition = this->getTilesetPosition(lTileset, lGid, mTileSize.x, mTileSize.y);
 
-				Rectangle lTileRec = Rectangle{ lTilesetPosition.x, lTilesetPosition.y, (float)mTilemapXmlParser->getTileSize().x, (float)mTilemapXmlParser->getTileSize().y };
+				Rectangle lTileRec = Rectangle{ lTilesetPosition.x, lTilesetPosition.y, (float)mTileSize.x, (float)mTileSize.y };
 
 				Tile* lTile = new Tile(lTileset.mTexture, lTilePosition, lTileRec);
-				mTiles.push_back(lTile);
+				this->mTiles.push_back(lTile);
 			}
 
 		}
@@ -70,15 +74,15 @@ Vector2 World::getTilesetPosition(Tileset aTileset, int aGid, int aTileWidth, in
 std::vector<Tile*> mChunk;
 void World::update(Vector2 aOffset) {
 	mChunk.clear();
-	for (int i = 0; i < mTiles.size(); i++) {
-		if (mTiles[i]->origin.x >= aOffset.x && mTiles[i]->origin.y >= aOffset.y && mTiles[i]->origin.x < Globals::SCREEN_WIDTH + aOffset.x && mTiles[i]->origin.y < Globals::SCREEN_HEIGHT + aOffset.y)
-			mChunk.push_back(mTiles[i]);
+	for (int i = 0; i < this->mTiles.size(); i++) {
+		if (this->mTiles[i]->mPosition.x >= aOffset.x && this->mTiles[i]->mPosition.y >= aOffset.y && this->mTiles[i]->mPosition.x < Globals::SCREEN_WIDTH + aOffset.x && this->mTiles[i]->mPosition.y < Globals::SCREEN_HEIGHT + aOffset.y)
+			mChunk.push_back(this->mTiles[i]);
 	}
 }
 
 void World::draw() {
 	for (int i = 0; i < mChunk.size(); i++) {
-		DrawTextureRec(mChunk[i]->mTileset, mChunk[i]->mapRectangle, mChunk[i]->origin, RAYWHITE);
+		DrawTextureRec(mChunk[i]->mTileset, mChunk[i]->mMapRectangle, mChunk[i]->mPosition, RAYWHITE);
 	}
 		
 }

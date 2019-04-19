@@ -5,7 +5,7 @@ namespace Globals
 {
 	const int SCREEN_WIDTH = 1024;
 	const int SCREEN_HEIGHT = 576;
-	const bool DEBUG = true;
+	const bool DEBUG = false;
 }
 
 namespace Sides {
@@ -27,12 +27,16 @@ namespace Sides {
 	}
 }
 
-enum Direction 
+enum Direction
 {
 	LEFT,
 	RIGHT,
 	UP,
-	DOWN
+	UPLEFT,
+	UPRIGHT,
+	DOWN,
+	DOWNLEFT,
+	DOWNRIGHT
 };
 
 enum {
