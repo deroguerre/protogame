@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.2" tiledversion="1.2.3" name="2-tileset-x32" tilewidth="32" tileheight="32" tilecount="100" columns="10">
- <image source="../assets/2-tileset-x32.png" width="320" height="320"/>
+<tileset version="1.2" tiledversion="1.2.3" name="2-tileset-x32" tilewidth="32" tileheight="32" tilecount="110" columns="10">
+ <image source="../assets/room_tileset.png" width="320" height="352"/>
  <tile id="0">
   <properties>
    <property name="collide" type="bool" value="true"/>
@@ -500,5 +500,13 @@
   <properties>
    <property name="collide" type="bool" value="false"/>
   </properties>
+ </tile>
+ <tile id="100">
+  <animation>
+   <frame tileid="100" duration="250"/>
+   <frame tileid="101" duration="250"/>
+   <frame tileid="102" duration="250"/>
+   <frame tileid="103" duration="250"/>
+  </animation>
  </tile>
 </tileset>
