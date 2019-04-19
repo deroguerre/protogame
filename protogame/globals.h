@@ -27,12 +27,16 @@ namespace Sides {
 	}
 }
 
-enum Direction 
+enum Direction
 {
 	LEFT,
 	RIGHT,
 	UP,
-	DOWN
+	UPLEFT,
+	UPRIGHT,
+	DOWN,
+	DOWNLEFT,
+	DOWNRIGHT
 };
 
 enum {

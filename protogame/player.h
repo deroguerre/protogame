@@ -17,7 +17,11 @@ public:
 	void moveLeft();
 	void moveRight();
 	void moveUp();
+	void moveUpLeft();
+	void moveUpRight();
 	void moveDown();
+	void moveDownLeft();
+	void moveDownRight();
 	void stopMoving();
 
 	void handleTileCollisions(std::vector<Rectangle> aOthersRects);
