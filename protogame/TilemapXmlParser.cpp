@@ -1,5 +1,6 @@
 #include "TilemapXmlParser.h"
 #include <sstream>
+#include <iostream>
 
 TilemapXmlParser::TilemapXmlParser(std::string aTilemapName) {
 	parseTilemap(aTilemapName);
@@ -11,6 +12,11 @@ void TilemapXmlParser::parseTilemap(std::string aTilemap) {
 	lStrStream << "maps/" << aTilemap << ".tmx";
 	lTilemapDoc.LoadFile(lStrStream.str().c_str());
 	XMLElement* lMapNode = lTilemapDoc.FirstChildElement("map");
+
+	if (lMapNode == NULL) {
+		throw std::exception();
+		std::cout << "impossible de lire le fichier";
+	}
 
 	//Get the width and the height of the tilemap
 	lMapNode->QueryFloatAttribute("width", &mTilemapSize.x);
@@ -31,15 +37,23 @@ void TilemapXmlParser::parseTilesets(XMLElement* aMapNode) {
 	if (lTilesetNode != NULL) {
 		while (lTilesetNode) {
 			int lFirstGid;
+
 			const char* lTilesetSource = lTilesetNode->Attribute("source");
+			const char* lImageSource;
 
-			//Parse .tsx file
-			XMLDocument lTileset;
-			std::stringstream lStrStream;
-			lStrStream << "maps/" << lTilesetSource;
-			lTileset.LoadFile(lStrStream.str().c_str());
+			//if tsx exist
+			if (lTilesetSource != NULL) {
+				//Parse .tsx file
+				XMLDocument lTileset;
+				std::stringstream lStrStream;
+				lStrStream << "maps/" << lTilesetSource;
+				lTileset.LoadFile(lStrStream.str().c_str());
 
-			const char* lImageSource = lTileset.FirstChildElement("tileset")->FirstChildElement("image")->Attribute("source");
+				lImageSource = lTileset.FirstChildElement("tileset")->FirstChildElement("image")->Attribute("source");
+			}
+			else {
+				lImageSource = lTilesetNode->FirstChildElement("image")->Attribute("source");
+			}
 
 			lImageSource += 3; // to remove the ../
 

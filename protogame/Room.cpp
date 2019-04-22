@@ -1,5 +1,6 @@
 #include "Globals.h"
 #include "room.h"
+#include "TilemapXmlParser.h"
 
 const int NB_COL_TILES = 32;
 const int NB_ROW_TILES = 18;
@@ -12,7 +13,9 @@ Room::Room(std::string aTilemap, Texture2D aTileset) {
 	mTilemap = aTilemap;
 	mTileset = aTileset;
 
-	//crée la liste des rectangles depuis la texture fournis (only 32x32)
+	//TilemapXmlParser* mTilemapXmlParser = new TilemapXmlParser("room_map");
+
+	//crée la liste des rectangles depuis la texture fournis
 	mLayerRects = this->createTilesetRectangles(mTileset);
 
 	this->loadTmx();
@@ -23,6 +26,11 @@ void Room::loadTmx() {
 	//recupère les calques et les ajoutes à une liste
 	lXMLFile.LoadFile(mTilemap.c_str());
 	XMLElement* lMapNode = lXMLFile.FirstChildElement("map");
+
+	if (lMapNode == NULL) {
+		throw std::exception();
+		std::cout << "impossible de lire le fichier";
+	}
 
 	for (XMLElement* lCurrentLayer = lMapNode->FirstChildElement("layer"); lCurrentLayer != NULL; lCurrentLayer = lCurrentLayer->NextSiblingElement("layer")) {
 
