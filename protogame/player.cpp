@@ -4,7 +4,7 @@ namespace PLAYER {
 	const std::string SPRITESHEET_PATH = "assets/django.png";
 	const int WIDTH = 32;
 	const int HEIGHT = 48;
-	const float WALK_SPEED = 2.3f;
+	float WALK_SPEED = 2.3f;
 
 	//IDLE UP-DOWN-LEFT-RIGHT
 	const std::string ANIM_IDLE_DOWN = "IdleDown";
@@ -29,10 +29,8 @@ namespace PLAYER {
 	const const std::string ANIM_RUN_DOWNRIGHT = "RunDownRight";
 }
 
-Player::Player() {}
-
 Player::Player(Vector2 aSpawnPoint) :
-	AnimatedSprite(PLAYER::SPRITESHEET_PATH, 0, 0, PLAYER::WIDTH, PLAYER::HEIGHT, aSpawnPoint, PLAYER::WALK_SPEED / 25.0f)
+	AnimatedSprite(PLAYER::SPRITESHEET_PATH, 0, 0, PLAYER::WIDTH, PLAYER::HEIGHT, aSpawnPoint, PLAYER::WALK_SPEED * 0.04f)
 {
 	mDirection = { 0, 0 };
 	setupAnimations();
@@ -111,6 +109,8 @@ void Player::moveDownRight() {
 
 void Player::stopMoving() {
 
+
+
 	switch (mFacing) {
 	case UP:
 		playAnimation(PLAYER::ANIM_IDLE_UP);
@@ -131,10 +131,10 @@ void Player::stopMoving() {
 		playAnimation(PLAYER::ANIM_IDLE_UPRIGHT);
 		break;
 	case DOWNLEFT:
-		playAnimation(PLAYER::ANIM_IDLE_DOWN);
+		playAnimation(PLAYER::ANIM_IDLE_DOWNLEFT);
 		break;
 	case DOWNRIGHT:
-		playAnimation(PLAYER::ANIM_IDLE_DOWN);
+		playAnimation(PLAYER::ANIM_IDLE_DOWNRIGHT);
 		break;
 	}
 }
@@ -270,6 +270,14 @@ void Player::update(float aFrameTime) {
 		mPosition.y += -PLAYER::WALK_SPEED;
 	if (IsKeyDown(KEY_S))
 		mPosition.y += PLAYER::WALK_SPEED;
+
+	//boost speed
+	if (IsKeyDown(KEY_LEFT_SHIFT)) {
+		PLAYER::WALK_SPEED = 3.3f;
+	}
+	else {
+		PLAYER::WALK_SPEED = 2.3f;
+	}
 
 	//--------------------------------------------------------------------------------------
 

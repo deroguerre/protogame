@@ -8,7 +8,6 @@
 class Player : public AnimatedSprite 
 {
 public:
-	Player();
 	Player(Vector2 aSpawnPoint);
 	void setupAnimations();
 	void draw();

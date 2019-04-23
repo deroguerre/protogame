@@ -17,7 +17,7 @@ public:
 	void update(Vector2 aOffset);
 	void draw();
 private:
-	TilemapXmlParser* mTilemapXmlParser;
+	TilemapXmlParser* mTilemapXmlParser = NULL;
 	std::vector<Tile*> mTiles;
 	std::vector<Tileset> mTilesets;
 	Vector2 mTilemapSize;

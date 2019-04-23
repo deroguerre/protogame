@@ -38,14 +38,15 @@ void World::createTiles() {
 				lTileX = lTileCounter % (int)mTilemapSize.x;
 				lTileX *= mTileSize.x;
 				lTileY += mTileSize.y * (lTileCounter / (int)mTilemapSize.x);
-				Vector2 lTilePosition = Vector2{ (float)lTileX, (float)lTileY };
+				//Vector2 lTilePosition = Vector2{ (float)lTileX, (float)lTileY };
+				Rectangle lTilePosition = { (float)lTileX, (float)lTileY , 32, 32};
 
 				//Calculate the position of the tile in the tileset
 				Vector2 lTilesetPosition = this->getTilesetPosition(lTileset, lGid, mTileSize.x, mTileSize.y);
 
 				Rectangle lTileRec = Rectangle{ lTilesetPosition.x, lTilesetPosition.y, (float)mTileSize.x, (float)mTileSize.y };
 
-				Tile* lTile = new Tile(lTileset.mTexture, lTilePosition, lTileRec);
+				Tile* lTile = new Tile(lGid, lTileset.mTexture, lTilePosition, lTileRec);
 				this->mTiles.push_back(lTile);
 			}
 
