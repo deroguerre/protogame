@@ -60,15 +60,35 @@ void TilemapXmlParser::parseTiles(XMLElement* aMapNode) {
 			XMLElement* lDataNode = lLayerNode->FirstChildElement("data");
 			if (lDataNode != NULL) {
 				while (lDataNode) {
-					//Loading the tile element
-					XMLElement* lTileNode = lDataNode->FirstChildElement("tile");
-					if (lTileNode != NULL) {
-						while (lTileNode) {
-							mTiles.push_back(lTileNode->IntAttribute("gid"));
+					const char* lEncoding = lDataNode->Attribute("encoding");
+					
+					if (lEncoding != NULL) {
+						std::stringstream lStrStream;
+						lStrStream << lEncoding;
+						if (lStrStream.str() == "csv") {
+							const char* lTiles = lDataNode->GetText();
+							std::stringstream lStrStream;
+							lStrStream << lTiles;
 
-							lTileNode = lTileNode->NextSiblingElement("tile");
+							std::string lGid;
+							while (std::getline(lStrStream, lGid, ',')) {
+								//Cast to int and add to vector
+								mTiles.push_back(std::stoi(lGid));
+							}
 						}
 					}
+					else {
+						//Loading the tile element
+						XMLElement* lTileNode = lDataNode->FirstChildElement("tile");
+						if (lTileNode != NULL) {
+							while (lTileNode) {
+								mTiles.push_back(lTileNode->IntAttribute("gid"));
+
+								lTileNode = lTileNode->NextSiblingElement("tile");
+							}
+						}
+					}
+
 					lDataNode = lDataNode->NextSiblingElement("data");
 				}
 			}
