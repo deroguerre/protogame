@@ -125,6 +125,8 @@
   <ItemGroup>
     <ClInclude Include="AnimatedSprite.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="Item.h" />
+    <ClInclude Include="ItemDatabase.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="room.h" />
@@ -142,6 +144,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimatedSprite.cpp" />
+    <ClCompile Include="Item.cpp" />
+    <ClCompile Include="ItemDatabase.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />

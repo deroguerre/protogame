@@ -19,6 +19,12 @@
     <Filter Include="Header Files\SceneManager">
       <UniqueIdentifier>{3ae133e7-279e-4280-99d4-3b0f8f31d9f6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Inventory">
+      <UniqueIdentifier>{6659b316-bc76-4270-a7cd-fc543b9c4dc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Inventory">
+      <UniqueIdentifier>{0766952e-f0db-4ba0-9941-fac3c177f232}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\player.png">
@@ -74,6 +80,12 @@
     <ClInclude Include="World.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Header Files\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemDatabase.h">
+      <Filter>Header Files\Inventory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneManager\GameOverScene.cpp">
@@ -126,6 +138,12 @@
     </ClCompile>
     <ClCompile Include="World.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Source Files\Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemDatabase.cpp">
+      <Filter>Source Files\Inventory</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

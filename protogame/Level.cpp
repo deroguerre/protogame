@@ -6,7 +6,12 @@ float mTinyMapWidth = 128.0f;
 float mTinyMapHeight = 96.0f;
 Vector2 mTinyMapOffset;
 
+Texture2D lTileset;
+
 Level::Level(int aRoomNumber, const char* aTilemap) {
+
+	lTileset = LoadTexture("assets/room_tileset.png");
+
 	mMazeWidth = sqrt(aRoomNumber) + 1;
 	mMazeHeight = sqrt(aRoomNumber) + 1;
 	mRoomNumber = aRoomNumber;
@@ -14,6 +19,7 @@ Level::Level(int aRoomNumber, const char* aTilemap) {
 
 	mTilemap = aTilemap;
 	generateMaze();
+
 }
 
 void Level::update() {
@@ -116,7 +122,7 @@ void Level::generateMaze() {
 	mRooms.clear();
 
 	//Choose a random position for the first room.
-	//mCurrentRoom = new Room(mTilemap, make_pair(rand() % mMazeWidth, rand() % mMazeHeight));
+	mCurrentRoom = new Room(mTilemap, lTileset, make_pair(rand() % mMazeWidth, rand() % mMazeHeight));
 
 	mRooms.push_back(mCurrentRoom);
 	mMaze[mCurrentRoom->getPosition().second * mMazeWidth + mCurrentRoom->getPosition().first] |= ROOM_VISITED;
@@ -124,10 +130,10 @@ void Level::generateMaze() {
 	createRooms(mCurrentRoom->getPosition());
 
 	// Set doors for our Rooms and load map
-	//for (auto lRoom : mRooms) {
-	//	lRoom->setDoors(mMaze[lRoom->getPosition().second * mMazeWidth + lRoom->getPosition().first]);
-	//	lRoom->loadMap();
-	//}
+	for (auto lRoom : mRooms) {
+		lRoom->setDoors(mMaze[lRoom->getPosition().second * mMazeWidth + lRoom->getPosition().first]);
+		//lRoom->loadMap();
+	}
 
 	findFarestRoom();
 }
@@ -151,25 +157,25 @@ void Level::createRooms(pair<int, int> aPosition) {
 		case 0: // North
 			mMaze[offset(0, -1)] |= ROOM_VISITED | ROOM_DOOR_BOTTOM;
 			mMaze[offset(0, 0)] |= ROOM_DOOR_TOP;
-			//mRooms.push_back(new Room(mTilemap, make_pair((aPosition.first + 0), (aPosition.second - 1))));
+			mRooms.push_back(new Room(mTilemap, lTileset, make_pair((aPosition.first + 0), (aPosition.second - 1))));
 			break;
 
 		case 1: // East
 			mMaze[offset(+1, 0)] |= ROOM_VISITED | ROOM_DOOR_LEFT;
 			mMaze[offset(0, 0)] |= ROOM_DOOR_RIGHT;
-			//mRooms.push_back(new Room(mTilemap, make_pair((aPosition.first + 1), (aPosition.second + 0))));
+			mRooms.push_back(new Room(mTilemap, lTileset, make_pair((aPosition.first + 1), (aPosition.second + 0))));
 			break;
 
 		case 2: // South
 			mMaze[offset(0, +1)] |= ROOM_VISITED | ROOM_DOOR_TOP;
 			mMaze[offset(0, 0)] |= ROOM_DOOR_BOTTOM;
-			//mRooms.push_back(new Room(mTilemap, make_pair((aPosition.first + 0), (aPosition.second + 1))));
+			mRooms.push_back(new Room(mTilemap, lTileset, make_pair((aPosition.first + 0), (aPosition.second + 1))));
 			break;
 
 		case 3: // West
 			mMaze[offset(-1, 0)] |= ROOM_VISITED | ROOM_DOOR_RIGHT;
 			mMaze[offset(0, 0)] |= ROOM_DOOR_LEFT;
-			//mRooms.push_back(new Room(mTilemap, make_pair((aPosition.first - 1), (aPosition.second + 0))));
+			mRooms.push_back(new Room(mTilemap, lTileset, make_pair((aPosition.first - 1), (aPosition.second + 0))));
 			break;
 		}
 

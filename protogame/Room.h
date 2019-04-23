@@ -17,7 +17,7 @@ using namespace tinyxml2;
 class Room
 {
 public:
-	Room(std::string aTilemap, Texture2D aTexture);
+	Room(std::string aTilemap, Texture2D aTexture, std::pair<int, int> aPosition);
 	std::vector<int> csvLineParser(std::string aLayer);
 	~Room();
 	void draw();
@@ -30,10 +30,10 @@ public:
 	void setCollisionTiles(std::vector<int> aTileIds);
 	void setCollisionDoors(std::vector<int> aDoorIds);
 
-	std::pair<int, int> getPosition() { return mPosition; }
+	std::pair<int, int> getPosition();
 
-	int getDoors() { return mDoors; }
-	void setDoors(int aDoors) { mDoors = aDoors; }
+	int getDoors() { return mDoorsFlags; }
+	void setDoors(int aDoors);
 
 private:
 	std::string mTilemap;
@@ -43,13 +43,13 @@ private:
 	std::vector<Rectangle> mCollisionDoors;
 	std::vector<Rectangle> mLayerRects;
 	std::pair<int, int> mPosition;
-	int mDoors;
+	int mDoorsFlags;
 
 	std::vector<Rectangle> createTilesetRectangles(Texture2D aDungeonTile);
-	std::vector<int> csvParser(std::string layerPath);
 	void loadTmx();
 	void createRoom();
 	void drawDoors();
 };
 
 #endif
+
