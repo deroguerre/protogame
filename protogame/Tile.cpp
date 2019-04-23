@@ -8,6 +8,7 @@ Tile::Tile(int aTiledId, Texture2D aTileset, Rectangle aMapRectangle, Rectangle 
 	mTextureRectangle = aTextureRectangle;
 
 	mPosition = { aMapRectangle.x, aMapRectangle.y };
+
 }
 
 Tile::Tile(Texture2D aTileset, Vector2 aPosition, Rectangle aTileRec)

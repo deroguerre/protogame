@@ -14,6 +14,7 @@ public:
 	Tile(Texture2D aTileset, Vector2 aOrigin, Rectangle aTextureRectangle);
 
 
+
 	int mTiledId;
 	Vector2 mPosition;
 	Rectangle mMapRectangle;
