@@ -3,7 +3,7 @@
 
 #include <string>
 #include "TilemapXmlParser.h"
-#include "tile.h"
+#include "Tile.h"
 
 namespace WorldHelper {
 	const std::string TILEMAP = "world_tilemap";

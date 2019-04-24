@@ -1,5 +1,5 @@
 #include "World.h"
-#include "globals.h"
+#include "Globals.h"
 
 struct Tileset;
 World::World() {

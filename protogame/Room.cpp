@@ -1,5 +1,5 @@
 #include "Globals.h"
-#include "room.h"
+#include "Room.h"
 
 const int NB_COL_TILES = 32;
 const int NB_ROW_TILES = 18;
