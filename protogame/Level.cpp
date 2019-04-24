@@ -12,8 +12,8 @@ Level::Level(int aRoomNumber, const char* aTilemap) {
 
 	lTileset = LoadTexture("assets/room_tileset.png");
 
-	mMazeWidth = sqrt(aRoomNumber) + 1;
-	mMazeHeight = sqrt(aRoomNumber) + 1;
+	mMazeWidth = (int)sqrt(aRoomNumber) + 1;
+	mMazeHeight = (int)sqrt(aRoomNumber) + 1;
 	mRoomNumber = aRoomNumber;
 	mTinyMapOffset = {Globals::SCREEN_WIDTH - mTinyMapWidth, 0.0f};
 
@@ -35,7 +35,7 @@ void Level::draw() {
 	// Draw the mini map
 	//DrawRectangle(mTinyMapOffset.x, mTinyMapOffset.y, mTinyMapWidth, mTinyMapHeight, Fade(RAYWHITE, 0.4f));
 	DrawRectangleLines(mTinyMapOffset.x, mTinyMapOffset.y, mTinyMapWidth, mTinyMapHeight, Fade(BLACK, 0.5f));
-	for (int i = 0; i < mRooms.size(); i++) {
+	for (unsigned int i = 0; i < mRooms.size(); i++) {
 
 		DrawRectangle(
 			(mTinyMapOffset.x + mRooms[i]->getPosition().first * (mTinyMapWidth / mMazeWidth)),
@@ -186,11 +186,11 @@ void Level::createRooms(pair<int, int> aPosition) {
 
 		pair<int, int> lNewCase;
 
-		int lMaxNeighbours = 0;
+		unsigned int lMaxNeighbours = 0;
 		int lMaxNeighboursAt = 0;
 		vector<int> lNeighboursAt;
 
-		for (int i = 0; i < mRooms.size(); i++) {
+		for (unsigned int i = 0; i < mRooms.size(); i++) {
 			lNeighboursAt = getNeighbours(mRooms[i]->getPosition(), false);
 			if (lNeighboursAt.size() >= lMaxNeighbours)	{
 				lMaxNeighbours = lNeighboursAt.size();
@@ -220,22 +220,22 @@ vector<int> Level::getNeighbours(pair<int, int> aPosition, bool aVisited)
 
 	// North neighbour
 	if (aPosition.second > 0)
-		if ((mMaze[offset(0, -1)] & ROOM_VISITED) == aVisited)
+		if ((mMaze[offset(0, -1)] & ROOM_VISITED) == (int)aVisited)
 			lNeighbours.push_back(0);
 
 	// East neighbour
 	if (aPosition.first < mMazeWidth - 1)
-		if ((mMaze[offset(1, 0)] & ROOM_VISITED) == aVisited)
+		if ((mMaze[offset(1, 0)] & ROOM_VISITED) == (int)aVisited)
 			lNeighbours.push_back(1);
 
 	// South neighbour
 	if (aPosition.second < mMazeHeight - 1)
-		if ((mMaze[offset(0, 1)] & ROOM_VISITED) == aVisited)
+		if ((mMaze[offset(0, 1)] & ROOM_VISITED) == (int)aVisited)
 			lNeighbours.push_back(2);
 
 	// West neighbour
 	if (aPosition.first > 0)
-		if ((mMaze[offset(-1, 0)] & ROOM_VISITED) == aVisited)
+		if ((mMaze[offset(-1, 0)] & ROOM_VISITED) == (int)aVisited)
 			lNeighbours.push_back(3);
 
 	return lNeighbours;
@@ -315,8 +315,8 @@ vector<stack<pair<int, int>>> Level::findAllPaths() {
 
 void Level::findFarestRoom() {
 	vector<stack<pair<int, int>>> lAllPaths = this->findAllPaths();
-	int lMax = 0;
-	for (int i = 0; i < lAllPaths.size(); i++) 
+	unsigned int lMax = 0;
+	for (unsigned int i = 0; i < lAllPaths.size(); i++) 
 	{
 		if (lMax < lAllPaths.at(i).size()) {
 			lMax = lAllPaths.at(i).size();

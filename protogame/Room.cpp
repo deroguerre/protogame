@@ -2,8 +2,8 @@
 #include "room.h"
 #include "TilemapXmlParser.h"
 
-const int NB_COL_TILES = 32;
-const int NB_ROW_TILES = 18;
+const int NB_COL_TILES = 40;
+const int NB_ROW_TILES = 23;
 const int TILE_SIZE = 32;
 
 XMLDocument lXMLFile;
@@ -14,7 +14,7 @@ Room::Room(std::string aTilemap, Texture2D aTileset, std::pair<int, int> aPositi
 	mTileset = aTileset;
 	mPosition = aPosition;
 
-	TilemapXmlParser* mTilemapXmlParser = new TilemapXmlParser("room_map");
+	//TilemapXmlParser* mTilemapXmlParser = new TilemapXmlParser("room_map");
 
 	//crée la liste des rectangles depuis la texture fournis
 	mLayerRects = this->createTilesetRectangles(mTileset);

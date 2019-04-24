@@ -22,7 +22,7 @@ public:
 private:
 	int mMazeWidth;
 	int mMazeHeight;
-	int mRoomNumber;
+	unsigned int mRoomNumber;
 	int* mMaze;
 	Room* mCurrentRoom;
 	vector<Room*> mRooms;

@@ -33,6 +33,7 @@ int main()
 {
 	// Initialization
 	//--------------------------------------------------------------------------------------
+	SetConfigFlags(FLAG_VSYNC_HINT);
 	InitWindow(Globals::SCREEN_WIDTH, Globals::SCREEN_HEIGHT, "raylib [core] example - basic window");
 
 	SetTargetFPS(60);
