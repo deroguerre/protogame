@@ -1,28 +1,41 @@
 #include "Globals.h"
 #include "room.h"
+#include "TilemapXmlParser.h"
 
-const int NB_COL_TILES = 32;
-const int NB_ROW_TILES = 18;
+const int NB_COL_TILES = 40;
+const int NB_ROW_TILES = 23;
 const int TILE_SIZE = 32;
 
 XMLDocument lXMLFile;
 
-Room::Room(std::string aTilemap, Texture2D aTileset) {
+Room::Room(std::string aTilemap, Texture2D aTileset, std::pair<int, int> aPosition) {
 
 	mTilemap = aTilemap;
 	mTileset = aTileset;
+	mPosition = aPosition;
 
-	//crée la liste des rectangles depuis la texture fournis (only 32x32)
+	//TilemapXmlParser* mTilemapXmlParser = new TilemapXmlParser("room_map");
+
+	//crée la liste des rectangles depuis la texture fournis
 	mLayerRects = this->createTilesetRectangles(mTileset);
 
 	this->loadTmx();
 	this->createRoom();
 }
 
+std::pair<int, int> Room::getPosition() {
+	return mPosition;
+}
+
 void Room::loadTmx() {
 	//recupère les calques et les ajoutes à une liste
 	lXMLFile.LoadFile(mTilemap.c_str());
 	XMLElement* lMapNode = lXMLFile.FirstChildElement("map");
+
+	if (lMapNode == NULL) {
+		throw std::exception();
+		std::cout << "impossible de lire le fichier";
+	}
 
 	for (XMLElement* lCurrentLayer = lMapNode->FirstChildElement("layer"); lCurrentLayer != NULL; lCurrentLayer = lCurrentLayer->NextSiblingElement("layer")) {
 
@@ -123,11 +136,19 @@ void Room::setCollisionDoors(std::vector<int> aDoorIds) {
 	}
 }
 
+void Room::setDoors(int aDoors) {
+	mDoorsFlags = aDoors;
+}
+
 void Room::drawDoors() {
 	Rectangle topDoor = { 480, 0, 64, 32 };
 	Rectangle downDoor = { 480, 544, 64, 32 };
 	Rectangle leftDoor = { 96, 256, 32, 64 };
 	Rectangle rightDoor = { 896, 256, 32, 64 };
+
+	if (mDoorsFlags & ROOM_DOOR_TOP) {
+		// 0010 & 0010
+	}
 
 	mCollisionDoors.push_back(topDoor);
 	mCollisionDoors.push_back(downDoor);
