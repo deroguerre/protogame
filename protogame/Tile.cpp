@@ -16,7 +16,6 @@ Tile::Tile(Texture2D aTileset, Vector2 aPosition, Rectangle aTileRec)
 	mTileset = aTileset;
 	mPosition = aPosition;
 	mMapRectangle = aTileRec;
-
 }
 
 void Tile::draw() {
