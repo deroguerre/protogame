@@ -2,7 +2,7 @@
 #include <sstream>
 #include <iostream>
 
-TilemapXmlParser::TilemapXmlParser(std::string aTilemapName) {
+TilemapXmlParser::TilemapXmlParser(const std::string aTilemapName) {
 	parseTilemap(aTilemapName);
 }
 
@@ -39,21 +39,14 @@ void TilemapXmlParser::parseTilesets(XMLElement* aMapNode) {
 			int lFirstGid;
 
 			const char* lTilesetSource = lTilesetNode->Attribute("source");
-			const char* lImageSource;
 
-			//if tsx exist
-			if (lTilesetSource != NULL) {
-				//Parse .tsx file
-				XMLDocument lTileset;
-				std::stringstream lStrStream;
-				lStrStream << "maps/" << lTilesetSource;
-				lTileset.LoadFile(lStrStream.str().c_str());
+			//Parse .tsx file
+			XMLDocument lTileset;
+			std::stringstream lStrStream;
+			lStrStream << "maps/" << lTilesetSource;
+			lTileset.LoadFile(lStrStream.str().c_str());
 
-				lImageSource = lTileset.FirstChildElement("tileset")->FirstChildElement("image")->Attribute("source");
-			}
-			else {
-				lImageSource = lTilesetNode->FirstChildElement("image")->Attribute("source");
-			}
+			const char* lImageSource = lTileset.FirstChildElement("tileset")->FirstChildElement("image")->Attribute("source");
 
 			lImageSource += 3; // to remove the ../
 
@@ -175,6 +168,72 @@ std::vector<Tileset> TilemapXmlParser::getTilesets() {
 
 std::vector<int> TilemapXmlParser::getTiles() {
 	return mTiles;
+}
+
+void TilemapXmlParser::getTiles(std::vector<Tile*>* aTiles) {
+
+	int lTileCounter = 0;
+
+	//Build each individual tile here
+	for (auto lGid : getTiles()) {
+
+		//If gid is 0, no tile should be drawn. Continue loop
+		if (lGid > 0) {
+			//Get the tileset for this specific gid
+			Tileset lTileset;
+			int lClosest = 0;
+			for (int i = 0; i < mTilesets.size(); i++) {
+				if (mTilesets[i].mFirstGid <= lGid) {
+					if (mTilesets[i].mFirstGid > lClosest) {
+						lClosest = mTilesets[i].mFirstGid;
+						lTileset = mTilesets.at(i);
+					}
+				}
+			}
+
+			if (lTileset.mFirstGid > -1) {
+				//Get the position of the tile in the screen
+				int lTileX = 0;
+				int lTileY = 0;
+				lTileX = lTileCounter % (int)mTilemapSize.x;
+				lTileX *= mTileSize.x;
+				lTileY += mTileSize.y * (lTileCounter / (int)mTilemapSize.x);
+				Vector2 lTilePosition = Vector2{ (float)lTileX, (float)lTileY };
+
+
+				//Calculate the position of the tile in the tileset
+				Vector2 lTilesetPosition = this->getTilesetPosition(lTileset, lGid, mTileSize.x, mTileSize.y);
+
+				Rectangle lTileRec = Rectangle{ lTilesetPosition.x, lTilesetPosition.y, (float)mTileSize.x, (float)mTileSize.y };
+
+				Tile* lTile = new Tile(lTileset.mTexture, lTilePosition, lTileRec);
+				aTiles->push_back(lTile);
+			}
+
+		}
+
+		lTileCounter++;
+		// If lTileCounter >= (mTilemapSize.x * mTilemapSize.y) we have to reset lTileCounter because we are on a new Layer.
+		if (lTileCounter >= (mTilemapSize.x * mTilemapSize.y))
+			lTileCounter = 0;
+	}
+	
+}
+
+Vector2 TilemapXmlParser::getTilesetPosition(Tileset aTileset, int aGid, int aTileWidth, int aTileHeight) {
+
+	int lTilesetWidth = aTileset.mTexture.width;
+	int lTilesetHeight = aTileset.mTexture.height;
+
+	int lTilesetX = aGid % (lTilesetWidth / aTileWidth) - 1;
+	lTilesetX *= aTileWidth;
+
+	int lTilesetY = 0;
+	int lAmount = ((aGid - aTileset.mFirstGid) / (lTilesetWidth / aTileWidth));
+
+	lTilesetY = aTileHeight * lAmount;
+	Vector2 lTilesetPosition = Vector2{ (float)lTilesetX, (float)lTilesetY };
+	return lTilesetPosition;
 }
 
 void TilemapXmlParser::getObject(std::vector<Rectangle>* aRectangles, std::string aObjectGroupName) {

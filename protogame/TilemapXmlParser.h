@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "Tile.h"
 
 using namespace tinyxml2;
 
@@ -16,13 +17,14 @@ struct ObjectGroup;
 class TilemapXmlParser {
 public:
 	TilemapXmlParser() {}
-	TilemapXmlParser(std::string aTilemap);
+	TilemapXmlParser(const std::string aTilemap);
 	~TilemapXmlParser();
 
 	Vector2 getTilemapSize();
 	Vector2 getTileSize();
 	std::vector<Tileset> getTilesets();
 	std::vector<int> getTiles();
+	void getTiles(std::vector<Tile*>* aTiles);
 	void getObject(std::vector<Rectangle>* aRectangles, std::string aObjectGroupName = std::string());
 	void getObject(std::vector<Vector2>* aPoint, std::string aObjectGroupName = std::string());
 	void getObject(std::map<std::string, Rectangle>* aRectangles, std::string aObjectGroupName = std::string());
@@ -39,6 +41,7 @@ private:
 	void parseTilesets(XMLElement* aMapNode);
 	void parseTiles(XMLElement* aMapNode);
 	void parseObject(XMLElement* aMapNode);
+	Vector2 getTilesetPosition(Tileset aTileset, int aGid, int aTileWidth, int aTileHeight);
 };
 
 struct Tileset {

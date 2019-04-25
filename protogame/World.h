@@ -6,24 +6,19 @@
 #include "Tile.h"
 
 namespace WorldHelper {
-	const std::string TILEMAP = "world_tilemap";
+	const std::string TILEMAP = "world_map";
 }
 
-struct Tileset;
-
 class World {
+
 public:
 	World();
 	void update(Vector2 aOffset);
 	void draw();
+
 private:
 	TilemapXmlParser* mTilemapXmlParser = NULL;
 	std::vector<Tile*> mTiles;
-	std::vector<Tileset> mTilesets;
-	Vector2 mTilemapSize;
-	Vector2 mTileSize;
 
-	void createTiles();
-	Vector2 getTilesetPosition(Tileset aTileset, int aGid, int aTileWidth, int aTileHeight);
 };
 #endif
