@@ -31,6 +31,7 @@ public:
 	void setCollisionDoors(std::vector<int> aDoorIds);
 
 	void createWallCollision(XMLElement * aObjectGroupNode);
+	void createDoors(XMLElement * aObjectGroupNode);
 
 	std::pair<int, int> getPosition();
 
@@ -41,6 +42,7 @@ private:
 	std::string mTilemap;
 	Texture2D mTileset;
 	std::vector<Tile> mTiles;
+	std::vector<Tile*> mDoors;
 	std::vector<Rectangle> mCollisionTiles;
 	std::vector<Rectangle> mCollisionDoors;
 	std::vector<Rectangle> mLayerRects;

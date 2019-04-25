@@ -28,7 +28,7 @@ std::pair<int, int> Room::getPosition() {
 }
 
 void Room::loadTmx() {
-	//recup�re les calques et les ajoutes � une liste
+	//recupere les calques et les ajoutes a une liste
 	lXMLFile.LoadFile(mTilemap.c_str());
 	XMLElement* lMapNode = lXMLFile.FirstChildElement("map");
 
@@ -56,8 +56,9 @@ void Room::loadTmx() {
 				if (lStrStream.str() == "wall") {
 					createWallCollision(lObjectGroupNode);
 				}
-				//else if (lStrStream.str() == "door")
-				//	createDoors(lObjectGroupNode);
+				else if (lStrStream.str() == "door") {
+					createDoors(lObjectGroupNode);
+				}
 				//else if (lStrStream.str() == "spawn")
 				//	createSpawn(lObjectGroupNode);
 
@@ -79,6 +80,72 @@ void Room::createWallCollision(XMLElement * aObjectGroupNode) {
 			mCollisionTiles.push_back(Rectangle{ lX, lY, lWidth, lHeight });
 
 			lObjectNode = lObjectNode->NextSiblingElement("object");
+		}
+	}
+}
+
+std::vector<std::string> mAvailableDoors = {
+	"topDoor",
+	"downDoor",
+	"leftDoor",
+	"rightDoor"
+};
+
+void Room::createDoors(XMLElement * aObjectGroupNode) {
+
+	XMLElement* lObjectNode = aObjectGroupNode->FirstChildElement("object");
+	if (lObjectNode != NULL) {
+		while (lObjectNode) {
+			float lX, lY, lWidth, lHeight;
+			std::string lName = lObjectNode->Attribute("name");
+			lX = lObjectNode->FloatAttribute("x");
+			lY = lObjectNode->FloatAttribute("y");
+			lWidth = lObjectNode->FloatAttribute("width");
+			lHeight = lObjectNode->FloatAttribute("height");
+
+			for (auto lDoor : mAvailableDoors) {
+				if (lDoor == lName) {
+
+					mCollisionDoors.push_back(Rectangle{ lX, lY, lWidth, lHeight });
+
+					Rectangle lTextureRectangle;
+
+					if (lDoor == "topDoor")
+						lTextureRectangle = {192, 192, 64, 32};
+					if (lDoor == "downDoor")
+						lTextureRectangle = { 192, 192, 64, 32 };
+					if (lDoor == "leftDoor")
+						lTextureRectangle = { 256, 128, 32, 64 };
+					if (lDoor == "rightDoor")
+						lTextureRectangle = { 224, 128, 32, 64 };
+
+					Tile* lDoor = new Tile(0, mTileset, Rectangle{ lX, lY, lWidth, lHeight }, lTextureRectangle);
+					mDoors.push_back(lDoor);
+				}
+			}
+
+			lObjectNode = lObjectNode->NextSiblingElement("object");
+		}
+	}
+}
+
+void Room::drawDoors() {
+
+	if (mDoorsFlags & ROOM_DOOR_TOP) {
+		// 0010 & 0010
+	}
+
+	for (auto lDoor : mDoors) {
+		DrawTextureRec(mTileset, lDoor->mTextureRectangle, lDoor->mPosition, WHITE);
+	}
+
+	//mDoors.push_back();
+
+	//DrawTextureRec(mTileset, currentTile.mTextureRectangle, currentTile.mPosition, WHITE);
+
+	if (Globals::DEBUG) {
+		for (auto door : mCollisionDoors) {
+			DrawRectangleLines(door.x, door.y, door.width, door.height, GREEN);
 		}
 	}
 }
@@ -174,29 +241,6 @@ void Room::setCollisionDoors(std::vector<int> aDoorIds) {
 
 void Room::setDoors(int aDoors) {
 	mDoorsFlags = aDoors;
-}
-
-void Room::drawDoors() {
-	Rectangle topDoor = { 480, 0, 64, 32 };
-	Rectangle downDoor = { 480, 544, 64, 32 };
-	Rectangle leftDoor = { 96, 256, 32, 64 };
-	Rectangle rightDoor = { 896, 256, 32, 64 };
-
-	if (mDoorsFlags & ROOM_DOOR_TOP) {
-		// 0010 & 0010
-	}
-
-	mCollisionDoors.push_back(topDoor);
-	mCollisionDoors.push_back(downDoor);
-	mCollisionDoors.push_back(leftDoor);
-	mCollisionDoors.push_back(rightDoor);
-
-	if (Globals::DEBUG) {
-		DrawRectangleLines((int)topDoor.x, (int)topDoor.y, (int)topDoor.width, (int)topDoor.height, BLUE);
-		DrawRectangleLines((int)downDoor.x, (int)downDoor.y, (int)downDoor.width, (int)downDoor.height, BLUE);
-		DrawRectangleLines((int)leftDoor.x, (int)leftDoor.y, (int)leftDoor.width, (int)leftDoor.height, BLUE);
-		DrawRectangleLines((int)rightDoor.x, (int)rightDoor.y, (int)rightDoor.width, (int)rightDoor.height, BLUE);
-	}
 }
 
 void Room::draw() {

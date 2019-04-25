@@ -48,7 +48,7 @@ void GameScene::update() {
 	}*/
 	//mWorld->update(Vector2{ mCamera.offset.x / 32, mCamera.offset.y / 32 });
 
-	// mPlayer->handleTileCollisions(mRoom->getCollisionTiles());
+	 mPlayer->handleTileCollisions(mLevel->getCurrentRoom()->getCollisionTiles());
 
 	//mPlayer->handleDoorCollisions(mLevel);
 }
