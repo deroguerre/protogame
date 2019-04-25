@@ -179,54 +179,52 @@ void Player::handleTileCollisions(std::vector<Rectangle> aOthersRects) {
 	}
 }
 
-void Player::handleDoorCollisions(Level* aLevel) {}
+void Player::handleDoorCollisions(Level* aLevel) {
+	std::vector<Rectangle> lDoors = aLevel->getCurrentRoom()->getCollisionDoors();
 
-//void Player::handleDoorCollisions(Level* aLevel) {
-//	std::vector<Rectangle> lDoors = aLevel->getCurrentRoom()->getCollisionDoors();
-//
-//	std::vector<Rectangle> lCollisions;
-//	for (auto lDoor : lDoors)
-//		if (CheckCollisionRecs(getCollisionRect(), lDoor))
-//			lCollisions.push_back(lDoor);
-//
-//	if (!lCollisions.empty()) {
-//		for (auto lCollison : lCollisions) {
-//			Sides::Side lCollisionSide = Sprite::getCollisionSide(lCollison);
-//			if (lCollisionSide != Sides::NONE) {
-//				Vector2 lSpawn;
-//				switch (lCollisionSide) {
-//				case Sides::TOP: //Player Top side
-//					aLevel->nextRoom(ROOM_DOOR_TOP);
-//					lSpawn = aLevel->getCurrentRoom()->getPlayerSpawn(ROOM_DOOR_BOTTOM);
-//					setPosition({lSpawn.x - PLAYER::WIDTH / 2, lSpawn.y - PLAYER::HEIGHT});
-//					break;
-//				case Sides::BOTTOM: //Player Bottom side
-//					aLevel->nextRoom(ROOM_DOOR_BOTTOM);
-//					lSpawn = aLevel->getCurrentRoom()->getPlayerSpawn(ROOM_DOOR_TOP);
-//					setPosition({ lSpawn.x - PLAYER::WIDTH / 2, lSpawn.y});
-//					break;
-//				case Sides::LEFT: //Player Left side
-//					aLevel->nextRoom(ROOM_DOOR_LEFT);
-//					lSpawn = aLevel->getCurrentRoom()->getPlayerSpawn(ROOM_DOOR_RIGHT);
-//					setPosition({ lSpawn.x - PLAYER::WIDTH, lSpawn.y - PLAYER::HEIGHT / 2 });
-//					break;
-//				case Sides::RIGHT: //Player Right side
-//					aLevel->nextRoom(ROOM_DOOR_RIGHT);
-//					lSpawn = aLevel->getCurrentRoom()->getPlayerSpawn(ROOM_DOOR_LEFT);
-//					setPosition({ lSpawn.x, lSpawn.y - PLAYER::HEIGHT / 2 });
-//					break;
-//				}
-//			}
-//		}
-//	}
-//}
+	std::vector<Rectangle> lCollisions;
+	for (auto lDoor : lDoors)
+		if (CheckCollisionRecs(getCollisionRect(), lDoor))
+			lCollisions.push_back(lDoor);
+
+	if (!lCollisions.empty()) {
+		for (auto lCollison : lCollisions) {
+			Sides::Side lCollisionSide = Sprite::getCollisionSide(lCollison);
+			if (lCollisionSide != Sides::NONE) {
+				Vector2 lSpawn;
+				switch (lCollisionSide) {
+				case Sides::TOP: //Player Top side
+					aLevel->nextRoom(ROOM_DOOR_TOP);
+					lSpawn = aLevel->getCurrentRoom()->getPlayerSpawn(ROOM_DOOR_BOTTOM);
+					setPosition({lSpawn.x - PLAYER::WIDTH / 2, lSpawn.y - PLAYER::HEIGHT});
+					break;
+				case Sides::BOTTOM: //Player Bottom side
+					aLevel->nextRoom(ROOM_DOOR_BOTTOM);
+					lSpawn = aLevel->getCurrentRoom()->getPlayerSpawn(ROOM_DOOR_TOP);
+					setPosition({ lSpawn.x - PLAYER::WIDTH / 2, lSpawn.y});
+					break;
+				case Sides::LEFT: //Player Left side
+					aLevel->nextRoom(ROOM_DOOR_LEFT);
+					lSpawn = aLevel->getCurrentRoom()->getPlayerSpawn(ROOM_DOOR_RIGHT);
+					setPosition({ lSpawn.x - PLAYER::WIDTH, lSpawn.y - PLAYER::HEIGHT / 2 });
+					break;
+				case Sides::RIGHT: //Player Right side
+					aLevel->nextRoom(ROOM_DOOR_RIGHT);
+					lSpawn = aLevel->getCurrentRoom()->getPlayerSpawn(ROOM_DOOR_LEFT);
+					setPosition({ lSpawn.x, lSpawn.y - PLAYER::HEIGHT / 2 });
+					break;
+				}
+			}
+		}
+	}
+}
 
 #pragma endregion
 
 void Player::fire() {
 	if (mFrameCounter >= (60 / mFireRate)) {
 
-		Vector2 lPlayerPosition = this->getPosition();
+		Vector2 lPlayerPosition = getPosition();
 		lPlayerPosition.x += 14;
 		lPlayerPosition.y += 24;
 		Bullet* lBullet = new Bullet(mBulletTexture, lPlayerPosition);
