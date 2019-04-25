@@ -2,8 +2,8 @@
 #include <sstream>
 #include <iostream>
 
-TilemapXmlParser::TilemapXmlParser(const std::string aTilemapName) {
-	parseTilemap(aTilemapName);
+TilemapXmlParser::TilemapXmlParser(const std::string aTilemap) {
+	parseTilemap(aTilemap);
 }
 
 void TilemapXmlParser::parseTilemap(std::string aTilemap) {

@@ -16,7 +16,6 @@ struct ObjectGroup;
 
 class TilemapXmlParser {
 public:
-	TilemapXmlParser() {}
 	TilemapXmlParser(const std::string aTilemap);
 	~TilemapXmlParser();
 
