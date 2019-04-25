@@ -71,10 +71,7 @@
     <ClInclude Include="tinyxml2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Room_old.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="room.h">
+    <ClInclude Include="Room.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="World.h">
@@ -85,6 +82,9 @@
     </ClInclude>
     <ClInclude Include="ItemDatabase.h">
       <Filter>Header Files\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -124,10 +124,7 @@
     <ClCompile Include="tinyxml2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Room_old.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="room.cpp">
+    <ClCompile Include="Room.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TilemapXmlParser.h">
@@ -144,6 +141,9 @@
     </ClCompile>
     <ClCompile Include="ItemDatabase.cpp">
       <Filter>Source Files\Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

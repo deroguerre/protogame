@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Bullet.h"
 
 namespace PLAYER {
 	const std::string SPRITESHEET_PATH = "assets/django.png";
@@ -222,6 +223,26 @@ void Player::handleDoorCollisions(Level* aLevel) {}
 
 #pragma endregion
 
+void Player::fire() {
+	if (mFrameCounter >= (60 / mFireRate)) {
+
+		Vector2 lPlayerPosition = this->getPosition();
+		lPlayerPosition.x += 14;
+		lPlayerPosition.y += 24;
+		Bullet* lBullet = new Bullet(mBulletTexture, lPlayerPosition);
+		mFiredBullets.push_back(lBullet);
+
+		mFrameCounter = 0;
+
+		std::cout << "fire" << std::endl;
+		std::cout << mFiredBullets.size() << std::endl;
+	}
+}
+
+void Player::load() {
+	mBulletTexture = LoadTexture("assets/bullet_1.png");
+}
+
 void Player::update(float aFrameTime) {
 
 	// Controls
@@ -282,13 +303,35 @@ void Player::update(float aFrameTime) {
 		PLAYER::WALK_SPEED = 2.3f;
 	}
 
+	//fire
+	if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
+		fire();
+	}
+
 	//--------------------------------------------------------------------------------------
+
 
 	AnimatedSprite::update(aFrameTime);
 }
 
 void Player::draw()
 {
+	//drawing bullets
+	//---------------------------------------------------------
+	mFrameCounter++;
+	for (int i = 0; i < mFiredBullets.size(); i++) {
+		mFiredBullets[i]->mLifeTimeCounter++;
+
+		if (mFiredBullets[i]->isAlive) {
+			mFiredBullets[i]->draw();
+		}
+		else {
+			delete mFiredBullets[i];
+			mFiredBullets.erase(mFiredBullets.begin() + i);
+		}
+	}
+	//---------------------------------------------------------
+
 	AnimatedSprite::draw(mPosition);
 }
 

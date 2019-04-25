@@ -11,7 +11,7 @@ Room* mRoom;
 World* mWorld;
 
 void GameScene::load() {
-
+	mPlayer->load();
 }
 
 GameScene::GameScene() : Scene() {
@@ -36,7 +36,7 @@ GameScene::GameScene() : Scene() {
 void GameScene::update() {
 
 	mLevel->update();
-	
+
 	mPlayer->update(GetFrameTime());
 
 	/*int x = (int)abs(mCamera.offset.x) % 32;
@@ -48,7 +48,7 @@ void GameScene::update() {
 	}*/
 	//mWorld->update(Vector2{ mCamera.offset.x / 32, mCamera.offset.y / 32 });
 
-	//mPlayer->handleTileCollisions(mRoom->getCollisionTiles());
+	// mPlayer->handleTileCollisions(mRoom->getCollisionTiles());
 
 	//mPlayer->handleDoorCollisions(mLevel);
 }
