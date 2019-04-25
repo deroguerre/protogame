@@ -10,7 +10,6 @@ class Player : public AnimatedSprite
 public:
 	Player(Vector2 aSpawnPoint);
 	void setupAnimations();
-	void draw();
 	void update(float aFrameTime);
 
 	void moveLeft();

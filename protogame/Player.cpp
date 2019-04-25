@@ -265,14 +265,23 @@ void Player::update(float aFrameTime) {
 		stopMoving();
 
 	//movement
+	Vector2 lSpeed = Vector2{0, 0};
 	if (IsKeyDown(KEY_A))
-		mPosition.x += -PLAYER::WALK_SPEED;
+		lSpeed.x += -PLAYER::WALK_SPEED;
 	if (IsKeyDown(KEY_D))
-		mPosition.x += PLAYER::WALK_SPEED;
+		lSpeed.x += PLAYER::WALK_SPEED;
 	if (IsKeyDown(KEY_W))
-		mPosition.y += -PLAYER::WALK_SPEED;
+		lSpeed.y += -PLAYER::WALK_SPEED;
 	if (IsKeyDown(KEY_S))
-		mPosition.y += PLAYER::WALK_SPEED;
+		lSpeed.y += PLAYER::WALK_SPEED;
+
+	if (lSpeed.x != 0 && lSpeed.y != 0) {
+		lSpeed.x /= std::sqrt(2.0f);
+		lSpeed.y /= std::sqrt(2.0f);
+	}
+
+	mPosition.x += lSpeed.x;
+	mPosition.y += lSpeed.y;
 
 	//boost speed
 	if (IsKeyDown(KEY_LEFT_SHIFT)) {
@@ -285,11 +294,6 @@ void Player::update(float aFrameTime) {
 	//--------------------------------------------------------------------------------------
 
 	AnimatedSprite::update(aFrameTime);
-}
-
-void Player::draw()
-{
-	AnimatedSprite::draw(mPosition);
 }
 
 
