@@ -92,14 +92,14 @@
     <ClInclude Include="Movement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Room_old.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Enemy.h">
       <Filter>Header Files\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Monster1.h">
       <Filter>Header Files\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -139,9 +139,6 @@
     <ClCompile Include="tinyxml2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Room_old.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Room.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -165,6 +162,9 @@
     </ClCompile>
     <ClCompile Include="Monster1.cpp">
       <Filter>Source Files\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

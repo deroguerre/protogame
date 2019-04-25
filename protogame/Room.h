@@ -8,9 +8,10 @@
 #include <string>
 #include <vector>
 #include <list>
+#include <map>
+#include "Globals.h"
 #include "Tile.h"
 #include "tinyxml2.h"
-#include <map>
 
 using namespace tinyxml2;
 
@@ -24,21 +25,28 @@ public:
 
 	std::list<std::vector<int>>  mLayerList;
 
+	std::map<std::string, Tile*> getDoorTiles();
 	std::vector<Rectangle> getCollisionTiles();
 	std::vector<Rectangle> getCollisionDoors();
 
 	void setCollisionTiles(std::vector<int> aTileIds);
 	void setCollisionDoors(std::vector<int> aDoorIds);
 
+	void createWallCollision(XMLElement * aObjectGroupNode);
+	void createDoors(XMLElement * aObjectGroupNode);
+
 	std::pair<int, int> getPosition();
 
 	int getDoors() { return mDoorsFlags; }
 	void setDoors(int aDoors);
 
+	Vector2 getPlayerSpawn(int aPreviousDoor);
+
 private:
 	std::string mTilemap;
 	Texture2D mTileset;
 	std::vector<Tile> mTiles;
+	std::map<std::string, Tile*> mActiveDoors;
 	std::vector<Rectangle> mCollisionTiles;
 	std::vector<Rectangle> mCollisionDoors;
 	std::vector<Rectangle> mLayerRects;

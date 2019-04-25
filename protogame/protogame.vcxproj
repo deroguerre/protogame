@@ -125,6 +125,7 @@
   <ItemGroup>
     <ClInclude Include="AnimatedSprite.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemDatabase.h" />
@@ -133,7 +134,6 @@
     <ClInclude Include="Movement.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Room.h" />
-    <ClInclude Include="Room_old.h" />
     <ClInclude Include="SceneManager\GameOverScene.h" />
     <ClInclude Include="SceneManager\GameScene.h" />
     <ClInclude Include="SceneManager\IntroScene.h" />
@@ -147,6 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimatedSprite.cpp" />
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemDatabase.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -155,7 +156,6 @@
     <ClCompile Include="Monster1.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Room.cpp" />
-    <ClCompile Include="Room_old.cpp" />
     <ClCompile Include="SceneManager\GameOverScene.cpp" />
     <ClCompile Include="SceneManager\GameScene.cpp" />
     <ClCompile Include="SceneManager\IntroScene.cpp" />

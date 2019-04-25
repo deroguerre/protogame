@@ -5,7 +5,7 @@ namespace Globals
 {
 	const int SCREEN_WIDTH = 1280;
 	const int SCREEN_HEIGHT = 720;
-	const bool DEBUG = false;
+	const bool DEBUG = true;
 }
 
 namespace Sides {

@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Bullet.h"
 
 namespace PLAYER {
 	const std::string SPRITESHEET_PATH = "assets/django.png";
@@ -178,49 +179,67 @@ void Player::handleTileCollisions(std::vector<Rectangle> aOthersRects) {
 	}
 }
 
-void Player::handleDoorCollisions(Level* aLevel) {}
+void Player::handleDoorCollisions(Level* aLevel) {
+	std::vector<Rectangle> lDoors = aLevel->getCurrentRoom()->getCollisionDoors();
 
-//void Player::handleDoorCollisions(Level* aLevel) {
-//	std::vector<Rectangle> lDoors = aLevel->getCurrentRoom()->getCollisionDoors();
-//
-//	std::vector<Rectangle> lCollisions;
-//	for (auto lDoor : lDoors)
-//		if (CheckCollisionRecs(getCollisionRect(), lDoor))
-//			lCollisions.push_back(lDoor);
-//
-//	if (!lCollisions.empty()) {
-//		for (auto lCollison : lCollisions) {
-//			Sides::Side lCollisionSide = Sprite::getCollisionSide(lCollison);
-//			if (lCollisionSide != Sides::NONE) {
-//				Vector2 lSpawn;
-//				switch (lCollisionSide) {
-//				case Sides::TOP: //Player Top side
-//					aLevel->nextRoom(ROOM_DOOR_TOP);
-//					lSpawn = aLevel->getCurrentRoom()->getPlayerSpawn(ROOM_DOOR_BOTTOM);
-//					setPosition({lSpawn.x - PLAYER::WIDTH / 2, lSpawn.y - PLAYER::HEIGHT});
-//					break;
-//				case Sides::BOTTOM: //Player Bottom side
-//					aLevel->nextRoom(ROOM_DOOR_BOTTOM);
-//					lSpawn = aLevel->getCurrentRoom()->getPlayerSpawn(ROOM_DOOR_TOP);
-//					setPosition({ lSpawn.x - PLAYER::WIDTH / 2, lSpawn.y});
-//					break;
-//				case Sides::LEFT: //Player Left side
-//					aLevel->nextRoom(ROOM_DOOR_LEFT);
-//					lSpawn = aLevel->getCurrentRoom()->getPlayerSpawn(ROOM_DOOR_RIGHT);
-//					setPosition({ lSpawn.x - PLAYER::WIDTH, lSpawn.y - PLAYER::HEIGHT / 2 });
-//					break;
-//				case Sides::RIGHT: //Player Right side
-//					aLevel->nextRoom(ROOM_DOOR_RIGHT);
-//					lSpawn = aLevel->getCurrentRoom()->getPlayerSpawn(ROOM_DOOR_LEFT);
-//					setPosition({ lSpawn.x, lSpawn.y - PLAYER::HEIGHT / 2 });
-//					break;
-//				}
-//			}
-//		}
-//	}
-//}
+	std::vector<Rectangle> lCollisions;
+	for (auto lDoor : lDoors)
+		if (CheckCollisionRecs(getCollisionRect(), lDoor))
+			lCollisions.push_back(lDoor);
+
+	if (!lCollisions.empty()) {
+		for (auto lCollison : lCollisions) {
+			Sides::Side lCollisionSide = Sprite::getCollisionSide(lCollison);
+			if (lCollisionSide != Sides::NONE) {
+				Vector2 lSpawn;
+				switch (lCollisionSide) {
+				case Sides::TOP: //Player Top side
+					aLevel->nextRoom(ROOM_DOOR_TOP);
+					lSpawn = aLevel->getCurrentRoom()->getPlayerSpawn(ROOM_DOOR_BOTTOM);
+					setPosition({lSpawn.x - PLAYER::WIDTH / 2, lSpawn.y - PLAYER::HEIGHT});
+					break;
+				case Sides::BOTTOM: //Player Bottom side
+					aLevel->nextRoom(ROOM_DOOR_BOTTOM);
+					lSpawn = aLevel->getCurrentRoom()->getPlayerSpawn(ROOM_DOOR_TOP);
+					setPosition({ lSpawn.x - PLAYER::WIDTH / 2, lSpawn.y});
+					break;
+				case Sides::LEFT: //Player Left side
+					aLevel->nextRoom(ROOM_DOOR_LEFT);
+					lSpawn = aLevel->getCurrentRoom()->getPlayerSpawn(ROOM_DOOR_RIGHT);
+					setPosition({ lSpawn.x - PLAYER::WIDTH, lSpawn.y - PLAYER::HEIGHT / 2 });
+					break;
+				case Sides::RIGHT: //Player Right side
+					aLevel->nextRoom(ROOM_DOOR_RIGHT);
+					lSpawn = aLevel->getCurrentRoom()->getPlayerSpawn(ROOM_DOOR_LEFT);
+					setPosition({ lSpawn.x, lSpawn.y - PLAYER::HEIGHT / 2 });
+					break;
+				}
+			}
+		}
+	}
+}
 
 #pragma endregion
+
+void Player::fire() {
+	if (mFrameCounter >= (60 / mFireRate)) {
+
+		Vector2 lPlayerPosition = getPosition();
+		lPlayerPosition.x += 14;
+		lPlayerPosition.y += 24;
+		Bullet* lBullet = new Bullet(mBulletTexture, lPlayerPosition);
+		mFiredBullets.push_back(lBullet);
+
+		mFrameCounter = 0;
+
+		std::cout << "fire" << std::endl;
+		std::cout << mFiredBullets.size() << std::endl;
+	}
+}
+
+void Player::load() {
+	mBulletTexture = LoadTexture("assets/bullet_1.png");
+}
 
 void Player::update(float aFrameTime) {
 
@@ -291,9 +310,36 @@ void Player::update(float aFrameTime) {
 		PLAYER::WALK_SPEED = 2.3f;
 	}
 
+	//fire
+	if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
+		fire();
+	}
+
 	//--------------------------------------------------------------------------------------
 
+
 	AnimatedSprite::update(aFrameTime);
+}
+
+void Player::draw()
+{
+	//drawing bullets
+	//---------------------------------------------------------
+	mFrameCounter++;
+	for (int i = 0; i < mFiredBullets.size(); i++) {
+		mFiredBullets[i]->mLifeTimeCounter++;
+
+		if (mFiredBullets[i]->isAlive) {
+			mFiredBullets[i]->draw();
+		}
+		else {
+			delete mFiredBullets[i];
+			mFiredBullets.erase(mFiredBullets.begin() + i);
+		}
+	}
+	//---------------------------------------------------------
+
+	AnimatedSprite::draw();
 }
 
 

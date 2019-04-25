@@ -11,17 +11,13 @@ Room* mRoom;
 World* mWorld;
 
 void GameScene::load() {
-
+	mPlayer->load();
 }
 
 GameScene::GameScene() : Scene() {
 
 
 	mLevel = new Level(8, "maps/dungeon_map.tmx");
-
-	//Texture2D lTileset = LoadTexture("assets/room_tileset.png");
-	//mRoom = new Room("maps/room_map.tmx", lTileset);
-	//mRoom->setCollisionTiles({ 1,2,3,4,5,6,11,16,21,26,31,36,41,42,43,44,45,46});
 
 	mPlayer = new Player(Vector2{ Globals::SCREEN_WIDTH / 2, Globals::SCREEN_HEIGHT / 2 });
 	
@@ -36,7 +32,7 @@ GameScene::GameScene() : Scene() {
 void GameScene::update() {
 
 	mLevel->update();
-	
+
 	mPlayer->update(GetFrameTime());
 
 	/*int x = (int)abs(mCamera.offset.x) % 32;
@@ -48,18 +44,16 @@ void GameScene::update() {
 	}*/
 	//mWorld->update(Vector2{ mCamera.offset.x / 32, mCamera.offset.y / 32 });
 
-	//mPlayer->handleTileCollisions(mRoom->getCollisionTiles());
+	mPlayer->handleTileCollisions(mLevel->getCurrentRoom()->getCollisionTiles());
 
-	//mPlayer->handleDoorCollisions(mLevel);
+	mPlayer->handleDoorCollisions(mLevel);
 }
 
 void GameScene::draw() {
 	mLevel->draw();
 	//BeginMode2D(mCamera);
 	//	//mWorld->draw();
-	//	//mRoom->draw();
 	//EndMode2D();
-	//mRoom->draw();
 	mPlayer->draw();
 }
 
