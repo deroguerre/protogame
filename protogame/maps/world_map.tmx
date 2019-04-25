@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="left-up" width="64" height="36" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="1">
- <tileset firstgid="1" source="overworld_tileset_grass.tsx"/>
+ <tileset firstgid="1" source="world_map.tsx"/>
  <layer id="4" name="Calque1" width="64" height="36">
   <data encoding="csv">
 62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,85,74,74,86,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,
