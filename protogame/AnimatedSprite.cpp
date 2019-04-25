@@ -44,7 +44,3 @@ void AnimatedSprite::update(float aFrameTime) {
 
 	mSourceRect = mAnimations[mCurrentAnimation][mFrameIndex];
 }
-
-void AnimatedSprite::draw(Vector2 aPosition) {
-	Sprite::draw(aPosition);
-}

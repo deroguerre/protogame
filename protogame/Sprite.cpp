@@ -44,7 +44,7 @@ const Sides::Side Sprite::getCollisionSide(Rectangle aOtherRect) const {
 
 }
 
-void Sprite::draw(Vector2 aPosition) {
-	mCollisionRect = { aPosition.x, aPosition.y, mSourceRect.width, mSourceRect.height };
-	DrawTextureRec(mSpriteSheet, mSourceRect, aPosition, RAYWHITE);
+void Sprite::draw() {
+	mCollisionRect = { mPosition.x, mPosition.y, mSourceRect.width, mSourceRect.height };
+	DrawTextureRec(mSpriteSheet, mSourceRect, mPosition, RAYWHITE);
 }
