@@ -30,6 +30,8 @@ public:
 	void setCollisionTiles(std::vector<int> aTileIds);
 	void setCollisionDoors(std::vector<int> aDoorIds);
 
+	void createWallCollision(XMLElement * aObjectGroupNode);
+
 	std::pair<int, int> getPosition();
 
 	int getDoors() { return mDoorsFlags; }

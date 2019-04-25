@@ -16,7 +16,7 @@ Room::Room(std::string aTilemap, Texture2D aTileset, std::pair<int, int> aPositi
 
 	//TilemapXmlParser* mTilemapXmlParser = new TilemapXmlParser("room_map");
 
-	//cr�e la liste des rectangles depuis la texture fournis
+	//cree la liste des rectangles depuis la texture fournis
 	mLayerRects = this->createTilesetRectangles(mTileset);
 
 	this->loadTmx();
@@ -43,6 +43,42 @@ void Room::loadTmx() {
 
 			std::vector<int> lCurrentLayer = this->csvLineParser((std::string)lCurrentCSV->GetText());
 			mLayerList.push_back(lCurrentLayer);
+		}
+	}
+
+		XMLElement* lObjectGroupNode = lMapNode->FirstChildElement("objectgroup");
+		if (lObjectGroupNode != NULL) {
+			while (lObjectGroupNode) {
+				const char* lName = lObjectGroupNode->Attribute("name");
+				std::stringstream lStrStream;
+				lStrStream << lName;
+			
+				if (lStrStream.str() == "wall") {
+					createWallCollision(lObjectGroupNode);
+				}
+				//else if (lStrStream.str() == "door")
+				//	createDoors(lObjectGroupNode);
+				//else if (lStrStream.str() == "spawn")
+				//	createSpawn(lObjectGroupNode);
+
+				lObjectGroupNode = lObjectGroupNode->NextSiblingElement("objectgroup");
+			}
+		}
+}
+
+void Room::createWallCollision(XMLElement * aObjectGroupNode) {
+	XMLElement* lObjectNode = aObjectGroupNode->FirstChildElement("object");
+	if (lObjectNode != NULL) {
+		while (lObjectNode) {
+			float lX, lY, lWidth, lHeight;
+			lX = lObjectNode->FloatAttribute("x");
+			lY = lObjectNode->FloatAttribute("y");
+			lWidth = lObjectNode->FloatAttribute("width");
+			lHeight = lObjectNode->FloatAttribute("height");
+
+			mCollisionTiles.push_back(Rectangle{ lX, lY, lWidth, lHeight });
+
+			lObjectNode = lObjectNode->NextSiblingElement("object");
 		}
 	}
 }
