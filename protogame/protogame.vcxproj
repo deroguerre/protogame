@@ -124,12 +124,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimatedSprite.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemDatabase.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="Monster1.h" />
+    <ClInclude Include="Movement.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="room.h" />
+    <ClInclude Include="Room.h" />
     <ClInclude Include="Room_old.h" />
     <ClInclude Include="SceneManager\GameOverScene.h" />
     <ClInclude Include="SceneManager\GameScene.h" />
@@ -146,10 +149,12 @@
     <ClCompile Include="AnimatedSprite.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemDatabase.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Monster1.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="room.cpp" />
+    <ClCompile Include="Room.cpp" />
     <ClCompile Include="Room_old.cpp" />
     <ClCompile Include="SceneManager\GameOverScene.cpp" />
     <ClCompile Include="SceneManager\GameScene.cpp" />
