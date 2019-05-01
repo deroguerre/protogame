@@ -1,6 +1,4 @@
-#ifndef PLAYER_H
-#define PLAYER_H
-
+#pragma once
 #include "AnimatedSprite.h"
 #include "Globals.h"
 #include "Level.h"
@@ -42,5 +40,3 @@ private:
 	Texture2D mBulletTexture;
 	std::vector<Bullet*> mFiredBullets;
 };
-
-#endif

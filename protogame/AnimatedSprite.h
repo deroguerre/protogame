@@ -1,6 +1,4 @@
-#ifndef ANIMATEDSPRITE_H
-#define ANIMATEDSPRITE_H
-
+#pragma once
 #include "Sprite.h"
 #include <map>
 #include <vector>
@@ -24,5 +22,3 @@ private:
 	unsigned int mFrameIndex = 0;
 	float mFrameTime = 0;
 };
-
-#endif

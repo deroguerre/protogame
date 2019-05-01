@@ -7,6 +7,8 @@ const int TILE_SIZE = 32;
 
 XMLDocument lXMLFile;
 
+Rectangle mRoomSurface = { 256, 96, 768, 512 };
+
 Room::Room(std::string aTilemap, Texture2D aTileset, std::pair<int, int> aPosition) {
 
 	mTilemap = aTilemap;
@@ -20,6 +22,7 @@ Room::Room(std::string aTilemap, Texture2D aTileset, std::pair<int, int> aPositi
 
 	this->loadTmx();
 	this->createRoom();
+	//this->generateRandomWall();
 }
 
 std::pair<int, int> Room::getPosition() {
@@ -58,6 +61,17 @@ void Room::loadTmx() {
 			else if (lStrStream.str() == "door") {
 				createDoors(lObjectGroupNode);
 			}
+			else if (lStrStream.str() == "surface") {
+
+				XMLElement* lObjectNode = lObjectGroupNode->FirstChildElement("object");
+				if (lObjectNode != NULL) {
+					float lX, lY, lWidth, lHeight;
+					mRoomSurface.x = lObjectNode->FloatAttribute("x");
+					mRoomSurface.y = lObjectNode->FloatAttribute("y");
+					mRoomSurface.width = lObjectNode->FloatAttribute("width");
+					mRoomSurface.height = lObjectNode->FloatAttribute("height");
+				}
+			}
 
 			lObjectGroupNode = lObjectGroupNode->NextSiblingElement("objectgroup");
 		}
@@ -78,6 +92,41 @@ void Room::createWallCollision(XMLElement * aObjectGroupNode) {
 
 			lObjectNode = lObjectNode->NextSiblingElement("object");
 		}
+	}
+}
+
+void Room::generateRandomWall() {
+
+	Rectangle lPitTexture = { 256, 224, TILE_SIZE, TILE_SIZE };
+
+	int minX = mRoomSurface.x;
+	int minY = mRoomSurface.y;
+	int maxX = mRoomSurface.x + mRoomSurface.width;
+	int maxY = mRoomSurface.y + mRoomSurface.height;
+
+	int randNumWall = GetRandomValue(0, 14);
+
+	for (size_t i = 0; i < randNumWall; i++)
+	{
+
+		int randNumX = GetRandomValue(minX, maxX);
+		int randNumY = GetRandomValue(minY, maxY);
+
+		while (randNumX % 32 != 0) {
+			randNumX--;
+		}
+
+		while (randNumY % 32 != 0) {
+			randNumY--;
+		}
+
+		Rectangle lPitCollision = { randNumX, randNumY, TILE_SIZE, TILE_SIZE };
+
+		Tile* lTile = new Tile(NULL, mTileset, lPitCollision, lPitTexture);
+		mTiles.push_back(*lTile);
+
+		mCollisionTiles.push_back(lPitCollision);
+
 	}
 }
 
@@ -136,6 +185,8 @@ void Room::drawDoors() {
 		for (auto door : mCollisionDoors) {
 			DrawRectangleLines(door.x, door.y, door.width, door.height, GREEN);
 		}
+
+		DrawRectangleLines(mRoomSurface.x, mRoomSurface.y, mRoomSurface.width, mRoomSurface.height, BLUE);
 	}
 }
 

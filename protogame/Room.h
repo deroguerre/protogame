@@ -1,6 +1,4 @@
-#ifndef ROOM_H
-#define ROOM_H
-
+#pragma once
 #include <raylib.h>
 #include <iostream>
 #include <sstream>
@@ -33,6 +31,7 @@ public:
 	void setCollisionDoors(std::vector<int> aDoorIds);
 
 	void createWallCollision(XMLElement * aObjectGroupNode);
+	void generateRandomWall();
 	void createDoors(XMLElement * aObjectGroupNode);
 
 	std::pair<int, int> getPosition();
@@ -58,6 +57,4 @@ private:
 	void createRoom();
 	void drawDoors();
 };
-
-#endif
 

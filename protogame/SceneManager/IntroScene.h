@@ -1,6 +1,4 @@
-#ifndef INTROSCENE_H
-#define INTROSCENE_H
-
+#pragma once
 #include "Scene.h"
 
 class IntroScene : public Scene 
@@ -12,5 +10,3 @@ public:
 	void draw() override;
 	void unload() override;
 };
-
-#endif

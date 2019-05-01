@@ -349,4 +349,6 @@ MigrationBackup/
 **/.vscode/
 **/assets/local
 
+**/shaders/
+
 CppProperties.json

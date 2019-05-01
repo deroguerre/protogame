@@ -1,6 +1,4 @@
-#ifndef TILE_H
-#define TILE_H
-
+#pragma once
 #include <raylib.h>
 #include <string>
 #include <vector>
@@ -23,5 +21,3 @@ public:
 private:
 
 };
-
-#endif

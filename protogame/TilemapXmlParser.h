@@ -1,11 +1,11 @@
-#ifndef TILEMAPXMLPARSER_H
-#define TILEMAPXMLPARSER_H
-
+#pragma once
 #include <raylib.h>
-#include "tinyxml2.h"
+#include <iostream>
 #include <string>
+#include <sstream>
 #include <vector>
 #include <map>
+#include "tinyxml2.h"
 #include "Tile.h"
 
 using namespace tinyxml2;
@@ -82,6 +82,3 @@ struct Object {
 		mHeight = aHeight;
 	}
 };
-
-
-#endif

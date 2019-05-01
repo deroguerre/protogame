@@ -1,6 +1,4 @@
-#ifndef SCENEMANAGER_H
-#define SCENEMANAGER_H
-
+#pragma once
 #include "Scene.h"
 
 // Class to manage all the scene of the game
@@ -28,5 +26,3 @@ private:
 	// The current scene
 	Scene* mCurrentScene;
 };
-
-#endif

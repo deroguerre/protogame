@@ -1,6 +1,4 @@
-#ifndef SCENE_H
-#define SCENE_H
-
+#pragma once
 #include <raylib.h>
 
 class Scene 
@@ -11,6 +9,4 @@ public:
 	virtual void draw() {}
 	virtual void unload() {}
 };
-
-#endif
 

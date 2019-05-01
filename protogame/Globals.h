@@ -1,11 +1,11 @@
-#ifndef GLOBALS_H
-#define GLOBALS_H
+#pragma once
+#include "raylib.h"
 
 namespace Globals
 {
 	const int SCREEN_WIDTH = 1280;
 	const int SCREEN_HEIGHT = 720;
-	const bool DEBUG = true;
+	const bool DEBUG = false;
 }
 
 namespace Sides {
@@ -47,4 +47,4 @@ enum {
 	ROOM_VISITED = 0x10
 };
 
-#endif
+bool isMouseOver(Rectangle aCheckedRectangle);

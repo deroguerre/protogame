@@ -1,6 +1,4 @@
-#ifndef SPRITE_H
-#define SPRITE_H
-
+#pragma once
 #include <raylib.h>
 #include <string>
 #include "Globals.h"
@@ -23,5 +21,3 @@ protected:
 	Texture2D mSpriteSheet;
 	Vector2 mPosition;
 };
-
-#endif

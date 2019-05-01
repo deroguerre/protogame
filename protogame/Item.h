@@ -7,4 +7,3 @@ public:
 	Item(std::string aName, std::string aDescription);
 	~Item();
 };
-

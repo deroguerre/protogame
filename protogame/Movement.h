@@ -1,6 +1,4 @@
-#ifndef MOVEMENT_H
-#define MOVEMENT_H
-
+#pragma once
 #include <raylib.h>
 #include <math.h>
 #include <algorithm>
@@ -87,4 +85,3 @@ private:
 	Vector2 mDirection;
 	Vector3 mAreaDetection;
 };
-#endif

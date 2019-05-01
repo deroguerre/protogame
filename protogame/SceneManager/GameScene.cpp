@@ -1,14 +1,9 @@
 #include <raylib.h>
 #include "GameScene.h"
-#include "SceneManager.h"
-#include "../Globals.h"
-#include "../TilemapXmlParser.h"
-#include "../World.h"
-//#include "../Level.h"
 
 Camera2D mCamera;
 Room* mRoom;
-World* mWorld;
+//World* mWorld;
 
 void GameScene::load() {
 	mPlayer->load();

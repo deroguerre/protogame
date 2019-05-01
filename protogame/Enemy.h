@@ -1,6 +1,4 @@
-#ifndef ENEMY_H
-#define ENEMY_H
-
+#pragma once
 #include "AnimatedSprite.h"
 #include <vector>
 #include "Movement.h"
@@ -13,5 +11,3 @@ public:
 protected:
 	Movement* mMovement;
 };
-
-#endif

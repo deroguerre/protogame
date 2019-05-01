@@ -1,6 +1,4 @@
-#ifndef MONSTER1_H
-#define MONSTER1_H
-
+#pragma once
 #include "Enemy.h"
 #include "Player.h"
 
@@ -28,5 +26,3 @@ public:
 private:
 
 };
-
-#endif

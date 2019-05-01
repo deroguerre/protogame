@@ -1,31 +1,10 @@
-/*******************************************************************************************
-*
-*   raylib [core] example - Basic window
-*
-*   Welcome to raylib!
-*
-*   To test examples, just press F6 and execute raylib_compile_execute script
-*   Note that compiled executable is placed in the same folder as .c file
-*
-*   You can find all basic examples on C:\raylib\raylib\examples folder or
-*   raylib official webpage: www.raylib.com
-*
-*   Enjoy using raylib. :)
-*
-*   This example has been created using raylib 1.0 (www.raylib.com)
-*   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
-*
-*   Copyright (c) 2013-2016 Ramon Santamaria (@raysan5)
-*
-********************************************************************************************/
-
 #include <raylib.h>
-#include "SceneManager/SceneManager.h"
-#include "SceneManager/IntroScene.h"
-#include "SceneManager/GameScene.h"
-#include "SceneManager/MenuScene.h"
-//#include "WorldMapScene.h"
 #include "Globals.h"
+#include "SceneManager/SceneManager.h"
+//#include "SceneManager/IntroScene.h"
+#include "SceneManager/MenuScene.h"
+#include "SceneManager/GameScene.h"
+//#include "WorldMapScene.h"
 
 SceneManager& mSceneManager = SceneManager::getInstance();
 

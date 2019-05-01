@@ -1,6 +1,4 @@
 #include "Level.h"
-#include <set>
-#include "Globals.h"
 
 float mTinyMapWidth = 128.0f;
 float mTinyMapHeight = 96.0f;

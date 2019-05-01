@@ -1,6 +1,4 @@
 #include "TilemapXmlParser.h"
-#include <sstream>
-#include <iostream>
 
 TilemapXmlParser::TilemapXmlParser(const std::string aTilemap) {
 	parseTilemap(aTilemap);

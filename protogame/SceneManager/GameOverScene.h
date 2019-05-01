@@ -1,6 +1,4 @@
-#ifndef GAMEOVERSCENE_H
-#define GAMEOVERSCENE_H
-
+#pragma once
 #include "Scene.h"
 
 class GameOverScene : public Scene 
@@ -12,4 +10,3 @@ public:
 	void draw() override;
 	void unload() override;
 };
-#endif

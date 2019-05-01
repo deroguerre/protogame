@@ -1,9 +1,9 @@
-#ifndef LEVEL_H
-#define LEVEL_H
+#pragma once
 #include <raylib.h>
 #include <stack>
+#include <set>
+#include "Globals.h"
 #include "Room.h"
-
 using namespace std;
 
 class Level {
@@ -37,5 +37,3 @@ private:
 
 	const char* mTilemap;
 };
-
-#endif

@@ -1,9 +1,11 @@
-#ifndef GAMESCENE_H
-#define GAMESCENE_H
-
+#pragma once
+#include "../Globals.h"
+#include "../TilemapXmlParser.h"
 #include "Scene.h"
+#include "SceneManager.h"
 #include "../Player.h"
 #include "../Level.h"
+#include "../World.h"
 
 class GameScene : public Scene 
 {
@@ -17,4 +19,3 @@ private:
 	Player* mPlayer;
 	Level* mLevel;
 };
-#endif

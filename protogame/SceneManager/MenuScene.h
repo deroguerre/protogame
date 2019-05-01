@@ -1,7 +1,8 @@
-#ifndef MENUSCENE_H
-#define MENUSCENE_H
-
+#include "../Globals.h"
 #include "Scene.h"
+#include "SceneManager.h"
+#include "GameScene.h"
+#include <iostream>
 
 class MenuScene : public Scene 
 {
@@ -11,6 +12,8 @@ public:
 	void update() override;
 	void draw() override;
 	void unload() override;
+	//bool isMouseOver(Rectangle aCheckedRectangle);
+private:
+
 };
 
-#endif

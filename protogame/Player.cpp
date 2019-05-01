@@ -1,5 +1,4 @@
 #include "Player.h"
-#include "Bullet.h"
 
 namespace PLAYER {
 	const std::string SPRITESHEET_PATH = "assets/django.png";
@@ -246,6 +245,7 @@ void Player::update(float aFrameTime) {
 	// Controls
 	//--------------------------------------------------------------------------------------
 
+	//animations
 	if (IsKeyDown(KEY_W) && IsKeyUp(KEY_A) && IsKeyUp(KEY_S) && IsKeyUp(KEY_D))			//UP
 		moveUp();
 	else if (IsKeyDown(KEY_S) && IsKeyUp(KEY_A) && IsKeyUp(KEY_W) && IsKeyUp(KEY_D))	//DOWN
@@ -268,7 +268,7 @@ void Player::update(float aFrameTime) {
 		moveRight();
 	else if (IsKeyDown(KEY_A) && IsKeyDown(KEY_D) && IsKeyDown(KEY_S))					//LEFT RIGHT DOWN
 		moveDown();
-	else if (IsKeyDown(KEY_A) && IsKeyDown(KEY_D) && IsKeyDown(KEY_W))					//LEFT DOWN UP
+	else if (IsKeyDown(KEY_A) && IsKeyDown(KEY_D) && IsKeyDown(KEY_W))					//LEFT RIGHT UP
 		moveUp();
 	else
 		stopMoving();
@@ -304,7 +304,7 @@ void Player::update(float aFrameTime) {
 
 	//boost speed
 	if (IsKeyDown(KEY_LEFT_SHIFT)) {
-		PLAYER::WALK_SPEED = 3.3f;
+		PLAYER::WALK_SPEED = 8.0f;
 	}
 	else {
 		PLAYER::WALK_SPEED = 2.3f;
