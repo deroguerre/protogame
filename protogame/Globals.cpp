@@ -2,13 +2,13 @@
 
 //CORE CUSTOM
 //---------------------------------------------------------------------------------------------------------------------
-bool isMouseOver(Rectangle aCheckedRectangle)
+bool isMouseOver(Rectangle aRectangle)
 {
 	bool isOver = false;
 	Vector2 lMousePosition = GetMousePosition();
 
-	if (lMousePosition.x >= aCheckedRectangle.x && lMousePosition.x <= aCheckedRectangle.x + aCheckedRectangle.width &&
-		lMousePosition.y >= aCheckedRectangle.y && lMousePosition.y <= aCheckedRectangle.y + aCheckedRectangle.height)
+	if (lMousePosition.x >= aRectangle.x && lMousePosition.x <= aRectangle.x + aRectangle.width &&
+		lMousePosition.y >= aRectangle.y && lMousePosition.y <= aRectangle.y + aRectangle.height)
 	{
 			isOver = true;
 	}
