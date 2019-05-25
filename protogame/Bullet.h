@@ -11,7 +11,7 @@ public:
 	Vector2 mOrigin;
 	Texture2D mTexture;
 
-	Bullet(Texture2D aBulletTexture, Vector2 aOrigin);
+	Bullet(Texture2D aBulletTexture, Vector2 aOrigin, std::string pattern);
 	~Bullet();
 
 	void draw();

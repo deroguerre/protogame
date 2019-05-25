@@ -5,10 +5,10 @@ Sprite::Sprite() {}
 Sprite::Sprite(const std::string &aFilePath, int aSourceX, int aSourceY, int aWidth, int aHeight, Vector2 aPosition)
 {
 	mPosition = aPosition;
-	mSourceRect.x = aSourceX;
-	mSourceRect.y = aSourceY;
-	mSourceRect.width = aWidth;
-	mSourceRect.height = aHeight;
+	mSourceRect.x = (float)aSourceX;
+	mSourceRect.y = (float)aSourceY;
+	mSourceRect.width = (float)aWidth;
+	mSourceRect.height = (float)aHeight;
 	mSpriteSheet = LoadTexture(aFilePath.c_str());
 }
 
@@ -23,10 +23,10 @@ void Sprite::setPosition(Vector2 aPosition) {
 const Sides::Side Sprite::getCollisionSide(Rectangle aOtherRect) const {
 	
 	int lAmtRight, lAmtLeft, lAmtTop, lAmtBottom;
-	lAmtRight = getCollisionRect().x + getCollisionRect().width - aOtherRect.x;
-	lAmtLeft = aOtherRect.x + aOtherRect.width - getCollisionRect().x;
-	lAmtTop = aOtherRect.y + aOtherRect.height - getCollisionRect().y;
-	lAmtBottom = getCollisionRect().y + getCollisionRect().height - aOtherRect.y;
+	lAmtRight = (int)(getCollisionRect().x + getCollisionRect().width - aOtherRect.x);
+	lAmtLeft = (int)(aOtherRect.x + aOtherRect.width - getCollisionRect().x);
+	lAmtTop = (int)(aOtherRect.y + aOtherRect.height - getCollisionRect().y);
+	lAmtBottom = (int)(getCollisionRect().y + getCollisionRect().height - aOtherRect.y);
 
 	int lVals[4] = { abs(lAmtRight), abs(lAmtLeft), abs(lAmtTop), abs(lAmtBottom) };
 	int lLowest = lVals[0];

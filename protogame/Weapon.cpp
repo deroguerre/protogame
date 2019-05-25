@@ -18,7 +18,7 @@ void Weapon::fire(Vector2 aOrigin) {
 void Weapon::draw() {
 
 	/* draw all fired bullets and check life cycle */
-	for (int i = 0; i < firedBullets.size(); i++) {
+	for (unsigned int i = 0; i < firedBullets.size(); i++) {
 
 		firedBullets[i]->lifeTimeCounter++;
 

@@ -40,7 +40,7 @@ int main()
 			mSceneManager.draw();
 
 			if (Globals::DEBUG) {
-				DrawFPS(0.0f, 0.0f);
+				DrawFPS(0, 0);
 			}
 
 		EndDrawing();

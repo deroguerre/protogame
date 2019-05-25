@@ -2,7 +2,7 @@
 
 float mBulletSpeed = 8.0f;
 
-Bullet::Bullet(Texture2D aTexture, Vector2 aOrigin)
+Bullet::Bullet(Texture2D aTexture, Vector2 aOrigin, std::string pattern)
 {
 	mTexture = aTexture;
 	mOrigin = aOrigin;
@@ -24,11 +24,11 @@ void Bullet::draw() {
 
 	float angle = atan2(mDestination.y - mOrigin.y, mDestination.x - mOrigin.x);
 
-	double dx = (double)(cos(angle) * mBulletSpeed);
-	double dy = (double)(sin(angle) * mBulletSpeed);
+	float dx = (float)(cos(angle) * mBulletSpeed);
+	float dy = (float)(sin(angle) * mBulletSpeed);
 
-	mPosition.x += dx;
-	mPosition.y += dy;
+	mPosition.x += (float)dx;
+	mPosition.y += (float)dy;
 
 	DrawTextureV(mTexture, mPosition, WHITE);
 

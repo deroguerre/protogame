@@ -180,7 +180,7 @@ void TilemapXmlParser::getTiles(std::vector<Tile*>* aTiles) {
 			//Get the tileset for this specific gid
 			Tileset lTileset;
 			int lClosest = 0;
-			for (int i = 0; i < mTilesets.size(); i++) {
+			for (unsigned int i = 0; i < mTilesets.size(); i++) {
 				if (mTilesets[i].mFirstGid <= lGid) {
 					if (mTilesets[i].mFirstGid > lClosest) {
 						lClosest = mTilesets[i].mFirstGid;
@@ -194,15 +194,15 @@ void TilemapXmlParser::getTiles(std::vector<Tile*>* aTiles) {
 				int lTileX = 0;
 				int lTileY = 0;
 				lTileX = lTileCounter % (int)mTilemapSize.x;
-				lTileX *= mTileSize.x;
-				lTileY += mTileSize.y * (lTileCounter / (int)mTilemapSize.x);
+				lTileX *= (int)mTileSize.x;
+				lTileY += (int)mTileSize.y * (lTileCounter / (int)mTilemapSize.x);
 				Vector2 lTilePosition = Vector2{ (float)lTileX, (float)lTileY };
 
 
 				//Calculate the position of the tile in the tileset
-				Vector2 lTilesetPosition = this->getTilesetPosition(lTileset, lGid, mTileSize.x, mTileSize.y);
+				Vector2 lTilesetPosition = this->getTilesetPosition(lTileset, lGid, (int)mTileSize.x, (int)mTileSize.y);
 
-				Rectangle lTileRec = Rectangle{ lTilesetPosition.x, lTilesetPosition.y, (float)mTileSize.x, (float)mTileSize.y };
+				Rectangle lTileRec = Rectangle{ lTilesetPosition.x, lTilesetPosition.y, mTileSize.x, mTileSize.y };
 
 				Tile* lTile = new Tile(lTileset.mTexture, lTilePosition, lTileRec);
 				aTiles->push_back(lTile);

@@ -32,7 +32,7 @@ void MenuScene::draw() {
 
 
 	DrawRectangleRec(playButton, playBtnColor);
-	DrawText("Jouer", playButton.x + playButton.width/2 - (MeasureText("Jouer", 20)/2), playButton.y + playButton.height/2 - 10, 20, BLACK);
+	DrawText("Jouer", (int)playButton.x + (int)playButton.width/2 - (MeasureText("Jouer", 20)/2), (int)playButton.y + (int)playButton.height/2 - 10, 20, BLACK);
 
 	//DrawRectangleRec(quitButton, LIGHTGRAY);
 	//DrawText("Quitter", quitButton.x + quitButton.width / 2 - (MeasureText("Quitter", 20) / 2), quitButton.y + quitButton.height / 2 - 10, 20, BLACK);

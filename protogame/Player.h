@@ -34,7 +34,7 @@ private:
 
 	std::vector<Texture2D> bulletTextures;
 
-	Weapon* equipedWeapon = NULL;
+	Weapon* equipedWeapon = nullptr;
 
 	Direction mFacing;
 	Vector2 mDirection;

@@ -13,9 +13,8 @@ void PapoGun::fire(Vector2 origin) {
 
 		for (size_t i = 0; i < 10; i++)
 		{
-			Bullet* lBullet = new Bullet(bulletTexture, origin);
+			Bullet* lBullet = new Bullet(bulletTexture, origin, "linear");
 			firedBullets.push_back(lBullet);
-
 		}
 
 		elapsedTime = 0;

@@ -1,7 +1,7 @@
 #include "Level.h"
 
-float mTinyMapWidth = 128.0f;
-float mTinyMapHeight = 96.0f;
+int mTinyMapWidth = 128;
+int mTinyMapHeight = 96;
 Vector2 mTinyMapOffset;
 
 Texture2D lTileset;
@@ -13,7 +13,7 @@ Level::Level(int aRoomNumber, const char* aTilemap) {
 	mMazeWidth = (int)sqrt(aRoomNumber) + 1;
 	mMazeHeight = (int)sqrt(aRoomNumber) + 1;
 	mRoomNumber = aRoomNumber;
-	mTinyMapOffset = {Globals::SCREEN_WIDTH - mTinyMapWidth, 0.0f};
+	mTinyMapOffset = { (float)Globals::SCREEN_WIDTH - (float)mTinyMapWidth, 0.0f };
 
 	mTilemap = aTilemap;
 	generateMaze();
@@ -32,78 +32,80 @@ void Level::draw() {
 
 	// Draw the mini map
 	//DrawRectangle(mTinyMapOffset.x, mTinyMapOffset.y, mTinyMapWidth, mTinyMapHeight, Fade(RAYWHITE, 0.4f));
-	DrawRectangleLines(mTinyMapOffset.x, mTinyMapOffset.y, mTinyMapWidth, mTinyMapHeight, Fade(BLACK, 0.5f));
+	DrawRectangleLines((int)mTinyMapOffset.x, (int)mTinyMapOffset.y, mTinyMapWidth, mTinyMapHeight, Fade(BLACK, 0.5f));
+
 	for (unsigned int i = 0; i < mRooms.size(); i++) {
 
 		DrawRectangle(
-			(mTinyMapOffset.x + mRooms[i]->getRoomPosition().first * (mTinyMapWidth / mMazeWidth)),
-			(mTinyMapOffset.y + mRooms[i]->getRoomPosition().second * (mTinyMapHeight / mMazeHeight)),
+			((int)mTinyMapOffset.x + mRooms[i]->getRoomPosition().first * (mTinyMapWidth / mMazeWidth)),
+			((int)mTinyMapOffset.y + mRooms[i]->getRoomPosition().second * (mTinyMapHeight / mMazeHeight)),
 			mTinyMapWidth / mMazeWidth,
 			mTinyMapHeight / mMazeHeight,
 			Fade(DARKGRAY, 0.4f));
 
 		DrawRectangle(
-			(mTinyMapOffset.x + mFarestRoom.first * (mTinyMapWidth / mMazeWidth)),
-			(mTinyMapOffset.y + mFarestRoom.second * (mTinyMapHeight / mMazeHeight)),
+			((int)mTinyMapOffset.x + mFarestRoom.first * (mTinyMapWidth / mMazeWidth)),
+			((int)mTinyMapOffset.y + mFarestRoom.second * (mTinyMapHeight / mMazeHeight)),
 			mTinyMapWidth / mMazeWidth,
 			mTinyMapHeight / mMazeHeight,
 			Fade(RED, 0.1f));
 
 		DrawRectangle(
-			(mTinyMapOffset.x + mRooms[0]->getRoomPosition().first * (mTinyMapWidth / mMazeWidth)),
-			(mTinyMapOffset.y + mRooms[0]->getRoomPosition().second * (mTinyMapHeight / mMazeHeight)),
+			((int)mTinyMapOffset.x + mRooms[0]->getRoomPosition().first * (mTinyMapWidth / mMazeWidth)),
+			((int)mTinyMapOffset.y + mRooms[0]->getRoomPosition().second * (mTinyMapHeight / mMazeHeight)),
 			mTinyMapWidth / mMazeWidth,
 			mTinyMapHeight / mMazeHeight,
 			Fade(DARKGREEN, 0.1f));
 
 		DrawRectangle(
-			(mTinyMapOffset.x + mCurrentRoom->getRoomPosition().first * (mTinyMapWidth / mMazeWidth)),
-			(mTinyMapOffset.y + mCurrentRoom->getRoomPosition().second * (mTinyMapHeight / mMazeHeight)),
+			((int)mTinyMapOffset.x + mCurrentRoom->getRoomPosition().first * (mTinyMapWidth / mMazeWidth)),
+			((int)mTinyMapOffset.y + mCurrentRoom->getRoomPosition().second * (mTinyMapHeight / mMazeHeight)),
 			mTinyMapWidth / mMazeWidth,
 			mTinyMapHeight / mMazeHeight,
 			Fade(RAYWHITE, 0.1f));
 
-		DrawRectangleLinesEx(
-			{ (mTinyMapOffset.x + mRooms[i]->getRoomPosition().first * (mTinyMapWidth / mMazeWidth)),
-			(mTinyMapOffset.y + mRooms[i]->getRoomPosition().second * (mTinyMapHeight / mMazeHeight)),
-			mTinyMapWidth / mMazeWidth,
-			mTinyMapHeight / mMazeHeight },
-			1,
-			Fade(RAYWHITE, 0.5f));
+
+		Rectangle lRectangle = {
+			(mTinyMapOffset.x + (float)(mRooms[i]->getRoomPosition().first * (mTinyMapWidth / mMazeWidth))),
+			(mTinyMapOffset.y + (float)(mRooms[i]->getRoomPosition().second * (mTinyMapHeight / mMazeHeight))),
+			(float)mTinyMapWidth / (float)mMazeWidth,
+			(float)mTinyMapHeight / (float)mMazeHeight
+		};
+		DrawRectangleLinesEx(lRectangle, 1, Fade(RAYWHITE, 0.5f));
 
 		if (mRooms[i]->getDoors() & ROOM_DOOR_TOP) {
 			DrawRectangle(
-				(mTinyMapOffset.x + mRooms[i]->getRoomPosition().first * (mTinyMapWidth / mMazeWidth)) + ((mTinyMapWidth / mMazeWidth) / 2) - 2.0f,
-				mTinyMapOffset.y + mRooms[i]->getRoomPosition().second * (mTinyMapHeight / mMazeHeight),
-				4.0f,
-				4.0f,
+				((int)mTinyMapOffset.x + mRooms[i]->getRoomPosition().first * (mTinyMapWidth / mMazeWidth)) + ((mTinyMapWidth / mMazeWidth) / 2) - 2,
+				(int)mTinyMapOffset.y + mRooms[i]->getRoomPosition().second * (mTinyMapHeight / mMazeHeight),
+				4,
+				4,
 				Fade(BLACK, 0.7f));
 		}
 
 		if (mRooms[i]->getDoors() & ROOM_DOOR_LEFT) {
 			DrawRectangle(
-				mTinyMapOffset.x + mRooms[i]->getRoomPosition().first * (mTinyMapWidth / mMazeWidth),
-				(mTinyMapOffset.y + mRooms[i]->getRoomPosition().second * (mTinyMapHeight / mMazeHeight)) + ((mTinyMapHeight / mMazeHeight) / 2) - 2.0f,
-				4.0f,
-				4.0f,
+				(int)mTinyMapOffset.x + mRooms[i]->getRoomPosition().first * (mTinyMapWidth / mMazeWidth),
+				((int)mTinyMapOffset.y + mRooms[i]->getRoomPosition().second * (mTinyMapHeight / mMazeHeight)) + ((mTinyMapHeight / mMazeHeight) / 2) - 2,
+				4,
+				4,
 				Fade(BLACK, 0.7f));
 		}
 
 		if (mRooms[i]->getDoors() & ROOM_DOOR_RIGHT) {
 			DrawRectangle(
-				(mTinyMapOffset.x + mRooms[i]->getRoomPosition().first * (mTinyMapWidth / mMazeWidth)) + (mTinyMapWidth / mMazeWidth) - 4.0f,
-				(mTinyMapOffset.y + mRooms[i]->getRoomPosition().second * (mTinyMapHeight / mMazeHeight)) + ((mTinyMapHeight / mMazeHeight) / 2) - 2.0f,
-				4.0f,
-				4.0f,
+				((int)mTinyMapOffset.x + mRooms[i]->getRoomPosition().first * (mTinyMapWidth / mMazeWidth)) + (mTinyMapWidth / mMazeWidth) - 4,
+				((int)mTinyMapOffset.y + mRooms[i]->getRoomPosition().second * (mTinyMapHeight / mMazeHeight)) + ((mTinyMapHeight / mMazeHeight) / 2) - 2,
+				4,
+				4,
 				Fade(BLACK, 0.7f));
 		}
 
 		if (mRooms[i]->getDoors() & ROOM_DOOR_BOTTOM) {
 			DrawRectangle(
-				(mTinyMapOffset.x + mRooms[i]->getRoomPosition().first * (mTinyMapWidth / mMazeWidth)) + ((mTinyMapWidth / mMazeWidth) / 2) - 2.0f,
-				(mTinyMapOffset.y + mRooms[i]->getRoomPosition().second * (mTinyMapHeight / mMazeHeight)) + (mTinyMapHeight / mMazeHeight) - 4.0f,
-				4.0f,
-				4.0f,
+				((int)mTinyMapOffset.x + mRooms[i]->getRoomPosition().first * (mTinyMapWidth / mMazeWidth)) + ((mTinyMapWidth / mMazeWidth) / 2) - 2,
+				((int)mTinyMapOffset.y + mRooms[i]->getRoomPosition().second * (mTinyMapHeight / mMazeHeight)) + (mTinyMapHeight / mMazeHeight) - 4,
+				4,
+				4,
 				Fade(BLACK, 0.7f));
 		}
 
@@ -113,7 +115,7 @@ void Level::draw() {
 
 void Level::generateMaze() {
 	mMaze = new int[mMazeWidth * mMazeHeight];
-	
+
 	//fill mMaze with 0;
 	memset(mMaze, 0x00, mMazeWidth * mMazeHeight * sizeof(int));
 
@@ -190,17 +192,17 @@ void Level::createRooms(pair<int, int> aPosition) {
 
 		for (unsigned int i = 0; i < mRooms.size(); i++) {
 			lNeighboursAt = getNeighbours(mRooms[i]->getRoomPosition(), false);
-			if (lNeighboursAt.size() >= lMaxNeighbours)	{
+			if (lNeighboursAt.size() >= lMaxNeighbours) {
 				lMaxNeighbours = lNeighboursAt.size();
 				lMaxNeighboursAt = i;
-			}	
+			}
 		}
 
 		int lRandomChoice = rand() % 10;
 
 		if (lRandomChoice % 2 == 0)
 			lNewCase = mRooms[lMaxNeighboursAt]->getRoomPosition();
-		else 
+		else
 			lNewCase = mRooms[rand() % mRooms.size()]->getRoomPosition();
 
 		createRooms(make_pair(lNewCase.first, lNewCase.second));
@@ -210,7 +212,7 @@ void Level::createRooms(pair<int, int> aPosition) {
 vector<int> Level::getNeighbours(pair<int, int> aPosition, bool aVisited)
 {
 	// Little lambda function to calculate index in a readable way
-	auto offset = [&](int x, int y)	{
+	auto offset = [&](int x, int y) {
 		return (aPosition.second + y) * mMazeWidth + (aPosition.first + x);
 	};
 
@@ -255,7 +257,7 @@ vector<stack<pair<int, int>>> Level::findAllPaths() {
 	lPath.push(lStack.top());
 	lVisitedCase.insert(mRooms[0]->getRoomPosition());
 
-	while (lVisitedCase.size() < mRooms.size())	{		
+	while (lVisitedCase.size() < mRooms.size()) {
 
 		lDoors = getRoomDoors(lTempMaze, lStack.top());
 
@@ -295,17 +297,17 @@ vector<stack<pair<int, int>>> Level::findAllPaths() {
 
 			if (getRoomDoors(lTempMaze, lStack.top()).empty()) {
 				lAllPaths.push_back(lStack);
-			}				
+			}
 
 			lVisitedCase.insert(lStack.top());
 		}
 		else {
 			lPath.pop();
-			lStack.pop();			
-		}		
+			lStack.pop();
+		}
 
 		lDoors.clear();
-	} 
+	}
 
 	delete lTempMaze;
 	return lAllPaths;
@@ -314,7 +316,7 @@ vector<stack<pair<int, int>>> Level::findAllPaths() {
 void Level::findFarestRoom() {
 	vector<stack<pair<int, int>>> lAllPaths = this->findAllPaths();
 	unsigned int lMax = 0;
-	for (unsigned int i = 0; i < lAllPaths.size(); i++) 
+	for (unsigned int i = 0; i < lAllPaths.size(); i++)
 	{
 		if (lMax < lAllPaths.at(i).size()) {
 			lMax = lAllPaths.at(i).size();

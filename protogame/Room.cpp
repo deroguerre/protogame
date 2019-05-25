@@ -60,10 +60,10 @@ void Room::colliderOptimizer() {
 
 	try
 	{
-		for (int i = 0; i < mCollisionTiles.size(); i++)
+		for (unsigned int i = 0; i < mCollisionTiles.size(); i++)
 		{
-			int lCurrentX = mCollisionTiles[i].x + mCollisionTiles[i].width;
-			int lCurrentY = mCollisionTiles[i].y + mCollisionTiles[i].height;
+			int lCurrentX = (int)mCollisionTiles[i].x + (int)mCollisionTiles[i].width;
+			int lCurrentY = (int)mCollisionTiles[i].y + (int)mCollisionTiles[i].height;
 
 			if (lCurrentX == mCollisionTiles[i + 1].x) {
 				mCollisionTiles[i].width += TILE_SIZE;
@@ -220,7 +220,7 @@ void Room::loadTmx() {
 
 				XMLElement* lObjectNode = lObjectGroupNode->FirstChildElement("object");
 				if (lObjectNode != NULL) {
-					float lX, lY, lWidth, lHeight;
+					//float lX, lY, lWidth, lHeight;
 					mRoomSurface.x = lObjectNode->FloatAttribute("x");
 					mRoomSurface.y = lObjectNode->FloatAttribute("y");
 					mRoomSurface.width = lObjectNode->FloatAttribute("width");
@@ -258,10 +258,10 @@ void Room::drawDoors() {
 
 	if (Globals::DEBUG) {
 		for (auto door : mCollisionDoors) {
-			DrawRectangleLines(door.x, door.y, door.width, door.height, GREEN);
+			DrawRectangleLines((int)door.x, (int)door.y, (int)door.width, (int)door.height, GREEN);
 		}
 
-		DrawRectangleLines(mRoomSurface.x, mRoomSurface.y, mRoomSurface.width, mRoomSurface.height, BLUE);
+		DrawRectangleLines((int)mRoomSurface.x, (int)mRoomSurface.y, (int)mRoomSurface.width, (int)mRoomSurface.height, BLUE);
 	}
 }
 
