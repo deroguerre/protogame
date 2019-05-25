@@ -132,6 +132,7 @@
     <ClInclude Include="Level.h" />
     <ClInclude Include="Monster1.h" />
     <ClInclude Include="Movement.h" />
+    <ClInclude Include="PapoGun.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="SceneManager\GameOverScene.h" />
@@ -140,9 +141,12 @@
     <ClInclude Include="SceneManager\MenuScene.h" />
     <ClInclude Include="SceneManager\Scene.h" />
     <ClInclude Include="SceneManager\SceneManager.h" />
+    <ClInclude Include="SolarGun.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="tinyxml2.h" />
+    <ClInclude Include="VinvinGun.h" />
+    <ClInclude Include="Weapon.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
@@ -155,6 +159,7 @@
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Monster1.cpp" />
+    <ClCompile Include="PapoGun.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="SceneManager\GameOverScene.cpp" />
@@ -162,11 +167,14 @@
     <ClCompile Include="SceneManager\IntroScene.cpp" />
     <ClCompile Include="SceneManager\MenuScene.cpp" />
     <ClCompile Include="SceneManager\SceneManager.cpp" />
+    <ClCompile Include="SolarGun.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TilemapXmlParser.cpp" />
     <ClCompile Include="TilemapXmlParser.h" />
     <ClCompile Include="tinyxml2.cpp" />
+    <ClCompile Include="VinvinGun.cpp" />
+    <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

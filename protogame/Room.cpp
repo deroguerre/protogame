@@ -1,5 +1,5 @@
 #include "Room.h"
-#include "TilemapXmlParser.h"
+//#include "TilemapXmlParser.h"
 
 const int NB_COL_TILES = 40;
 const int NB_ROW_TILES = 23;
@@ -15,12 +15,12 @@ Room::Room(std::string aTilemap, Texture2D aTileset, std::pair<int, int> aPositi
 	mTileset = aTileset;
 	mPosition = aPosition;
 
-	TilemapXmlParser* mTilemapXmlParser = new TilemapXmlParser("dungeon_map");
+	//TilemapXmlParser* mTilemapXmlParser = new TilemapXmlParser("dungeon_map");
 
 	//cree la liste des rectangles depuis la texture fournis
 	mLayerRects = this->createTilesetRectangles(mTileset);
 
-	std::vector<int> allTiles = mTilemapXmlParser->getTiles();
+	//std::vector<int> allTiles = mTilemapXmlParser->getTiles();
 
 	this->loadTmx();
 	this->createRoom();

@@ -38,6 +38,13 @@ Player::Player(Vector2 aSpawnPoint) :
 	mDirection = { 0, 0 };
 	setupAnimations();
 	playAnimation(PLAYER::ANIM_IDLE_RIGHT);
+	equipedWeapon = new SolarGun();
+}
+
+void Player::load() {
+	Texture2D bulletTexture1 = LoadTexture("assets/bullet_1.png");
+	bulletTextures.push_back(bulletTexture1);
+	equipedWeapon->setBulletTexture(bulletTextures[0]);
 }
 
 void Player::setupAnimations()
@@ -220,27 +227,10 @@ void Player::handleDoorCollisions(Level* aLevel) {
 
 #pragma endregion
 
-void Player::fire() {
-	if (mFrameCounter >= (60 / mFireRate)) {
-
-		Vector2 lPlayerPosition = getPosition();
-		lPlayerPosition.x += 14;
-		lPlayerPosition.y += 24;
-		Bullet* lBullet = new Bullet(mBulletTexture, lPlayerPosition);
-		mFiredBullets.push_back(lBullet);
-
-		mFrameCounter = 0;
-
-		std::cout << "fire" << std::endl;
-		std::cout << mFiredBullets.size() << std::endl;
-	}
-}
-
-void Player::load() {
-	mBulletTexture = LoadTexture("assets/bullet_1.png");
-}
-
 void Player::update(float aFrameTime) {
+
+	AnimatedSprite::update(aFrameTime);
+	equipedWeapon->update();
 
 	// Controls
 	//--------------------------------------------------------------------------------------
@@ -312,34 +302,31 @@ void Player::update(float aFrameTime) {
 
 	//fire
 	if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
-		fire();
+		Vector2 lPlayerPosition = getPosition();
+		lPlayerPosition.x += PLAYER::WIDTH / 2;
+		lPlayerPosition.y += PLAYER::HEIGHT / 2;
+		equipedWeapon->fire(lPlayerPosition);
 	}
 
+	/* equip solar gun */
+	if (IsKeyPressed(KEY_ONE)) {
+		equipedWeapon = new SolarGun();
+		equipedWeapon->setBulletTexture(bulletTextures[0]);
+	}
+	/* equip papo gun */
+	if (IsKeyPressed(KEY_TWO)) {
+		equipedWeapon = new PapoGun();
+		equipedWeapon->setBulletTexture(bulletTextures[0]);
+	}
 	//--------------------------------------------------------------------------------------
 
-
-	AnimatedSprite::update(aFrameTime);
 }
 
 void Player::draw()
 {
-	//drawing bullets
-	//---------------------------------------------------------
-	mFrameCounter++;
-	for (int i = 0; i < mFiredBullets.size(); i++) {
-		mFiredBullets[i]->mLifeTimeCounter++;
-
-		if (mFiredBullets[i]->isAlive) {
-			mFiredBullets[i]->draw();
-		}
-		else {
-			delete mFiredBullets[i];
-			mFiredBullets.erase(mFiredBullets.begin() + i);
-		}
-	}
-	//---------------------------------------------------------
-
 	AnimatedSprite::draw();
+	equipedWeapon->draw();
+
 }
 
 

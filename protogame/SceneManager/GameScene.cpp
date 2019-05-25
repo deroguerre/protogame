@@ -6,15 +6,16 @@ Room* mRoom;
 //World* mWorld;
 
 void GameScene::load() {
+
 	mPlayer->load();
 }
 
 GameScene::GameScene() : Scene() {
 
-
 	mLevel = new Level(8, "maps/dungeon_map.tmx");
 
 	mPlayer = new Player(Vector2{ Globals::SCREEN_WIDTH / 2, Globals::SCREEN_HEIGHT / 2 });
+	
 	
 	//mCamera.offset = { 0, 0 };
 	//mCamera.target = { mPlayer->getPosition().x, mPlayer->getPosition().y };

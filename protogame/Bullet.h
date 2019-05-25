@@ -7,7 +7,7 @@ class Bullet
 {
 public:
 	bool isAlive = true;
-	int mLifeTimeCounter;
+	int lifeTimeCounter;
 	Vector2 mOrigin;
 	Texture2D mTexture;
 
@@ -16,7 +16,7 @@ public:
 
 	void draw();
 private:
-	Vector2 mDestination;
 	Vector2 mPosition;
+	Vector2 mDestination;
 };
 

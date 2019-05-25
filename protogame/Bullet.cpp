@@ -10,7 +10,7 @@ Bullet::Bullet(Texture2D aTexture, Vector2 aOrigin)
 	mPosition = mOrigin;
 	mDestination = GetMousePosition();
 
-	mLifeTimeCounter = 0;
+	lifeTimeCounter = 0;
 }
 
 
@@ -32,7 +32,7 @@ void Bullet::draw() {
 
 	DrawTextureV(mTexture, mPosition, WHITE);
 
-	if (mLifeTimeCounter >= 120) {
+	if (lifeTimeCounter >= 120) {
 		isAlive = false;
 	}
 }

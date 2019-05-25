@@ -1,6 +1,8 @@
 #pragma once
 #include "raylib.h"
 
+using namespace std;
+
 namespace Globals
 {
 	const int SCREEN_WIDTH = 1280;

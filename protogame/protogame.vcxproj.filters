@@ -31,6 +31,12 @@
     <Filter Include="Source Files\Enemy">
       <UniqueIdentifier>{57336046-adf1-4f74-bf6f-361695ea2f55}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Weapon">
+      <UniqueIdentifier>{fbb8df22-23b5-457b-8c0f-a3efaf69a626}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Weapon">
+      <UniqueIdentifier>{36b70499-a204-4bc9-9b66-1cec4c3b0663}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\player.png">
@@ -101,6 +107,18 @@
     <ClInclude Include="Bullet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>Header Files\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="SolarGun.h">
+      <Filter>Header Files\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="PapoGun.h">
+      <Filter>Header Files\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="VinvinGun.h">
+      <Filter>Header Files\Weapon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneManager\GameOverScene.cpp">
@@ -168,6 +186,18 @@
     </ClCompile>
     <ClCompile Include="Globals.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
+      <Filter>Source Files\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="SolarGun.cpp">
+      <Filter>Source Files\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="PapoGun.cpp">
+      <Filter>Source Files\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="VinvinGun.cpp">
+      <Filter>Source Files\Weapon</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
